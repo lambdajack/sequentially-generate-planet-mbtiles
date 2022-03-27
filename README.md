@@ -301,16 +301,21 @@ We would recommend something like [tileserver-gl]('https://github.com/maptiler/t
 ## FAQ
 
 1. **How long will this take?** Low spec hardware? Whole planet? Days/weeks. A few days for reasonable hardward. Small sections can be done in as little as a few minutes. The beauty of this however, is that you can stop and start the project fairly regularly as necessary, or simply leave it running. If it errors out, just start it up again and all previously generated data will be kept and the work not repeated. Given that you can generate the planet bit by bit, it would not be too difficult to split the load over multiple machines (say if you have a couple of old spare laptops/pc's gathering dust this may half the time taken or better!).
-2. **Why do I have to run part of the programme with 'sudo' privileges?** You might not have to depending on your system, but most modern linux systems require sudo for commands like `make install`, which are required here. Therefore, we run those commands as sudo as a catch-all.
-3. **Do I have to download the entire planet?** Not at all. Simply remove/change the `config.json` `subRegions` array to include only the areas you want. Once downloaded, they will be merged together into a single file called `planet.mbtiles`. You can then rename that file to something more appropriate.
-4. **It's running, but my pbf folder is empty - should I be worried?** Check the openmaptiles/data folder. If your config has selected to delete files downloaded, then they will be moved rather than copied.
-5. **Ubuntu only?** Nope! It should work on any distro as long as the dependancies are installed.
-6. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core8gb ram home pc without too much trouble. Just time.
-7. **_Why javascript and not bash or something?_** Two reasons - 1: _"Anything that can be Written in JavaScript, will Eventually be Written in JavaScript"_; 2: The pure simplicity of typing `npx command` is unparralelled and is rather system agnostic. This is written to be simple, and tile servers are often used by web developers, so they are likely to have node and npm already available to use right away. In short, simplicity in use.
+2. **_Would I use this if I have powerful hardware?_** Maybe. Since the programme essentially saves its progress as it goes, even if you have strong hardware, you are reducing the time taken to redo the process in the event of a crash or file corruption.
+3. **Why do I have to run part of the programme with 'sudo' privileges?** You might not have to depending on your system, but most modern linux systems require sudo for commands like `make install`, which are required here. Therefore, we run those commands as sudo as a catch-all.
+4. **Do I have to download the entire planet?** Not at all. Simply remove/change the `config.json` `subRegions` array to include only the areas you want. Once downloaded, they will be merged together into a single file called `planet.mbtiles`. You can then rename that file to something more appropriate.
+5. **It's running, but my pbf folder is empty - should I be worried?** Check the openmaptiles/data folder. If your config has selected to delete files downloaded, then they will be moved rather than copied.
+6. **Ubuntu only?** Nope! It should work on any distro as long as the dependancies are installed.
+7. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core8gb ram home pc without too much trouble. Just time.
+8. **_Why javascript and not bash or something?_** Two reasons - 1: _"Anything that can be Written in JavaScript, will Eventually be Written in JavaScript"_; 2: The pure simplicity of typing `npx command` is unparralelled and is rather system agnostic. This is written to be simple, and tile servers are often used by web developers, so they are likely to have node and npm already available to use right away. In short, simplicity in use.
 
 ## Acknowledgements
 
 Please take the time to thank the folks over at [openmaptiles]('https://github.com/openmaptiles/openmaptiles') and [tippecanoe]('https://github.com/mapbox/tippecanoe'). They are the reason any of this is possible in the first place. Also, please thank the guys over at Geofabrik as it is their map segments which we use.
+
+## Attribution
+
+Please attribute openmaptiles, openstreemap contributors and tippecanoe if any data derived from this programme is used in production.
 
 ## Prefer not to use npx?
 
@@ -347,3 +352,4 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 9. Add sleep function at points in stdout user may wish to read and hold it there for a time.
 10. Add option to generate osm.pbf segments directly from osm data
 11. Add option to provide your own .osm.pbf files.
+12. Convert til-join to be iterative - allowing for report to be updated after each join.

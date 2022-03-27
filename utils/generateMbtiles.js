@@ -28,6 +28,11 @@ export const generateMbtiles = async (
     );
   }
 
+  // Set up REPORT.txt
+  if (!fs.existsSync(`${pwd}/mbtiles/REPORT.txt`)) {
+    fs.writeFileSync(`${pwd}/mbtiles/REPORT.txt`, "");
+  }
+
   for (const region of subRegions) {
     // Check to see if mbtiles already exist for the region. If so, skip their generation.
     const saveFileName = region.split("/").pop();
@@ -81,12 +86,12 @@ export const generateMbtiles = async (
       );
       fs.appendFileSync(
         `${pwd}/mbtiles/REPORT.txt`,
-        `FAILED: ${region}: Failed to generate mbtiles.\n`
+        `GENERATE FAILED: ${region}: Failed to generate mbtiles.\n`
       );
     } else {
       fs.appendFileSync(
         `${pwd}/mbtiles/REPORT.txt`,
-        `SUCCESS: ${region}: Successfully generated mbtiles.\n`
+        `GENERATE SUCCESS: ${region}: Successfully generated mbtiles.\n`
       );
     }
   }

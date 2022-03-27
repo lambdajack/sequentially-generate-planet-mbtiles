@@ -98,12 +98,14 @@ await mergeMbtiles(subRegions, keepSubRegionMbtiles);
 fs.appendFileSync(
   `${pwd}/mbtiles/REPORT.txt`,
   `
-  #################################################################################
+  
   The mbtiles were generated using the following config:
 
 ${JSON.stringify(config, null, 2)}\n
 
-  ################################################################################`
+  ################################################################################
+  
+  `
 );
 
 console.log(
