@@ -131,3 +131,4 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 3. The ability to select different system drives for downloading/generating files.
 4. Write tests before significant future development.
 5. Make the console prettier.
+6. Add a -t test-config.json for people to test out before committing to the entire planet.
