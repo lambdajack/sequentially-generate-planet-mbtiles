@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import fs from "fs";
-import { execSync } from "child_process";
 import { generateMbtiles } from "./utils/generateMbtiles.js";
 import { mergeMbtiles } from "./utils/mergeMbtiles.js";
 import { execute } from "./utils/execute.js";
@@ -37,7 +36,7 @@ if (process.argv.includes("-c")) {
       console.log("Cannot find default config.json file... this is a problem.");
     }
   }
-} else {
+} else if (!process.argv.includes("-t")) {
   try {
     config = JSON.parse(fs.readFileSync(`${pwd}/config.json`, "utf-8"));
   } catch (e) {

@@ -54,7 +54,7 @@ npx sequentially-generate-planet-mbtiles -c /path/to/config.json
 
 **_keepSubRegionMbtiles_** - If true, each sub region mbtiles file (e.g. asia.mbtiles) will be kept, further drastically increasing required disk space. This may be particularly useful on old or slow hardware that has the tendancy to crash or give up!
 
-**_tileZoomLevel_** - Default 14. This sets the amount of detail you will see. 14 is as detailed as most people would ever want. Setting any higher will take weeks to process on low spec hardward. 7 is a good level for seeing an overview, but not as detailed as seeing individual building blocks.
+**_tileZoomLevel_** - Default 12. This sets the amount of detail you will see. 14 is as detailed as most people would ever want but be warned, each point increases the amount of work required by a factor of 4. Please see: https://wiki.openstreetmap.org/wiki/Zoom_levels. For some perspective, to render Antarctica, on a 6 year old, 4 cores/8gb RAM, pc at the default zoom level 12, takes about 15 hours. at zoom level 14, estimates about 9 _days_; zoom level 10 takes less than an hour. While this programme is doing its best to give vector tiles to everyone with low spec hardware (and it certainly will), ask yourself how long you are prepared to wait. If you need a high zoom number with lots of map detail for a project you are working on, consider setting the programme off well in advance while your project is still in development; that way, minimal if no time will be wasted. Setting any higher will take weeks to process on mid spec hardware.
 
 ## Why?
 
@@ -151,3 +151,6 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 7. Add automatically serve on completion option -s.
 8. Typos and grammatical errors on readme - add section about distritubing the load for tile generation - maybe.
 9. Add a success.json file showing which regions were successful, and ask the user if they would like to retry any failed regions
+10. Add sleep function at points in stdout user may wish to read and hold it there for a time.
+11. Remove overwrite planet.mbtiles - document that it is for the user to ensure the data is clean or only contains what they want.
+12. Add realistic schedules - two weeks for zoom level 12 - add the wiki information (directly?)

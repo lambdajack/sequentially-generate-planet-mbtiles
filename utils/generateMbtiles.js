@@ -29,12 +29,21 @@ export const generateMbtiles = async (
   }
 
   for (const region of subRegions) {
+    // Check to see if mbtiles already exist for the region. If so, skip their generation.
+    const saveFileName = region.split("/").pop();
+    if (
+      fs.existsSync(`${pwd}/mbtiles/${saveFileName}.mbtiles`) &&
+      fs.statSync(`${pwd}/mbtiles/${saveFileName}.mbtiles`).size > 0
+    ) {
+      console.log(`${region}.mbtiles already exists. Skipping generation.`);
+      continue;
+    }
+
     // Clean up openmaptiles for new sub region
     execute("sudo", ["make", "clean"], `${pwd}/openmaptiles`);
     execute("rm", ["-rf", "data"], `${pwd}/openmaptiles`);
 
     // Download sub region .osm.pbf file
-    const saveFileName = region.split("/").pop();
     if (!fs.existsSync(`${pwd}/pbf/${saveFileName}.osm.pbf`)) {
       const downloadUrl = `https://download.geofabrik.de/${region}-latest.osm.pbf`;
       await downloadFile(downloadUrl, saveFileName);
@@ -63,5 +72,22 @@ export const generateMbtiles = async (
       `${pwd}/openmaptiles/data/tiles.mbtiles`,
       `${pwd}/mbtiles/${saveFileName}.mbtiles`,
     ]);
+
+    // Veryfy that the mbtiles file was generated successfully.
+    const mbtilesFile = `${pwd}/mbtiles/${saveFileName}.mbtiles`;
+    if (!fs.existsSync(mbtilesFile)) {
+      console.log(
+        `${mbtilesFile} does not exist. The process failed to complete for ${region}. Moving on to next process regardless.`
+      );
+      fs.appendFileSync(
+        `${pwd}/mbtiles/REPORT.txt`,
+        `FAILED: ${region}: Failed to generate mbtiles.\n`
+      );
+    } else {
+      fs.appendFileSync(
+        `${pwd}/mbtiles/REPORT.txt`,
+        `SUCCESS: ${region}: Successfully generated mbtiles.\n`
+      );
+    }
   }
 };
