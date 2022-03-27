@@ -96,7 +96,7 @@ Add the `-t` options to use the presupplied test-config.json. This test will gen
 
 ## Things to look out for
 
-1. If starting the process halfway throuhg (e.g. it crashed and you are resuming), the terminal may ask your permission when it comes to writing over certain files, since they were created with sudo privileges.
+1. If starting the process halfway through (e.g. it crashed and you are resuming), the terminal may ask your permission when it comes to writing over certain files, since they were created with sudo privileges.
 
 ## How to serve?
 
