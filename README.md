@@ -101,6 +101,7 @@ We would recommend something like [tileserver-gl]('https://github.com/maptiler/t
 3. **Do I have to download the entire planet?** Not at all. Simply remove/change the `config.json` `subRegions` array to include only the areas you want. Once downloaded, they will be merged together into a single file called `planet.mbtiles`. You can then rename that file to something more appropriate.
 4. **It's running, but my pbf folder is empty - should I be worried?** Check the openmaptiles/data folder. If your config has selected to delete files downloaded, then they will be moved rather than copied.
 5. **Ubuntu only?** Nope! It should work on any distro as long as the dependancies are installed.
+6. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core8gb ram home pc without too much trouble. Just time.
 
 ## Acknowledgements
 
