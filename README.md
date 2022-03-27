@@ -68,6 +68,8 @@ It's also designed (work in progress) to be fail safe - meaning that if your har
 
 It's a work in progress - but it works - again, slowly. I'll do what I can to make it much more robust as time goes on.
 
+This also uses the maptiler mbtiles spec, meaning when you serve the files with something like tileserver-gl, you don't have to worry about setting up styles, as the basic one will be automatically available. Use the -s option to automatically serve the files when done on `http://localhost:8080`. (-s not yet implemented).
+
 We make extensive use of openmaptiles, which in theory, does not require a huge amount of RAM, but I have tried it on a few high spec 'consumer' machines (circa. £2000-3000) and the process is never able to complete (and if it fails - you have to start all over again mostly - at least from the parts which took the longest anyway). I have spoken with a few people who have had a similar experience. That's why this has been made, to work on hardware as low as 4gb/4cores. If anyone can test any lower (who has the time though?) please let me know!
 
 ## Requirements
@@ -145,6 +147,5 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 3. The ability to select different system drives for downloading/generating files.
 4. Write tests before significant future development.
 5. Make the console prettier.
-6. Add a -t test-config.json for people to test out before committing to the entire planet.
-7. Add option to include or not ocean tiles.
-8. Add automatically serve on completion option.
+6. Add option to include or not ocean tiles -o.
+7. Add automatically serve on completion option -s.
