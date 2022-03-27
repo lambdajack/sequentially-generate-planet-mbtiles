@@ -94,6 +94,18 @@ await generateMbtiles(subRegions, keepDownloadedFiles, tileZoomLevel);
 // STEP 4 - Merge mbtiles into a single mbtiles file
 await mergeMbtiles(subRegions, keepSubRegionMbtiles);
 
+// Write config.json used to report
+fs.appendFileSync(
+  `${pwd}/mbtiles/REPORT.txt`,
+  `
+  #################################################################################
+  The mbtiles were generated using the following config:
+
+${JSON.stringify(config, null, 2)}\n
+
+  ################################################################################`
+);
+
 console.log(
   "--------------------------------------------------------------------------------"
 );
