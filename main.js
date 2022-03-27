@@ -83,7 +83,7 @@ console.log("Downloading the following sub regions:", subRegions);
 await generateMbtiles(subRegions, keepDownloadedFiles, tileZoomLevel);
 
 // STEP 4 - Merge mbtiles into a single mbtiles file
-// await mergeMbtiles(subRegions, keepSubRegionMbtiles);
+await mergeMbtiles(subRegions, keepSubRegionMbtiles);
 
 console.log(
   "--------------------------------------------------------------------------------"
