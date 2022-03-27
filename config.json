@@ -10,5 +10,6 @@
     "south-america"
   ],
   "keepDownloadedFiles": true,
-  "keepSubRegionMbtiles": false
+  "keepSubRegionMbtiles": false,
+  "tileZoomLevel": 14
 }

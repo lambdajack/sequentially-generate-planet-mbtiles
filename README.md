@@ -43,7 +43,8 @@ npx sequentially-generate-planet-mbtiles -c /path/to/config.json
     "south-america"
   ],
   "keepDownloadedFiles": false,
-  "keepSubRegionMbtiles": false
+  "keepSubRegionMbtiles": false,
+  "tileZoomLevel": 14
 }
 ```
 
@@ -52,6 +53,8 @@ npx sequentially-generate-planet-mbtiles -c /path/to/config.json
 **_keepDownloadedFiles_** - If true, downloaded files will be kept in the pbf directory. If false, they will be deleted. Files will not be downloaded if they are already present. `True` will use over twice the disk space upon completion. We would recommend that this option is selected if you foresee multiple attempts/downloads in your future - be kind to Geofabrik <3.
 
 **_keepSubRegionMbtiles_** - If true, each sub region mbtiles file (e.g. asia.mbtiles) will be kept, further drastically increasing required disk space. This may be particularly useful on old or slow hardware that has the tendancy to crash or give up!
+
+**_tileZoomLevel_** - Default 14. This sets the amount of detail you will see. 14 is as detailed as most people would ever want. Setting any higher will take weeks to process on low spec hardward. 7 is a good level for seeing an overview, but not as detailed as seeing individual building blocks.
 
 ## Why?
 
@@ -93,10 +96,11 @@ We would recommend something like [tileserver-gl]('https://github.com/maptiler/t
 
 ## FAQ
 
-1. **Why do I have to run part of the programme with 'sudo' privileges?** You might not have to depending on your system, but most modern linux systems require sudo for commands like `make install`, which are required here. Therefore, we run those commands as sudo as a catch-all.
-2. **Do I have to download the entire planet?** Not at all. Simply remove/change the `config.json` `subRegions` array to include only the areas you want. Once downloaded, they will be merged together into a single file called `planet.mbtiles`. You can then rename that file to something more appropriate.
-3. **It's running, but my pbf folder is empty - should I be worried?** Check the openmaptiles/data folder. If your config has selected to delete files downloaded, then they will be moved rather than copied.
-4. **Ubuntu only?** Nope! It should work on any distro as long as the dependancies are installed.
+1. **How long will this take?** Low spec hardware? Whole planet? Days/weeks. A few days for reasonable hardward. Small sections can be done in as little as a few minutes.
+2. **Why do I have to run part of the programme with 'sudo' privileges?** You might not have to depending on your system, but most modern linux systems require sudo for commands like `make install`, which are required here. Therefore, we run those commands as sudo as a catch-all.
+3. **Do I have to download the entire planet?** Not at all. Simply remove/change the `config.json` `subRegions` array to include only the areas you want. Once downloaded, they will be merged together into a single file called `planet.mbtiles`. You can then rename that file to something more appropriate.
+4. **It's running, but my pbf folder is empty - should I be worried?** Check the openmaptiles/data folder. If your config has selected to delete files downloaded, then they will be moved rather than copied.
+5. **Ubuntu only?** Nope! It should work on any distro as long as the dependancies are installed.
 
 ## Acknowledgements
 
@@ -132,3 +136,5 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 4. Write tests before significant future development.
 5. Make the console prettier.
 6. Add a -t test-config.json for people to test out before committing to the entire planet.
+7. Add option to include or not ocean tiles.
+8. Add automatically serve on completion option.

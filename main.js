@@ -75,14 +75,15 @@ execute("sudo", ["make", "install"], `${pwd}/tippecanoe`);
 const subRegions = config.subRegions;
 const keepDownloadedFiles = config.keepDownloadedFiles || false;
 const keepSubRegionMbtiles = config.keepSubRegionMbtiles || false;
+const tileZoomLevel = config.tileZoomLevel || 14;
 
 console.log("Downloading the following sub regions:", subRegions);
 
 // STEP 3 - Generate mbtiles files for each sub region
-await generateMbtiles(subRegions, keepDownloadedFiles);
+await generateMbtiles(subRegions, keepDownloadedFiles, tileZoomLevel);
 
 // STEP 4 - Merge mbtiles into a single mbtiles file
-await mergeMbtiles(subRegions, keepSubRegionMbtiles);
+// await mergeMbtiles(subRegions, keepSubRegionMbtiles);
 
 console.log(
   "--------------------------------------------------------------------------------"
