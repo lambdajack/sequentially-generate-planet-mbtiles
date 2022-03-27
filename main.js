@@ -10,6 +10,16 @@ const pwd = process.cwd();
 let config = {};
 
 // Load config.json
+if (process.argv.includes("-t")) {
+  try {
+    config = JSON.parse(fs.readFileSync(`${pwd}/test-config.json`, "utf-8"));
+    console.log("Using the test-config...");
+  } catch (e) {
+    console.log(e);
+    console.log("Cannot find default config.json file... this is a problem.");
+  }
+}
+
 if (process.argv.includes("-c")) {
   try {
     const c = process.argv.indexOf("-c");

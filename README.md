@@ -86,6 +86,14 @@ We make extensive use of openmaptiles, which in theory, does not require a huge 
    ```
 2. Docker
 
+### Run an 'low load' test
+
+```bash
+sequentially-generate-planet-mbtiles -t
+```
+
+Add the `-t` options to use the presupplied test-config.json. This test will generate low zoom levels of a small area in Africa and even on the lowest powered hardware should not take more and 20 minutes to run - often less than 5 minutes.
+
 ## Things to look out for
 
 1. If starting the process halfway throuhg (e.g. it crashed and you are resuming), the terminal may ask your permission when it comes to writing over certain files, since they were created with sudo privileges.
