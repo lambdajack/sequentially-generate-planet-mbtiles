@@ -1,6 +1,6 @@
 {
   "name": "sequentially-generate-planet-mbtiles",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices.",
   "exports": "./index.js",
   "type": "module",
