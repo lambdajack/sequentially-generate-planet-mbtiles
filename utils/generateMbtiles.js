@@ -28,7 +28,10 @@ export const generateMbtiles = async (
     );
   }
 
-  // Set up REPORT.txt
+  // Set up REPORT.txt and mbtiles folder
+  if (!fs.existsSync(`${pwd}/mbtiles`)) {
+    fs.mkdirSync(`${pwd}/mbtiles`);
+  }
   if (!fs.existsSync(`${pwd}/mbtiles/REPORT.txt`)) {
     fs.writeFileSync(`${pwd}/mbtiles/REPORT.txt`, "");
   }
