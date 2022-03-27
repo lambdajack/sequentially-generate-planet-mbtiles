@@ -2,7 +2,7 @@
 
 Catchy name right?
 
-### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices... slowly._
+### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices for free... slowly._
 
 ## TL;DR give me planet vector tiles!
 
@@ -13,9 +13,13 @@ Catchy name right?
 sudo apt-get install build-essential libsqlite3-dev zlib1g-dev
 ```
 
-3. `npx sequentially-generate-planet-mbtiles`
+3. Run with npx:
 
-4. [Rejoice]('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2FWIg8P0VNpgH8Q%2Fgiphy.gif&f=1&nofb=1') - see acknowledgements below for people to thank.
+```bash
+npx sequentially-generate-planet-mbtiles
+```
+
+4.  Rejoice - see acknowledgements below for people to thank.
 
 ## config.json (defaults shown)
 
@@ -47,7 +51,7 @@ npx sequentially-generate-planet-mbtiles -c /path/to/config.json
 
 **_keepDownloadedFiles_** - If true, downloaded files will be kept in the pbf directory. If false, they will be deleted. Files will not be downloaded if they are already present. `True` will use over twice the disk space upon completion. We would recommend that this option is selected if you foresee multiple attempts/downloads in your future - be kind to Geofabrik <3.
 
-**_keepSubRegionMbtiles_** - If true, each sub region mbtiles file (e.g. asia.mbtiles) will be kept, further drastically increasing required disk space. This may be particularly useful on old or slow hardware that has the tendancy to crash or give up!.
+**_keepSubRegionMbtiles_** - If true, each sub region mbtiles file (e.g. asia.mbtiles) will be kept, further drastically increasing required disk space. This may be particularly useful on old or slow hardware that has the tendancy to crash or give up!
 
 ## Why?
 
@@ -79,6 +83,10 @@ We make extensive use of openmaptiles, which in theory, does not require a huge 
    ```
 2. Docker
 
+## Things to look out for
+
+1. If starting the process halfway throuhg (e.g. it crashed and you are resuming), the terminal may ask your permission when it comes to writing over certain files, since they were created with sudo privileges.
+
 ## How to serve?
 
 We would recommend something like [tileserver-gl]('https://github.com/maptiler/tileserver-gl). Further reading can be found [here]('https://wiki.openstreetmap.org/wiki/MBTiles') (openstreetmap wiki).
@@ -87,6 +95,8 @@ We would recommend something like [tileserver-gl]('https://github.com/maptiler/t
 
 1. **Why do I have to run part of the programme with 'sudo' privileges?** You might not have to depending on your system, but most modern linux systems require sudo for commands like `make install`, which are required here. Therefore, we run those commands as sudo as a catch-all.
 2. **Do I have to download the entire planet?** Not at all. Simply remove/change the `config.json` `subRegions` array to include only the areas you want. Once downloaded, they will be merged together into a single file called `planet.mbtiles`. You can then rename that file to something more appropriate.
+3. **It's running, but my pbf folder is empty - should I be worried?** Check the openmaptiles/data folder. If your config has selected to delete files downloaded, then they will be moved rather than copied.
+4. **Ubuntu only?** Nope! It should work on any distro as long as the dependancies are installed.
 
 ## Acknowledgements
 
@@ -106,8 +116,18 @@ All welcome! Feature request, pull request, bug reports/fixes etc - go for it.
 
 We'd like to make this tool quite robust moving forward - since we needed it for a current project of ours, we have released it notwithstanding the current rough-and-ready nature.
 
+Feedback on this one is much appreciated :D.
+
+## Development
+
+We already depend on others enough for this, so the programme is written without any npm dependancies. This may change in the future though if we want to make the terminal pretty etc. Simply clone the repo and you're good to go. Just make sure you have the dependancies installed as above.
+
+Use the provided `development-config.json` as it is preconfigured to keep downloaded data and only download very small regions for quick testing.
+
 ## Todo
 
 1. TS conversion before significant improvement or features added.
 2. Extra error handling for if one of the third party processes should fail.
 3. The ability to select different system drives for downloading/generating files.
+4. Write tests before significant future development.
+5. Make the console prettier.
