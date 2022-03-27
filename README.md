@@ -29,6 +29,11 @@ npx sequentially-generate-planet-mbtiles
 npx sequentially-generate-planet-mbtiles -c /path/to/config.json
 ```
 
+....
+
+<details>
+  <summary>CLICK TO SEE DEFAULT CONFIG.JSON</summary>
+  
 ```json
 // config.json
 {
@@ -233,6 +238,9 @@ npx sequentially-generate-planet-mbtiles -c /path/to/config.json
   "tileZoomLevel": 12
 }
 ```
+</details>
+
+....
 
 **_subRegions_** - Defaults to downloading the each of the largest sub regions provided by Geofabrik in order to create vector tiles for the entire planet. Entries must be in the correct format according to the GEOFABRIK (https://download.geofabrik.de/) download api's. e.g. "australia-oceania-latest.osm.pbf" should be "australia-oceania"; "chad-latest.osm.pbf" should be "africa/chad"; "europe" will be downloaded from https://download.geofabrik.de/europe.html.
 
