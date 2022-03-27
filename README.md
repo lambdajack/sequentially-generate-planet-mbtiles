@@ -149,3 +149,5 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 5. Make the console prettier.
 6. Add option to include or not ocean tiles -o.
 7. Add automatically serve on completion option -s.
+8. Typos and grammatical errors on readme - add section about distritubing the load for tile generation - maybe.
+9. Add a success.json file showing which regions were successful, and ask the user if they would like to retry any failed regions
