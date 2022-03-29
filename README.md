@@ -353,3 +353,5 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 10. Add option to generate osm.pbf segments directly from osm data
 11. Add option to provide your own .osm.pbf files.
 12. Convert til-join to be iterative - allowing for report to be updated after each join.
+13. Add option to name output file
+14. Change mbtiles delete logic to only delete when successfully merged.
