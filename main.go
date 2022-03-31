@@ -82,13 +82,12 @@ func main() {
 		if _, err := os.Stat("water-polygons-split-4326.zip"); os.IsNotExist(err) {
 			_, err = downloadsubregion.DownloadOceanPoly(coastlineFolder)
 			if err != nil {
-		log.Fatalf("Error downloading ocean polygons: %v\n", err)
-	}
+				log.Fatalf("Error downloading ocean polygons: %v\n", err)
+			}
 		} else {
 			unzip.Unzip("water-polygons-split-4326.zip", coastlineFolder)
 		}
 	}
-
 
 	// Generate mbtiles for each subregion, downloading pbf files as necessary.
 	for _, subRegion := range config.SubRegions {
