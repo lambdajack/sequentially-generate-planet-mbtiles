@@ -42,6 +42,7 @@ func main() {
 	pwd, _ := os.Getwd()
 	pbfPath := pwd + "/" + pbfFolder
 	mbtilesPath := pwd + "/" + mbtilesFolder
+	coastLinePath := pwd + "/" + coastlineFolder
 
 	// Load flags and config.json if supplied; otherwise use defaults.
 	pathToConfig := flags.GetFlags()
@@ -113,7 +114,7 @@ func main() {
 		if _, err := os.Stat(fmt.Sprintf("mbtiles/%v.mbtiles", splitSubRegion[len(splitSubRegion)-1])); os.IsNotExist(err) {
 			inputFile := splitSubRegion[len(splitSubRegion)-1] + ".osm.pbf"
 			outputFile := splitSubRegion[len(splitSubRegion)-1] + ".mbtiles"
-			generateMbtilesCmd := fmt.Sprintf("sudo docker run -v %v:/pbf -v %v:/mbtiles %v --input /pbf/%v --output /mbtiles/%v", pbfPath, mbtilesPath, dockerTilemakerName, inputFile, outputFile)
+			generateMbtilesCmd := fmt.Sprintf("sudo docker run -v %v:/pbf -v %v:/mbtiles -v %v:/coastline %v --input /pbf/%v --output /mbtiles/%v", pbfPath, mbtilesPath, coastLinePath, dockerTilemakerName, inputFile, outputFile)
 			execute.OutputToConsole(generateMbtilesCmd)
 
 		} else {
