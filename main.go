@@ -55,7 +55,7 @@ func main() {
 	logger.AppendReport(fmt.Sprintf("CONFIG LOADED:\n %v\n", config))
 
 	// Clone required repositories
-	reposToClone := [2]string{"systemed/tilemaker", "mapbox/tippecanoe"}
+	reposToClone := [...]string{"systemed/tilemaker", "mapbox/tippecanoe"}
 	for _, repo := range reposToClone {
 		wg.Add(1)
 		go func(repo string) {
