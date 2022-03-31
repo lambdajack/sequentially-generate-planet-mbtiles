@@ -14,10 +14,9 @@ func AppendReport(msg string) {
 		log.Println("Cannot append REPORT.txt as it does not exist")
 	}
 	if _, err := f.Write([]byte(fmt.Sprintf("%v\n", msg))); err != nil {
-			log.Fatal(err)
+		log.Fatal(err)
 	}
 	if err := f.Close(); err != nil {
-			log.Fatal(err)
+		log.Fatal(err)
 	}
 }
-

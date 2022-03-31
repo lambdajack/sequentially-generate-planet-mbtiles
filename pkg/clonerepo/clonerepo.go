@@ -16,7 +16,7 @@ func CloneRepo(repoToClone string) error {
 	// Check to see if the repo dir already exists, and skip if so.
 	splitPath := strings.Split(repoToClone, "/")
 	if _, err := os.Stat(splitPath[len(splitPath)-1]); !os.IsNotExist(err) {
-		log.Printf("%v elready exists. Skipping clone.\n", splitPath[len(splitPath)-1])
+		log.Printf("%v already exists. Skipping clone.\n", splitPath[len(splitPath)-1])
 		return nil
 	}
 

@@ -14,33 +14,34 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/execute"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/flags"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/logger"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/unzip"
 )
 
 var wg sync.WaitGroup
 
 func main() {
-		// Set up folder structure and report file
-		pbfFolder := "pbf"
-		mbtilesFolder := "mbtiles"
-		mergedFolder := "mbtiles/merged"
-		folders := []string{pbfFolder, mbtilesFolder, mergedFolder}
-		for _, folder := range folders {
-			if _, err := os.Stat(folder); os.IsNotExist(err) {
-				os.MkdirAll(folder, os.ModePerm)
-			} else {
-				log.Printf("Folder: %v already exists. Skipping creation.\n", folder)
-			}
+	// Set up folder structure and report file
+	pbfFolder := "pbf"
+	mbtilesFolder := "mbtiles"
+	mergedFolder := "mbtiles/merged"
+	coastlineFolder := "coastline"
+	folders := [4]string{pbfFolder, mbtilesFolder, mergedFolder, coastlineFolder}
+	for _, folder := range folders {
+		if _, err := os.Stat(folder); os.IsNotExist(err) {
+			os.MkdirAll(folder, os.ModePerm)
+		} else {
+			log.Printf("Folder: %v already exists. Skipping creation.\n", folder)
 		}
-		reportFile := mergedFolder + "/REPORT.txt"
-		if _, err := os.Stat(reportFile); os.IsNotExist(err) {
-			log.Println("Cannot append REPORT.txt as it does not exist")
-		}
+	}
+	reportFile := mergedFolder + "/REPORT.txt"
+	if _, err := os.Stat(reportFile); os.IsNotExist(err) {
+		log.Println("Cannot append REPORT.txt as it does not exist")
+	}
 
-			// folder references
+	// folder references
 	pwd, _ := os.Getwd()
 	pbfPath := pwd + "/" + pbfFolder
 	mbtilesPath := pwd + "/" + mbtilesFolder
-
 
 	// Load flags and config.json if supplied; otherwise use defaults.
 	pathToConfig := flags.GetFlags()
@@ -75,6 +76,19 @@ func main() {
 	dockerTippecanoeName := "sequential-tippecanoe"
 	execute.OutputToConsole(fmt.Sprintf("sudo docker build -t %v tippecanoe", dockerTippecanoeName))
 
+	// Download water polygons if does not already exist.
+	if _, err := os.Stat("coastline/water_polygons.shp"); os.IsNotExist(err) {
+		if _, err := os.Stat("water-polygons-split-4326.zip"); os.IsNotExist(err) {
+			_, err = downloadsubregion.DownloadOceanPoly(coastlineFolder)
+			if err != nil {
+		log.Fatalf("Error downloading ocean polygons: %v\n", err)
+	}
+		} else {
+			unzip.Unzip("water-polygons-split-4326.zip", coastlineFolder)
+		}
+	}
+
+
 	// Generate mbtiles for each subregion, downloading pbf files as necessary.
 	for _, subRegion := range config.SubRegions {
 		// Check to see if subregion already exists, and skip if so.
@@ -89,7 +103,7 @@ func main() {
 				log.Printf("There was a problem downloading %v. Moving on to the next one.", subRegion)
 				continue
 			}
-			
+
 			if ok {
 				fmt.Printf("%v successfully downloaded.\n", subRegion)
 			}
@@ -97,10 +111,10 @@ func main() {
 
 		// Generate mbtiles inside docker container, if they don't already exist
 		if _, err := os.Stat(fmt.Sprintf("mbtiles/%v.mbtiles", splitSubRegion[len(splitSubRegion)-1])); os.IsNotExist(err) {
-		inputFile := splitSubRegion[len(splitSubRegion)-1] + ".osm.pbf"
-		outputFile := splitSubRegion[len(splitSubRegion)-1] + ".mbtiles"
-		generateMbtilesCmd := fmt.Sprintf("sudo docker run -v %v:/pbf -v %v:/mbtiles %v --input /pbf/%v --output /mbtiles/%v", pbfPath, mbtilesPath, dockerTilemakerName, inputFile, outputFile)
-		execute.OutputToConsole(generateMbtilesCmd)
+			inputFile := splitSubRegion[len(splitSubRegion)-1] + ".osm.pbf"
+			outputFile := splitSubRegion[len(splitSubRegion)-1] + ".mbtiles"
+			generateMbtilesCmd := fmt.Sprintf("sudo docker run -v %v:/pbf -v %v:/mbtiles %v --input /pbf/%v --output /mbtiles/%v", pbfPath, mbtilesPath, dockerTilemakerName, inputFile, outputFile)
+			execute.OutputToConsole(generateMbtilesCmd)
 
 		} else {
 			log.Printf("Mbtiles: mbtiles/%v.mbtiles already exists. Skipping generation.\n", splitSubRegion[len(splitSubRegion)-1])

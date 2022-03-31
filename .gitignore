@@ -3,5 +3,7 @@ openmaptiles
 tippecanoe
 tilemaker
 pbf
+coastline
+water-polygons*
 test.json
 my.json

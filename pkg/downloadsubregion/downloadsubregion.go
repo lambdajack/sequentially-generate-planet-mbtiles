@@ -8,6 +8,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/logger"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/unzip"
 )
 
 type DownloadInformation struct {
@@ -70,6 +73,68 @@ func DownloadSubRegion(subRegion, destFolder string) (ok bool, err error) {
 	_, err = io.Copy(f, tee)
 	if err != nil {
 		log.Printf("There was a problem writing to file: %v.osm.pbf\n", subRegion)
+		return false, err
+	}
+	return true, nil
+}
+
+func DownloadOceanPoly(oceanPolyDest string) (ok bool, err error) {
+	oceanPolyUrl := "https://osmdata.openstreetmap.de/download/water-polygons-split-4326.zip"
+
+	// HEAD request - find out the content-length (file size in bytes).
+	r, err := http.NewRequest("HEAD", oceanPolyUrl, nil)
+	if err != nil {
+		return false, err
+	}
+	rH, err := http.DefaultClient.Do(r)
+	if err != nil {
+		return false, err
+	}
+	contentLength, err := strconv.Atoi(rH.Header.Get("Content-Length"))
+	if err != nil {
+		log.Printf("No content length was provided for the download, therefore progress cannot be displayed. The file will still be downloaded.\n")
+	}
+	fmt.Printf("Content Length: %T, %v\n", contentLength, contentLength)
+
+	// Setup file to write download to.
+	oceanPolyFileName := "water-polygons-split-4326.zip"
+	f, err := os.Create(oceanPolyFileName)
+	if err != nil {
+		log.Println("Failed to create ocean poly file... skipping.")
+		logger.AppendReport("Failed to create ocean poly file... skipping. Ocean poly's will have to be added manually later if required.")
+		return false, err
+	}
+
+	// GET request
+	r.Method = "GET"
+	rG, err := http.DefaultClient.Do(r)
+	if err != nil {
+		log.Println(err)
+		return false, err
+	}
+	defer rG.Body.Close()
+
+	// Initiate struct implementing writer for progress reporting.
+	di := &DownloadInformation{
+		SubRegion:       oceanPolyUrl,
+		ContentLength:   contentLength,
+		TotalDownloaded: 0,
+	}
+
+	// Write to file and progress report.
+	tee := io.TeeReader(rG.Body, di)
+	_, err = io.Copy(f, tee)
+	if err != nil {
+		log.Printf("Failed to create ocean poly file... skipping.\n")
+		logger.AppendReport("Failed to create ocean poly file... skipping. Ocean poly's will have to be added manually later if required.")
+		return false, err
+	}
+
+	// Unziping poly into coastline
+	unzip.Unzip(oceanPolyFileName, oceanPolyDest)
+	if err != nil {
+		log.Printf("Failed to unzip ocean poly file... skipping.\n")
+		logger.AppendReport("Failed to unzip ocean poly file... skipping. Ocean poly's will have to be added manually later if required.")
 		return false, err
 	}
 	return true, nil
