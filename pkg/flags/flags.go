@@ -5,7 +5,7 @@ import (
 )
 
 func GetFlags() (pathToConfig *string) {
-	pathToConfig = flag.String("c", "test-config.json", "Relative or absolute path to config.json file")
+	pathToConfig = flag.String("c", "config.json", "Relative or absolute path to config.json file")
 	flag.Parse()
 	return pathToConfig
 }
