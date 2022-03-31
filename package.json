@@ -6,7 +6,9 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
+    "clean": "rm -rf mbtiles openmaptiles pbf tippecanoe",
+    "format-go": "go fmt ./..."
   },
   "bin": "./main.js",
   "keywords": [
