@@ -21,8 +21,12 @@ type DownloadInformation struct {
 
 func (di *DownloadInformation) Write(p []byte) (n int, err error) {
 	di.TotalDownloaded += len(p)
-	percentage := di.TotalDownloaded * 100 / di.ContentLength
-	log.Printf("Downloaded %v of %v bytes (%v%%) of %v\n", di.TotalDownloaded, di.ContentLength, percentage, di.SubRegion)
+	if di.ContentLength != 0 {
+		percentage := di.TotalDownloaded * 100 / di.ContentLength
+		log.Printf("Downloaded %v of %v bytes (%v%%) of %v\n", di.TotalDownloaded, di.ContentLength, percentage, di.SubRegion)
+	} else {
+		log.Printf("Downloaded %v bytes of %v\n", di.TotalDownloaded, di.SubRegion)
+	}
 	return di.TotalDownloaded, nil
 }
 
