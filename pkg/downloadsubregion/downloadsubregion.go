@@ -23,9 +23,9 @@ func (di *DownloadInformation) Write(p []byte) (n int, err error) {
 	di.TotalDownloaded += len(p)
 	if di.ContentLength != 0 {
 		percentage := di.TotalDownloaded * 100 / di.ContentLength
-		log.Printf("Downloaded %v of %v bytes (%v%%) of %v\n", di.TotalDownloaded, di.ContentLength, percentage, di.SubRegion)
+		fmt.Printf("\rDownloaded %v of %v bytes (%v%%) of %v", di.TotalDownloaded, di.ContentLength, percentage, di.SubRegion)
 	} else {
-		log.Printf("Downloaded %v bytes of %v\n", di.TotalDownloaded, di.SubRegion)
+		fmt.Printf("\rDownloaded %v bytes of %v", di.TotalDownloaded, di.SubRegion)
 	}
 	return di.TotalDownloaded, nil
 }
