@@ -5,13 +5,14 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
 )
 
 func OutputToConsole(commandString string) error {
 	comArgs := strings.Split(strings.Trim(commandString, " "), " ")
 	if len(comArgs) < 2 {
-		errStr := fmt.Errorf("pkg/execute | Received a command, but no arguments... exiting. \n Received the following command: %v", commandString)
-		return errStr
+		return stderrorhandler.StdErrorHandler(fmt.Sprintf("execute.go | Received a command, but no arguments... exiting. \n Received the following command: %v", commandString), nil)
 	}
 
 	cmd := exec.Command(comArgs[0], comArgs[1:]...)
@@ -19,7 +20,7 @@ func OutputToConsole(commandString string) error {
 	cmd.Stderr = os.Stderr
 
 	if err := cmd.Run(); err != nil {
-		return err
+		return stderrorhandler.StdErrorHandler(fmt.Sprintf("execute.go | Executing %v failed.", cmd), err)
 	}
 	cmd.Wait()
 	return nil

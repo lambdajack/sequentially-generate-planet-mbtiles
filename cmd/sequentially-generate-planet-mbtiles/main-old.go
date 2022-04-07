@@ -19,7 +19,7 @@ import (
 
 var wg sync.WaitGroup
 
-func main() {
+func mainOld() {
 	// Set up folder structure and report file
 	pbfFolder := "pbf"
 	mbtilesFolder := "mbtiles"

@@ -1,10 +1,12 @@
 package clonerepo
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
 )
 
 func CloneRepo(repoToClone string) error {
@@ -16,8 +18,8 @@ func CloneRepo(repoToClone string) error {
 	// Check to see if the repo dir already exists, and skip if so.
 	splitPath := strings.Split(repoToClone, "/")
 	if _, err := os.Stat(splitPath[len(splitPath)-1]); !os.IsNotExist(err) {
-		log.Printf("%v already exists. Skipping clone.\n", splitPath[len(splitPath)-1])
-		return nil
+		return stderrorhandler.StdErrorHandler(fmt.Sprintf("clonerepo.go | %v already exists. Skipping clone.\n", splitPath[len(splitPath)-1]), err)
+
 	}
 
 	// Attempt to validate the url to clone the repo from and correct it if necessary.
@@ -33,7 +35,7 @@ func CloneRepo(repoToClone string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Start(); err != nil {
-		return err
+		return stderrorhandler.StdErrorHandler("clonerepo.go | Failed to execute git clone command", err)
 	}
 	cmd.Wait()
 	return nil
