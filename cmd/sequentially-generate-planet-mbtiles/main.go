@@ -13,7 +13,6 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/unzipwaterpolygons"
 )
 
-// embed docker files into binary
 func main() {
 	flags.GetFlags()
 	folders.SetupFolderStructure()

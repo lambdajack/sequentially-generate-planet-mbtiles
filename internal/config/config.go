@@ -8,8 +8,8 @@ import (
 
 type Configuration struct {
 	DataDir                string `json:"dataDir"`
-	PathToTilemakerConfig  string `json:"pathToTilemakerConfig"`
-	PathToTilemakerProcess string `json:"pathToTilemakerProcess"`
+	TilemakerConfig  string `json:"TilemakerConfig"`
+	TilemakerProcess string `json:"TilemakerProcess"`
 }
 
 var Config Configuration

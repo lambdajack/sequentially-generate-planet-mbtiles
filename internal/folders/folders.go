@@ -35,12 +35,12 @@ func SetupFolderStructure() {
 		MbtilesMergedFolder = formatFolderString(MbtilesFolder + "/" + "merged")
 	}
 
-	if config.Config.PathToTilemakerConfig != "" {
-		TilemakerConfigFile = formatFolderString(config.Config.PathToTilemakerConfig)
+	if config.Config.TilemakerConfig != "" {
+		TilemakerConfigFile = formatFolderString(config.Config.TilemakerConfig)
 	}
 
-	if config.Config.PathToTilemakerProcess != "" {
-		TilemakerProcessFile = formatFolderString(config.Config.PathToTilemakerProcess)
+	if config.Config.TilemakerProcess != "" {
+		TilemakerProcessFile = formatFolderString(config.Config.TilemakerProcess)
 	}
 
 	allFolders := [...]*string{&DataFolder, &CoastlineFolder, &PbfFolder, &PbfSlicesFolder, &PbfQuadrantSlicesFolder, &MbtilesFolder, &MbtilesMergedFolder}
