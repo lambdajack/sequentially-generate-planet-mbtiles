@@ -13,8 +13,8 @@ var Pwd, _ = os.Getwd()
 
 var ConfigsFolder = formatFolderString(Pwd + "/" + "configs")
 
-var TilemakerConfigFile = formatFolderString(Pwd + "/" + config.Config.PathToTilemakerConfig)
-var TilemakerProcessFile = formatFolderString(Pwd + "/" + config.Config.PathToTilemakerProcess)
+var TilemakerConfigFile = formatFolderString(Pwd + "/" + "configs" +"/" + "tilemaker" + "/" + "config.json")
+var TilemakerProcessFile = formatFolderString(Pwd + "/" + "configs" +"/" + "tilemaker" + "/" + "process.lua")
 
 var DataFolder = formatFolderString(Pwd + "/" + "data")
 var CoastlineFolder = formatFolderString(DataFolder + "/" + "coastline")
@@ -25,7 +25,7 @@ var MbtilesFolder = formatFolderString(DataFolder + "/" + "mbtiles")
 var MbtilesMergedFolder = formatFolderString(MbtilesFolder + "/" + "merged")
 
 func SetupFolderStructure() {
-	if config.Config.DataDir != "data" {
+	if config.Config.DataDir != "" {
 		DataFolder = formatFolderString(config.Config.DataDir)
 		CoastlineFolder = formatFolderString(DataFolder + "/" + "coastline")
 		PbfFolder = formatFolderString(DataFolder + "/" + "pbf")
@@ -35,11 +35,11 @@ func SetupFolderStructure() {
 		MbtilesMergedFolder = formatFolderString(MbtilesFolder + "/" + "merged")
 	}
 
-	if config.Config.PathToTilemakerConfig != "configs/tilemaker/config.json" {
+	if config.Config.PathToTilemakerConfig != "" {
 		TilemakerConfigFile = formatFolderString(config.Config.PathToTilemakerConfig)
 	}
 
-	if config.Config.PathToTilemakerProcess != "configs/tilemaker/process.lua" {
+	if config.Config.PathToTilemakerProcess != "" {
 		TilemakerProcessFile = formatFolderString(config.Config.PathToTilemakerProcess)
 	}
 
