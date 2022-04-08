@@ -6,7 +6,7 @@ const cmdLineArguments = process.argv.slice(2);
 
 if (binaryExists) {
   execute("sudo", [
-    "./sequentially-generate-planet-mbtiles",
+    "./releases/sequentially-generate-planet-mbtiles",
     ...cmdLineArguments,
   ]);
 } else {

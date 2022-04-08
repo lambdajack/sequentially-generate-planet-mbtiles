@@ -24,12 +24,20 @@ func GenMbtiles() {
 		panic(err)
 	}
 
+	splitConfigPath := strings.Split(folders.TilemakerConfigFile, "/")
+	tilemakerConfigPath := strings.Join(splitConfigPath[:len(splitConfigPath)-1], "/")
+	tilemakerConfigFile := splitConfigPath[len(splitConfigPath)-1]
+
+	splitProcessPath := strings.Split(folders.TilemakerProcessFile, "/")
+	tilemakerProcessPath := strings.Join(splitProcessPath[:len(splitProcessPath)-1], "/")
+	tilemakerProcessFile := splitProcessPath[len(splitProcessPath)-1]
+
 	for _, file := range f {
 		if file.IsDir() == false {
 			outFileName := strings.Split(file.Name(), ".")[0] + ".mbtiles"
 
 			if _, err := os.Stat(filepath.FromSlash(folders.MbtilesFolder + "/" + outFileName)); os.IsNotExist(err) {
-				err := generatembtiles.GenerateMbTiles(file.Name(), outFileName, folders.PbfSlicesFolder, folders.MbtilesFolder, folders.CoastlineFolder, buildthirdpartycontainers.ContainerTilemakerName, folders.TilemakerConfigsFolder, "config.json", "process.lua")
+				err := generatembtiles.GenerateMbTiles(file.Name(), outFileName, folders.PbfSlicesFolder, folders.MbtilesFolder, folders.CoastlineFolder, buildthirdpartycontainers.ContainerTilemakerName, tilemakerConfigPath, tilemakerConfigFile, tilemakerProcessPath, tilemakerProcessFile)
 				if err != nil {
 					stderrorhandler.StdErrorHandler(fmt.Sprintf("genmbtiles.go | Failed to generate mbtiles for %s.", file.Name()), err)
 					mu.Lock()

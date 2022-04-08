@@ -1,6 +1,0 @@
-{
-  "subRegions": ["africa/seychelles", "africa/equatorial-guinea"],
-  "keepDownloadedFiles": true,
-  "keepSubRegionMbtiles": false,
-  "tileZoomLevel": 7
-}

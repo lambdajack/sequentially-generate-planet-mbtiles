@@ -1,1 +1,5 @@
-{}
+{
+  "dataDir": "data",
+  "pathToTilemakerConfig": "configs/tilemaker/config.json",
+  "pathToTilemakerProcess": "configs/tilemaker/process.lua"
+}

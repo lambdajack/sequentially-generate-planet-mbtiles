@@ -24,7 +24,7 @@ func Unzip(zipFilePath, unzipDestFolder string) error {
 
 	// Setup destination dir
 	if _, err := os.Stat(unzipDestFolder); os.IsNotExist(err) {
-		os.Mkdir(unzipDestFolder, 0755)
+		os.Mkdir(unzipDestFolder, os.ModePerm)
 		if err != nil {
 			return stderrorhandler.StdErrorHandler(fmt.Sprintf("unzip.go | Failed to create destination folder %v", unzipDestFolder), err)
 		}
