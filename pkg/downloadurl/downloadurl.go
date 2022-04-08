@@ -12,7 +12,7 @@ import (
 )
 
 type downloadInformation struct {
-	destFileName                    string
+	destFileName           string
 	counter, contentLength int64
 }
 
@@ -50,7 +50,7 @@ func DownloadUrl(url, destFileName, destFolder string) error {
 
 	// Initiate struct implementing writer for progress reporting.
 	di := downloadInformation{
-		destFileName:           destFileName,
+		destFileName:  destFileName,
 		counter:       0,
 		contentLength: r.ContentLength,
 	}

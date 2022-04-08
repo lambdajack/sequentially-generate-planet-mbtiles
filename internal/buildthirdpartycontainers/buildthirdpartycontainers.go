@@ -6,16 +6,14 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/execute"
 )
 
-func BuildContainers() (containerNames []string) {
-	dockerTilemakerName := "sequential-tilemaker"
-	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./tilemaker", dockerTilemakerName))
+var ContainerTilemakerName = "sequential-tilemaker"
+var ContainerTippecanoeName = "sequential-tippecanoe"
+var ContainerOsmiumName = "sequential-osmium"
 
-	dockerTippecanoeName := "sequential-tippecanoe"
-	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./tippecanoe", dockerTippecanoeName))
+func BuildContainers() {
+	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./tilemaker", ContainerTilemakerName))
 
-	dockerOsmiumName := "sequential-osmium"
-	execute.OutputToConsole(fmt.Sprintf("docker build -t %v build/osmium", dockerOsmiumName))
+	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./tippecanoe", ContainerTippecanoeName))
 
-	containerNames = []string{dockerTilemakerName, dockerTippecanoeName, dockerOsmiumName}
-	return containerNames
+	execute.OutputToConsole(fmt.Sprintf("docker build -t %v build/osmium", ContainerOsmiumName))
 }

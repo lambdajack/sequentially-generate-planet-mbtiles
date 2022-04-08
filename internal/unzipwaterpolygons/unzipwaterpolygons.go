@@ -9,7 +9,7 @@ import (
 )
 
 func UnzipWaterPolygons() {
-waterPolygonsPath := filepath.FromSlash(folders.DataFolder + "/" + "water-polygons-split-4326.zip")
+	waterPolygonsPath := filepath.FromSlash(folders.DataFolder + "/" + "water-polygons-split-4326.zip")
 
 	err := unzip.Unzip(waterPolygonsPath, folders.CoastlineFolder)
 	if err != nil {

@@ -357,4 +357,7 @@ Use the provided `development-config.json` as it is preconfigured to keep downlo
 14. Change mbtiles delete logic to only delete when successfully merged.
 15. Add exit listeners
 16. Option to provide download location for ocean poly
-17. Fix bug divide by zero when download fails
+17. Add docker kill on SIGINT
+18. Add skip quadrant generation (save space but slower)
+19. Add remove pbfs (save space)
+20. Add option to override default config

@@ -1,20 +1,20 @@
 package logger
 
 import (
-	"fmt"
 	"log"
 	"os"
 )
 
 func AppendReport(msg string) {
 	reportFile := "REPORT.txt"
-	f, err := os.Create(reportFile)
+
+	f, err := os.OpenFile(reportFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
-		log.Println("Cannot append REPORT.txt as it does not exist")
+		log.Println(err)
 	}
 	defer f.Close()
 
-	if _, err := f.Write([]byte(fmt.Sprintf("%v\n", msg))); err != nil {
+	if _, err = f.WriteString(msg); err != nil {
 		log.Println(err)
 	}
 }

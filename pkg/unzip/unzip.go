@@ -14,7 +14,7 @@ import (
 func Unzip(zipFilePath, unzipDestFolder string) error {
 	zipFilePath = filepath.FromSlash(filepath.FromSlash(zipFilePath))
 	unzipDestFolder = filepath.FromSlash(filepath.Clean(unzipDestFolder))
-	
+
 	// Open a zip archive for reading.
 	r, err := zip.OpenReader(zipFilePath)
 	if err != nil {
@@ -29,7 +29,6 @@ func Unzip(zipFilePath, unzipDestFolder string) error {
 			return stderrorhandler.StdErrorHandler(fmt.Sprintf("unzip.go | Failed to create destination folder %v", unzipDestFolder), err)
 		}
 	}
-	
 
 	// Iterate through the files in the archive,
 	for _, f := range r.File {
