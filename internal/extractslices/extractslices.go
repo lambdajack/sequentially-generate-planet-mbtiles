@@ -18,7 +18,7 @@ var mu sync.Mutex
 var chCount = make(chan int, 2)
 
 func ExtractSlicesFromQuadrants() {
-	for i := -2; i < 2; i++ {
+	for i := -180; i < 180; i++ {
 		chCount <- 1
 		wg.Add(1)
 		go func(wg *sync.WaitGroup, i int) {
