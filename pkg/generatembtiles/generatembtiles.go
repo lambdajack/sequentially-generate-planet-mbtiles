@@ -12,7 +12,7 @@ import (
 
 func GenerateMbTiles(inputFile, outputFile, pbfFolder, mbtilesFolder, coastlineFolder, containerName, configFile, processFile string) error {
 
-  splitConfigPath := strings.Split(configFile, string(os.PathSeparator))
+	splitConfigPath := strings.Split(configFile, string(os.PathSeparator))
 	splitProcessPath := strings.Split(processFile, string(os.PathSeparator))
 
 	configPath := strings.Join(splitConfigPath[:len(splitConfigPath)-1], string(os.PathSeparator))
@@ -21,10 +21,10 @@ func GenerateMbTiles(inputFile, outputFile, pbfFolder, mbtilesFolder, coastlineF
 	configFile = filepath.Base(configFile)
 	processFile = filepath.Base(processFile)
 
-var generateMbtilesCmd string
+	var generateMbtilesCmd string
 
-if processPath == configPath {
-	generateMbtilesCmd = fmt.Sprintf("docker run -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /config/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, containerName, inputFile, outputFile, configFile, processFile)
+	if processPath == configPath {
+		generateMbtilesCmd = fmt.Sprintf("docker run -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /config/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, containerName, inputFile, outputFile, configFile, processFile)
 	} else {
 		generateMbtilesCmd = fmt.Sprintf("docker run -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config -v %v:/process %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /process/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, processPath, containerName, inputFile, outputFile, configFile, processFile)
 	}

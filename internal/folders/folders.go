@@ -13,8 +13,8 @@ var Pwd, _ = os.Getwd()
 
 var ConfigsFolder = formatFolderString(Pwd + "/" + "configs")
 
-var TilemakerConfigFile = formatFolderString(Pwd + "/" + "configs" +"/" + "tilemaker" + "/" + "config.json")
-var TilemakerProcessFile = formatFolderString(Pwd + "/" + "configs" +"/" + "tilemaker" + "/" + "process.lua")
+var TilemakerConfigFile = formatFolderString(Pwd + "/" + "configs" + "/" + "tilemaker" + "/" + "config.json")
+var TilemakerProcessFile = formatFolderString(Pwd + "/" + "configs" + "/" + "tilemaker" + "/" + "process.lua")
 
 var DataFolder = formatFolderString(Pwd + "/" + "data")
 var CoastlineFolder = formatFolderString(DataFolder + "/" + "coastline")
