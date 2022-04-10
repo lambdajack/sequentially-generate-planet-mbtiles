@@ -128,3 +128,4 @@ We'd like to make this tool quite robust moving forward - since we needed it for
 18. Add skip quadrant generation (save space but slower)
 19. Add remove pbfs (save space)
 20. Add option to override default config
+21. Embed docker file into build binary
