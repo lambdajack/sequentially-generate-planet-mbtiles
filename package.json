@@ -6,7 +6,8 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
+    "clean": "rm -rf data"
   },
   "bin": "./main.js",
   "keywords": [
@@ -23,14 +24,16 @@
     "openstreetmap",
     "osm",
     "openmaptiles",
-    "tippecanoe"
+    "tippecanoe",
+    "tilemaker"
   ],
   "author": "Jack Bizzell",
   "license": "ISC",
   "files": [
     "./main.js",
-    "./config.json",
-    "./development-config.json",
-    "utils"
+    "utils",
+    "release",
+    "configs",
+    "build"
   ]
 }
