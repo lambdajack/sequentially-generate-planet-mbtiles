@@ -24,7 +24,8 @@
     "openstreetmap",
     "osm",
     "openmaptiles",
-    "tippecanoe"
+    "tippecanoe",
+    "tilemaker"
   ],
   "author": "Jack Bizzell",
   "license": "ISC",
