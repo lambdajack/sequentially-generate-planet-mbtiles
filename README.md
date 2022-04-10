@@ -18,7 +18,7 @@ npx sequentially-generate-planet-mbtiles
 
 ## config.json (defaults shown)
 
-### config supplied with the -c flag:
+#### config supplied with the -c flag:
 
 ```bash
 npx sequentially-generate-planet-mbtiles -c /path/to/config.json
@@ -78,6 +78,7 @@ We would recommend something like [tileserver-gl]('https://github.com/maptiler/t
 3. **Why do I have to run part of the programme with 'sudo' privileges?** Many docker installations require sudo to be executed. You may not have to execute the programme with sudo.
 4. **Do I have to download the entire planet?** At present, yes. Since if you are not downloading the entire planet, there are other tools out there which do a fine job of getting you mbtiles. We are working on being able to generate mbtiles for smaller areas (such as continents which may still not fit into the average computers RAM)
 5. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core4gb ram home pc without too much trouble. Just time.
+6. **Didn't this used to use GeoFabrik?** It did but the plan was always to move away from geofabrik sources for the planet since it felt unnecessary, when the data was already available direct from source. Further, the GeoFabrik data leaves gaps in the ocean and some of their slices require more than 4gb of ram to process in memory. Ultimately, by getting the data from source, we have more control over it. 
 
 ## Acknowledgements
 
