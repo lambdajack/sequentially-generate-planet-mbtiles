@@ -7,8 +7,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "clean": "rm -rf mbtiles openmaptiles pbf tippecanoe",
-    "format-go": "go fmt ./..."
+    "clean": "rm -rf data"
   },
   "bin": "./main.js",
   "keywords": [
@@ -31,8 +30,9 @@
   "license": "ISC",
   "files": [
     "./main.js",
-    "./config.json",
-    "./development-config.json",
-    "utils"
+    "utils",
+    "release",
+    "configs",
+    "build"
   ]
 }

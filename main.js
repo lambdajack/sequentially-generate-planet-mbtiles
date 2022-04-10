@@ -4,12 +4,16 @@ import { binaryExists } from "./utils/checkBinaryExists.js";
 
 const cmdLineArguments = process.argv.slice(2);
 
-if (binaryExists) {
+const binaryName = "v2.0.0-sequentially-generate-planet-mbtiles.exe"
+
+console.log(binaryExists(binaryName))
+
+if (binaryExists(binaryName)) {
   execute("sudo", [
-    "./releases/sequentially-generate-planet-mbtiles",
+    `./releases/${binaryName}`,
     ...cmdLineArguments,
   ]);
 } else {
-  console.log("sequentially-generate-planet-mbtiles not found. Exiting...");
+  console.log("sequentially-generate-planet-mbtiles binary not found. Exiting...");
   process.exit(1);
 }
