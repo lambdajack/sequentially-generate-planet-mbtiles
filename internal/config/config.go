@@ -7,7 +7,7 @@ import (
 )
 
 type Configuration struct {
-	DataDir                string `json:"dataDir"`
+	DataDir          string `json:"dataDir"`
 	TilemakerConfig  string `json:"TilemakerConfig"`
 	TilemakerProcess string `json:"TilemakerProcess"`
 }
@@ -19,7 +19,7 @@ func LoadConfig(pathToConfig string) (*Configuration, error) {
 	dec := json.NewDecoder(file)
 	err = dec.Decode(&Config)
 	if err != nil {
-		log.Fatal("Unable to read config file - config file may be invalid. Unable to proceed...")
+		log.Fatal("Unable to read config file - config file may be invalid. Supply a config.json file using the '-c' flag")
 	}
 	return &Config, nil
 }
