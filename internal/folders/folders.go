@@ -56,6 +56,5 @@ func SetupFolderStructure() {
 
 func formatFolderString(folder string) string {
 	folder = filepath.Clean(folder)
-	folder = filepath.FromSlash(folder)
 	return folder
 }

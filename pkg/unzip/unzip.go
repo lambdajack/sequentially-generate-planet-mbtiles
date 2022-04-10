@@ -12,8 +12,8 @@ import (
 )
 
 func Unzip(zipFilePath, unzipDestFolder string) error {
-	zipFilePath = filepath.FromSlash(filepath.FromSlash(zipFilePath))
-	unzipDestFolder = filepath.FromSlash(filepath.Clean(unzipDestFolder))
+	zipFilePath = filepath.Clean(zipFilePath)
+	unzipDestFolder = filepath.Clean(unzipDestFolder)
 
 	// Open a zip archive for reading.
 	r, err := zip.OpenReader(zipFilePath)

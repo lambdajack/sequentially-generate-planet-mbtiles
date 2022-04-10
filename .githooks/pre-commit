@@ -1,0 +1,6 @@
+#!/usr/bin/sh
+
+echo "RUNNING PRE-COMMIT HOOK | .githooks/pre-commit"
+
+echo "Running go fmt"
+go fmt ./...
