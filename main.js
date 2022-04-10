@@ -10,7 +10,7 @@ console.log(binaryExists(binaryName))
 
 if (binaryExists(binaryName)) {
   execute("sudo", [
-    `./releases/${binaryName}`,
+    `../release/${binaryName}`,
     ...cmdLineArguments,
   ]);
 } else {
