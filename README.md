@@ -1,8 +1,6 @@
 # Sequentially Generate Planet Mbtiles
 
-Catchy name right?
-
-### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices for free... slowly._
+### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices for free._
 
 ## TL;DR give me planet vector tiles!
 
