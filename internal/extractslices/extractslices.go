@@ -34,10 +34,10 @@ func ExtractSlicesFromQuadrants() {
 			if err != nil {
 				stderrorhandler.StdErrorHandler(fmt.Sprintf("osmboundaryextractslices.go | Failed to extract %s from %s. Skipping and moving onto next one. Data can be retrospecitively filled in manually later.", bbox, src), err)
 				mu.Lock()
-				logger.AppendReport(fmt.Sprintf("SLICE_EXTRACT_FAILED: %s from %s", bbox, src))
+				logger.AppendReport(fmt.Sprintf("SLICE_EXTRACT_FAILED: %s from %s\n", bbox, src))
 			} else {
 				mu.Lock()
-				logger.AppendReport(fmt.Sprintf("SLICE_EXTRACT_SUCCESS: %s from %s", bbox, src))
+				logger.AppendReport(fmt.Sprintf("SLICE_EXTRACT_SUCCESS: %s from %s\n", bbox, src))
 			}
 			mu.Unlock()
 			<-chCount

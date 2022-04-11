@@ -25,7 +25,7 @@ func GenMbtiles() {
 	}
 
 	for _, file := range f {
-		if file.IsDir() == false {
+		if !file.IsDir() {
 			outFileName := strings.Split(file.Name(), ".")[0] + ".mbtiles"
 
 			if _, err := os.Stat(filepath.FromSlash(folders.MbtilesFolder + "/" + outFileName)); os.IsNotExist(err) {
@@ -33,10 +33,10 @@ func GenMbtiles() {
 				if err != nil {
 					stderrorhandler.StdErrorHandler(fmt.Sprintf("genmbtiles.go | Failed to generate mbtiles for %s.", file.Name()), err)
 					mu.Lock()
-					logger.AppendReport(fmt.Sprintf("GENERATE_MBTILES_FAILED: %s", outFileName))
+					logger.AppendReport(fmt.Sprintf("GENERATE_MBTILES_FAILED: %s\n", outFileName))
 				} else {
 					mu.Lock()
-					logger.AppendReport(fmt.Sprintf("GENERATE_MBTILES_SUCCESS: %s", outFileName))
+					logger.AppendReport(fmt.Sprintf("GENERATE_MBTILES_SUCCESS: %s\n", outFileName))
 				}
 				mu.Unlock()
 
