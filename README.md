@@ -105,24 +105,17 @@ We'd like to make this tool quite robust moving forward - since we needed it for
 
 ## Todo
 
-1. TS conversion before significant improvement or features added.
-2. Extra error handling for if one of the third party processes should fail.
-3. The ability to select different system drives for downloading/generating files.
-4. Write tests before significant future development.
-5. Make the console prettier.
-6. Add option to include or not ocean tiles -o.
-7. Add automatically serve on completion option -s.
-8. Typos and grammatical errors on readme - add section about distritubing the load for tile generation - maybe.
-9. Add sleep function at points in stdout user may wish to read and hold it there for a time.
-10. Add option to generate osm.pbf segments directly from osm data
-11. Add option to provide your own .osm.pbf files.
-12. Convert til-join to be iterative - allowing for report to be updated after each join.
-13. Add option to name output file
-14. Change mbtiles delete logic to only delete when successfully merged.
-15. Add exit listeners
-16. Option to provide download location for ocean poly
-17. Add docker kill on SIGINT
-18. Add skip quadrant generation (save space but slower)
-19. Add remove pbfs (save space)
-20. Add option to override default config
-21. Embed docker file into build binary
+1. Extra error handling for if one of the third party processes should fail.
+2. The ability to select different system drives for downloading/generating files.
+3. Write tests before significant future development.
+4. Make the console prettier.
+5. Add option to include or not ocean tiles -o.
+6. Add automatically serve on completion option -s.
+7. Add sleep function at points in stdout user may wish to read and hold it there for a time.
+8.  Consider converting tile-join to operate iteratively - allowing the report to be updated after each join.
+9.  Add option to name output file
+10. Add exit listeners
+11. Add docker kill on SIGINT
+12. Add skip quadrant generation (save space but slower)
+13. Add remove pbfs (save space)
+14. Embed docker file into build binary
