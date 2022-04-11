@@ -22,7 +22,11 @@ var wg = &sync.WaitGroup{}
 func ExtractQuadrants() {
 	chCount := make(chan int, maxRoutines)
 
-	quadrantsToGenerate := [...]Quadrant{{name: "q1.osm.pbf", bbox: "-180,-85,-59.9,85"}, {name: "q2.osm.pbf", bbox: "-60.1,-85,0.1,85"}, {name: "q3.osm.pbf", bbox: "-0.1,-85,60.1,85"}, {name: "q4.osm.pbf", bbox: "59.9,-85,180,85"}}
+	quadrantsToGenerate := [...]Quadrant{
+		{name: "q1.osm.pbf", bbox: "-180,-85,-90.1,85"},
+		{name: "q2.osm.pbf", bbox: "-89.9,-85,0.1,85"},
+		{name: "q3.osm.pbf", bbox: "-0.1,-85,90.1,85"},
+		{name: "q4.osm.pbf", bbox: "89.9,-85,180,85"}}
 	for _, quadrant := range quadrantsToGenerate {
 		chCount <- 1
 		wg.Add(1)

@@ -51,7 +51,7 @@ func setK(i int) float32 {
 	if i == -180 {
 		return float32(i)
 	} else {
-		return float32(i) - 0.01
+		return float32(i) - 0.001
 	}
 }
 
@@ -59,7 +59,7 @@ func setJ(i int) float32 {
 	if i == 179 {
 		return float32(180)
 	} else {
-		return float32(i) + 1.01
+		return float32(i) + 1.001
 	}
 }
 
@@ -67,13 +67,13 @@ func setSrc(i int) string {
 	var src string
 
 	if i < -90 {
-		src = fmt.Sprintf("q1.osm.pbf")
+		src = "q1.osm.pbf"
 	} else if i < 0 {
-		src = fmt.Sprintf("q2.osm.pbf")
+		src = "q2.osm.pbf"
 	} else if i < 90 {
-		src = fmt.Sprintf("q3.osm.pbf")
+		src = "q3.osm.pbf"
 	} else {
-		src = fmt.Sprintf("q4.osm.pbf")
+		src = "q4.osm.pbf"
 	}
 
 	return src
