@@ -10,7 +10,7 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/folders"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/genmbtiles"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/genplanet"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/unzipwaterpolygons"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/unzippolygons"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	clonerepos.CloneRepos()
 	buildthirdpartycontainers.BuildContainers()
 	downloadosmdata.DownloadOsmData()
-	unzipwaterpolygons.UnzipWaterPolygons()
+	unzippolygons.UnzipPolygons()
 	extractquadrants.ExtractQuadrants()
 	extractslices.ExtractSlicesFromQuadrants()
 	genmbtiles.GenMbtiles()

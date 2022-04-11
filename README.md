@@ -117,3 +117,4 @@ We'd like to make this tool quite robust moving forward - since we needed it for
 12. Add skip quadrant generation (save space but slower)
 13. Add remove pbfs (save space)
 14. Embed docker file into build binary
+15. Add landcover

@@ -25,10 +25,26 @@ func DownloadOsmData() {
 		destFileName: "water-polygons-split-4326.zip",
 		destFolder:   folders.DataFolder,
 	}
-	downloads := [...]downloadInformation{osmPlanetPbf, waterPolygons}
+	landCoverUrban := downloadInformation{
+		url:          "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_urban_areas.zip",
+		destFileName: "ne_10m_urban_areas.zip",
+		destFolder:   folders.DataFolder,
+	}
+	landCoverIceShelves := downloadInformation{
+		url:          "https://naciscdn.org/naturalearth/10m/physical/ne_10m_antarctic_ice_shelves_polys.zip",
+		destFileName: "ne_10m_antarctic_ice_shelves_polys.zip",
+		destFolder:   folders.DataFolder,
+	}
+	landCoverGlaciated := downloadInformation{
+		url:          "https://naciscdn.org/naturalearth/10m/physical/ne_10m_glaciated_areas.zip",
+		destFileName: "ne_10m_glaciated_areas.zip",
+		destFolder:   folders.DataFolder,
+	}
+
+	downloads := [...]downloadInformation{osmPlanetPbf, waterPolygons, landCoverUrban, landCoverIceShelves, landCoverGlaciated}
 
 	for _, dl := range downloads {
-		if _, err := os.Stat(filepath.FromSlash(dl.destFolder + "/" + dl.destFileName)); os.IsNotExist(err) {
+		if _, err := os.Stat(filepath.Clean(dl.destFolder + "/" + dl.destFileName)); os.IsNotExist(err) {
 			err := downloadurl.DownloadUrl(dl.url, dl.destFileName, dl.destFolder)
 			if err != nil {
 				stderrorhandler.StdErrorHandler("main.go | Failed downloading required initial data. Unable to proceed", err)

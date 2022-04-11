@@ -18,6 +18,7 @@ var TilemakerProcessFile = formatFolderString(Pwd + "/" + "configs" + "/" + "til
 
 var DataFolder = formatFolderString(Pwd + "/" + "data")
 var CoastlineFolder = formatFolderString(DataFolder + "/" + "coastline")
+var LandcoverFolder = formatFolderString(DataFolder + "/" + "landcover")
 var PbfFolder = formatFolderString(DataFolder + "/" + "pbf")
 var PbfSlicesFolder = formatFolderString(PbfFolder + "/" + "slices")
 var PbfQuadrantSlicesFolder = formatFolderString(PbfSlicesFolder + "/" + "quadrants")
@@ -28,6 +29,7 @@ func SetupFolderStructure() {
 	if config.Config.DataDir != "" {
 		DataFolder = formatFolderString(config.Config.DataDir)
 		CoastlineFolder = formatFolderString(DataFolder + "/" + "coastline")
+		LandcoverFolder = formatFolderString(DataFolder + "/" + "landcover")
 		PbfFolder = formatFolderString(DataFolder + "/" + "pbf")
 		PbfSlicesFolder = formatFolderString(PbfFolder + "/" + "slices")
 		PbfQuadrantSlicesFolder = formatFolderString(PbfSlicesFolder + "/" + "quadrants")
@@ -43,7 +45,7 @@ func SetupFolderStructure() {
 		TilemakerProcessFile = formatFolderString(config.Config.TilemakerProcess)
 	}
 
-	allFolders := [...]*string{&DataFolder, &CoastlineFolder, &PbfFolder, &PbfSlicesFolder, &PbfQuadrantSlicesFolder, &MbtilesFolder, &MbtilesMergedFolder}
+	allFolders := [...]*string{&DataFolder, &CoastlineFolder, &LandcoverFolder, &PbfFolder, &PbfSlicesFolder, &PbfQuadrantSlicesFolder, &MbtilesFolder, &MbtilesMergedFolder}
 
 	for _, folder := range allFolders {
 		err := os.MkdirAll(*folder, os.ModePerm)
