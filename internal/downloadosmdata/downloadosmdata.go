@@ -50,6 +50,7 @@ func DownloadOsmData() {
 				stderrorhandler.StdErrorHandler("main.go | Failed downloading required initial data. Unable to proceed", err)
 				panic(err)
 			}
+			fmt.Printf("Download success: %v\n", dl.destFileName)
 		} else {
 			fmt.Printf("main.go | %v already exists. Skipping download.\n", dl.destFileName)
 		}
