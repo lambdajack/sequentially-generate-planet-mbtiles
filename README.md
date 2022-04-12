@@ -6,11 +6,11 @@
 
 1. Have [Docker]('https://docs.docker.com/get-docker/') installed.
 
-2. `git clone git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
+2. `git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
 
 3. `sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe`
 
-3.  Rejoice - see acknowledgements below for people to thank.
+4.  Rejoice - see acknowledgements below for people to thank.
 
 ## config.json (defaults shown)
 
