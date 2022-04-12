@@ -1,4 +1,4 @@
-package unzip
+package flatunzip
 
 import (
 	"archive/zip"

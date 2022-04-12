@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/folders"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/flatunzip"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/unzip"
 )
 
 type unzipInformation struct {
@@ -25,7 +25,7 @@ func UnzipPolygons() {
 	for i, zipFile := range fileNames {
 		fileNames[i].srcPath = filepath.Clean(folders.DataFolder + "/" + zipFile.srcPath)
 
-		err := unzip.Unzip(fileNames[i].srcPath, fileNames[i].destPath)
+		err := flatunzip.Unzip(fileNames[i].srcPath, fileNames[i].destPath)
 		if err != nil {
 			stderrorhandler.StdErrorHandler(fmt.Sprintf("unzippolygons.go | Failed unzipping %v polygons. Unable to proceed...", zipFile.srcPath), err)
 			panic(err)
