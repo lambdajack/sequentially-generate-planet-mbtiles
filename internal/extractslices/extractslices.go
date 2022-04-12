@@ -17,7 +17,7 @@ var mu sync.Mutex
 
 var chCount = make(chan int, 2)
 
-func ExtractSlicesFromQuadrants() {
+func FromQuadrants() {
 	for i := -180; i < 180; i++ {
 		chCount <- 1
 		wg.Add(1)
@@ -50,17 +50,15 @@ func ExtractSlicesFromQuadrants() {
 func setK(i int) float32 {
 	if i == -180 {
 		return float32(i)
-	} else {
-		return float32(i) - 0.001
 	}
+	return float32(i) - 0.001
 }
 
 func setJ(i int) float32 {
 	if i == 179 {
 		return float32(180)
-	} else {
-		return float32(i) + 1.001
 	}
+	return float32(i) + 1.001
 }
 
 func setSrc(i int) string {

@@ -21,7 +21,7 @@ func main() {
 	downloadosmdata.DownloadOsmData()
 	unzippolygons.UnzipPolygons()
 	extractquadrants.ExtractQuadrants()
-	extractslices.ExtractSlicesFromQuadrants()
+	extractslices.FromQuadrants()
 	genmbtiles.GenMbtiles()
 	genplanet.GenPlanet()
 }

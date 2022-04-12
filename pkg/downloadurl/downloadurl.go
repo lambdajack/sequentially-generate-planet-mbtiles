@@ -27,7 +27,7 @@ func (d *downloadInformation) Write(p []byte) (n int, err error) {
 	return int(d.counter), nil
 }
 
-func DownloadUrl(url, destFileName, destFolder string) error {
+func DownloadURL(url, destFileName, destFolder string) error {
 	slash := string(os.PathSeparator)
 
 	err := os.MkdirAll(destFolder, os.ModePerm)

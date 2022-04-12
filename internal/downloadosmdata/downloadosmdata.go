@@ -45,7 +45,7 @@ func DownloadOsmData() {
 
 	for _, dl := range downloads {
 		if _, err := os.Stat(filepath.Clean(dl.destFolder + "/" + dl.destFileName)); os.IsNotExist(err) {
-			err := downloadurl.DownloadUrl(dl.url, dl.destFileName, dl.destFolder)
+			err := downloadurl.DownloadURL(dl.url, dl.destFileName, dl.destFolder)
 			if err != nil {
 				stderrorhandler.StdErrorHandler("main.go | Failed downloading required initial data. Unable to proceed", err)
 				panic(err)
