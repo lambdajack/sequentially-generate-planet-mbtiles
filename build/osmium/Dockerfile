@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 ENV OSMIUM_VERSION 2.18.0
