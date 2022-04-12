@@ -8,7 +8,7 @@
 
 2. `git clone git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
 
-3. `sudo ./release/v2.0.0-sequentially-generate-planet-mbtiles.exe`
+3. `sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe`
 
 3.  Rejoice - see acknowledgements below for people to thank.
 
@@ -17,7 +17,7 @@
 #### config supplied with the -c flag:
 
 ```bash
- sudo ./release/v2.0.0-sequentially-generate-planet-mbtiles.exe -c /path/to/config.json
+ sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe -c /path/to/config.json
 ```
   
 ```json
@@ -47,9 +47,9 @@ That's where [sequentially-generate-planet-mbtiles](https://github.com/lambdajac
 
 **_This programme aims to be a simple set and forget, one liner which gives anyone - a way to get a full-featured and bang up to date set of vector tiles for the entire planet on small hardware._**
 
-It's also designed (work in progress) to be fail safe - meaning that if your hardward (or our software) does crash mid process, you have not lost all your data, and you are able to start again from a point mid-way through.
+It's also designed (work in progress) to be fail safe - meaning that if your hardware (or our software) does crash mid process, you have not lost all your data, and you are able to start again from a point mid-way through.
 
-This also uses the maptiler mbtiles spec, meaning when you serve the files with something like tileserver-gl, you don't have to worry about setting up styles, as the basic one will be automatically available. Use the -s option to automatically serve the files when done on `http://localhost:8080`. (-s not yet implemented).
+This also uses the openmaptiles mbtiles spec, meaning that when accessing the served tiles you can easily use most of the open source styles available. The default is aimed at using the OSM Bright style. More information on styles can be found below.
 
 ## Considerations
 1. Hardware usage - this will consume effectively 100% CPU for up to a few days and will also do millions of read/writes from ssd/RAM/CPUcache. While modern hardware and vps' are perfectly capable of handling this, if you are using old hardware, beware that its remaining lifespan may be significantly reduced.
@@ -70,14 +70,31 @@ This also uses the maptiler mbtiles spec, meaning when you serve the files with 
 
 1. Have [Docker](https://www.docker.com/) installed.
 
-## How to serve?
+# Serving mbtiles
 
-We would recommend something like [tileserver-gl]('https://github.com/maptiler/tileserver-gl). The style is designed to match the basic one tileserver-gl provides. Further reading can be found [here]('https://wiki.openstreetmap.org/wiki/MBTiles') (openstreetmap wiki).
+## Software
+
+We would recommend something like [tileserver-gl](https://github.com/maptiler/tileserver-gl). Further reading can be found on the [openstreetmap wiki](https://wiki.openstreetmap.org/wiki/MBTiles).
+
+## Styles
+
+The default output of `sequentially-generate-planet-mbtiles` looks to match with the open source OSM ['Bright'](https://github.com/openmaptiles/osm-bright-gl-style/blob/master/style.json) style.
+
+When accessing your tileserver with something like [MapLibre](https://maplibre.org/maplibre-gl-js-docs/api/) from a front end application, a good place to start would be passing it a copy of the above ['Bright'](https://github.com/openmaptiles/osm-bright-gl-style/blob/master/style.json) style, **making sure to edit the urls to point to the correct places**.
+
+You can edit the output of `sequentially-generate-planet-mbtiles` by providing a customised process or config file through the config file.
+
+### Style first considerations
+If making your own style or editing an existing one, note that `sequentially-generate-planet-mbtiles` by default will write text to the `name:latin` tag. If your maps are displayed, but missing text, check that your style is looking for `name:latin` and not something else (e.g. simply `name`).
+
+Pay attention to your fonts. The OSM Bright style makes use of Noto Sans variants (bold, italic & regular). If you are using tileserver-gl to serve your tiles, it only comes with the regular variant of Noto Sans (not the bold or the italic); therefore, it may look like text labels are missing since the style won't be able to find the fonts. You should therefore consider editing the style and changing all mentions of the font to use only the regular variant. Alternatively, you could ensure that all fonts necessary are present.
+
+**Further to the above, please find in this repo, a slightly [edited](./configs/styles/sgpm-bright.json) OSM Bright style for use with the default tileserver-gl. Feed this to your MapLibre or similar front end for a pleasent map suitable for most use cases.**
 
 ## FAQ
 
 1. **How long will this take?** Low spec hardware? Whole planet? A few days. Maybe less than 48 hours for 16 CPUs.
-2. **_Would I use this if I have powerful hardware?_** Maybe. Since the programme essentially saves its progress as it goes, even if you have strong hardware, you are reducing the time taken to redo the process in the event of a crash or file corruption. Further, the RAM is what is really saved here so if you have say 32 cores and 64gb RAM, you still would not be able to generate the entire planet by loading it into memory. Additionally, it just saves time configuring everything.
+2. **Would I use this if I have powerful hardware?** Maybe. Since the programme essentially saves its progress as it goes, even if you have strong hardware, you are reducing the time taken to redo the process in the event of a crash or file corruption. Further, the RAM is what is really saved here so if you have say 32 cores and 64gb RAM, you still would not be able to generate the entire planet by loading it into memory. Additionally, it just saves time configuring everything.
 3. **Why do I have to run part of the programme with 'sudo' privileges?** Many docker installations require sudo to be executed. You may not have to execute the programme with sudo.
 4. **Do I have to download the entire planet?** At present, yes. Since if you are not downloading the entire planet, there are other tools out there which do a fine job of getting you mbtiles. We are working on being able to generate mbtiles for smaller areas (such as continents which may still not fit into the average computers RAM)
 5. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core4gb ram home pc without too much trouble. Just time.
