@@ -11,9 +11,9 @@ var ContainerTippecanoeName = "sequential-tippecanoe"
 var ContainerOsmiumName = "sequential-osmium"
 
 func BuildContainers() {
-	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./tilemaker", ContainerTilemakerName))
+	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./third_party/tilemaker", ContainerTilemakerName))
 
-	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./tippecanoe", ContainerTippecanoeName))
+	execute.OutputToConsole(fmt.Sprintf("docker build -t %v ./third_party/tippecanoe", ContainerTippecanoeName))
 
-	execute.OutputToConsole(fmt.Sprintf("docker build -t %v build/osmium", ContainerOsmiumName))
+	execute.OutputToConsole(fmt.Sprintf("docker build -t %v -f ./build/osmium/Dockerfile .", ContainerOsmiumName))
 }

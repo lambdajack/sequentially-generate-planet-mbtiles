@@ -6,7 +6,7 @@
 
 1. Have [Docker]('https://docs.docker.com/get-docker/') installed.
 
-2. `git clone https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
+2. `git clone git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
 
 3. `sudo ./release/v2.0.0-sequentially-generate-planet-mbtiles.exe`
 
@@ -116,5 +116,3 @@ We'd like to make this tool quite robust moving forward - since we needed it for
 11. Add docker kill on SIGINT
 12. Add skip quadrant generation (save space but slower)
 13. Add remove pbfs (save space)
-14. Embed docker file into build binary
-15. Add landcover

@@ -11,20 +11,14 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir /var/install
 WORKDIR /var/install
 
-RUN wget https://github.com/osmcode/libosmium/archive/v${OSMIUM_VERSION}.tar.gz && \
-    tar xzvf v${OSMIUM_VERSION}.tar.gz && \
-    rm v${OSMIUM_VERSION}.tar.gz && \
-    mv libosmium-${OSMIUM_VERSION} libosmium
+COPY third_party/libosmium libosmium
 
 RUN cd libosmium && \
     mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DINSTALL_PROTOZERO=ON .. && \
     make
 
-RUN wget https://github.com/osmcode/osmium-tool/archive/v${OSMIUM_TOOL_VERSION}.tar.gz && \
-    tar xzvf v${OSMIUM_TOOL_VERSION}.tar.gz && \
-    rm v${OSMIUM_TOOL_VERSION}.tar.gz && \
-    mv osmium-tool-${OSMIUM_TOOL_VERSION} osmium-tool
+COPY third_party/osmium-tool osmium-tool
 
 RUN cd osmium-tool && \
     mkdir build && cd build && \
