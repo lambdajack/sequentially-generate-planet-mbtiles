@@ -6,7 +6,7 @@ ENV OSMIUM_TOOL_VERSION 1.14.0
 
 RUN apt-get update
 RUN apt-get update && apt-get install -y \
-    wget libosmium2-dev libprotozero-dev libboost-program-options-dev libbz2-dev zlib1g-dev liblz4-dev libexpat1-dev cmake pandoc build-essential
+    libosmium2-dev libprotozero-dev libboost-program-options-dev libbz2-dev zlib1g-dev liblz4-dev libexpat1-dev cmake pandoc build-essential
 
 RUN mkdir /var/install
 WORKDIR /var/install
