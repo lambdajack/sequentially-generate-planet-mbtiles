@@ -18,7 +18,12 @@ var TilemakerProcessFile = formatFolderString(Pwd + "/" + "third_party" + "/" + 
 
 var DataFolder = formatFolderString(Pwd + "/" + "data")
 var CoastlineFolder = formatFolderString(DataFolder + "/" + "coastline")
+
 var LandcoverFolder = formatFolderString(DataFolder + "/" + "landcover")
+var LandCoverUrbanDepth = formatFolderString(LandcoverFolder + "/" + "ne_10m_urban_areas")
+var LandCoverIceShelvesDepth = formatFolderString(LandcoverFolder + "/" + "ne_10m_antarctic_ice_shelves_polys")
+var LandCoverGlaciatedDepth = formatFolderString(LandcoverFolder + "/" + "ne_10m_glaciated_areas")
+
 var PbfFolder = formatFolderString(DataFolder + "/" + "pbf")
 var PbfSlicesFolder = formatFolderString(PbfFolder + "/" + "slices")
 var PbfQuadrantSlicesFolder = formatFolderString(PbfSlicesFolder + "/" + "quadrants")
@@ -30,6 +35,9 @@ func SetupFolderStructure() {
 		DataFolder = formatFolderString(config.Config.DataDir)
 		CoastlineFolder = formatFolderString(DataFolder + "/" + "coastline")
 		LandcoverFolder = formatFolderString(DataFolder + "/" + "landcover")
+		LandCoverUrbanDepth = formatFolderString(LandcoverFolder + "/" + "ne_10m_urban_areas")
+		LandCoverIceShelvesDepth = formatFolderString(LandcoverFolder + "/" + "ne_10m_antarctic_ice_shelves_polys")
+		LandCoverGlaciatedDepth = formatFolderString(LandcoverFolder + "/" + "ne_10m_glaciated_areas")
 		PbfFolder = formatFolderString(DataFolder + "/" + "pbf")
 		PbfSlicesFolder = formatFolderString(PbfFolder + "/" + "slices")
 		PbfQuadrantSlicesFolder = formatFolderString(PbfSlicesFolder + "/" + "quadrants")
@@ -45,7 +53,7 @@ func SetupFolderStructure() {
 		TilemakerProcessFile = formatFolderString(config.Config.TilemakerProcess)
 	}
 
-	allFolders := [...]*string{&DataFolder, &CoastlineFolder, &LandcoverFolder, &PbfFolder, &PbfSlicesFolder, &PbfQuadrantSlicesFolder, &MbtilesFolder, &MbtilesMergedFolder}
+	allFolders := [...]*string{&DataFolder, &CoastlineFolder, &LandcoverFolder, &PbfFolder, &PbfSlicesFolder, &PbfQuadrantSlicesFolder, &MbtilesFolder, &MbtilesMergedFolder, &LandCoverUrbanDepth, &LandCoverIceShelvesDepth, &LandCoverGlaciatedDepth}
 
 	for _, folder := range allFolders {
 		err := os.MkdirAll(*folder, os.ModePerm)
