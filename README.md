@@ -76,6 +76,11 @@ This also uses the openmaptiles mbtiles spec, meaning that when accessing the se
 
 We would recommend something like [tileserver-gl](https://github.com/maptiler/tileserver-gl). Further reading can be found on the [openstreetmap wiki](https://wiki.openstreetmap.org/wiki/MBTiles).
 
+You can quickly serve using tileserver-gl:
+```bash
+docker run --rm -it -v $(pwd)/data:/data -p 8080:80 maptiler/tileserver-gl
+```
+
 ## Styles
 
 The default output of `sequentially-generate-planet-mbtiles` looks to match with the open source OSM ['Bright'](https://github.com/openmaptiles/osm-bright-gl-style/blob/master/style.json) style.
