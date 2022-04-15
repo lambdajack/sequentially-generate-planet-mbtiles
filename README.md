@@ -108,7 +108,7 @@ Pay attention to your fonts. The OSM Bright style makes use of Noto Sans variant
 
 ## Acknowledgements
 
-Please take the time to thank the folks over at [tilemaker](https://github.com/systemed/tilemaker) and [tippecanoe](https://github.com/mapbox/tippecanoe). They are the reason any of this is possible in the first place. It goes without saying, our thanks go out to [OpenStreetMap](https://www.openstreetmap.org/copyright).
+Please take the time to thank the folks over at [tilemaker](https://github.com/systemed/tilemaker), [tippecanoe](https://github.com/mapbox/tippecanoe) and [osmium](https://github.com/osmcode/libosmium). They are the reason any of this is possible in the first place. It goes without saying, our thanks go out to [OpenStreetMap](https://www.openstreetmap.org/copyright).
 
 ## Attribution
 
