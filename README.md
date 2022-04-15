@@ -4,7 +4,7 @@
 
 ## TL;DR give me planet vector tiles!
 
-1. Have [Docker]('https://docs.docker.com/get-docker/') installed.
+1. Have [Docker](https://docs.docker.com/get-docker/) installed.
 
 2. `git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
 
