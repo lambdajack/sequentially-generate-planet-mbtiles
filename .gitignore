@@ -13,3 +13,4 @@ main
 REPORT.txt
 
 !/configs/tilemaker
+!third_party/*

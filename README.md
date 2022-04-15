@@ -6,18 +6,18 @@
 
 1. Have [Docker]('https://docs.docker.com/get-docker/') installed.
 
-2. `git clone https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
+2. `git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
 
-3. `sudo ./release/v2.0.0-sequentially-generate-planet-mbtiles.exe`
+3. `sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe`
 
-3.  Rejoice - see acknowledgements below for people to thank.
+4.  Rejoice - see acknowledgements below for people to thank.
 
 ## config.json (defaults shown)
 
 #### config supplied with the -c flag:
 
 ```bash
- sudo ./release/v2.0.0-sequentially-generate-planet-mbtiles.exe -c /path/to/config.json
+ sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe -c /path/to/config.json
 ```
   
 ```json
@@ -33,9 +33,9 @@
 
 **_dataDir_** - This will be where the program stores all data downloaded and generated. Need approx 300GB space. If none is provided a 'data' folder will be created in the current working directory.
 
-**_TilemakerConfig_** - The config file that will be passed to [Tilemaker](https://github.com/systemed/tilemaker). See the default used [here](configs/tilemaker/config.json).
+**_TilemakerConfig_** - The config file that will be passed to [Tilemaker](https://github.com/systemed/tilemaker). See the default used [here](third_party/tilemaker/resources/config-openmaptiles.json).
 
-**_TilemakerProcess_** - The process file that will be passed to [Tilemaker](https://github.com/systemed/tilemaker). See the default used [here](configs/tilemaker/process.lua).
+**_TilemakerProcess_** - The process file that will be passed to [Tilemaker](https://github.com/systemed/tilemaker). See the default used [here](third_party/tilemaker/resources/process-openmaptiles.lua).
 
 Note the files used are slightly adjusted from the examples provided by Tilemaker to give a pleasant default presentation when used with [TileServerGL](https://github.com/maptiler/tileserver-gl).
 
@@ -47,13 +47,13 @@ That's where [sequentially-generate-planet-mbtiles](https://github.com/lambdajac
 
 **_This programme aims to be a simple set and forget, one liner which gives anyone - a way to get a full-featured and bang up to date set of vector tiles for the entire planet on small hardware._**
 
-It's also designed (work in progress) to be fail safe - meaning that if your hardward (or our software) does crash mid process, you have not lost all your data, and you are able to start again from a point mid-way through.
+It's also designed (work in progress) to be fail safe - meaning that if your hardware (or our software) does crash mid process, you have not lost all your data, and you are able to start again from a point mid-way through.
 
-This also uses the maptiler mbtiles spec, meaning when you serve the files with something like tileserver-gl, you don't have to worry about setting up styles, as the basic one will be automatically available. Use the -s option to automatically serve the files when done on `http://localhost:8080`. (-s not yet implemented).
+This also uses the openmaptiles mbtiles spec, meaning that when accessing the served tiles you can easily use most of the open source styles available. The default is aimed at using the OSM Bright style. More information on styles can be found below.
 
 ## Considerations
 1. Hardware usage - this will consume effectively 100% CPU for up to a few days and will also do millions of read/writes from ssd/RAM/CPUcache. While modern hardware and vps' are perfectly capable of handling this, if you are using old hardware, beware that its remaining lifespan may be significantly reduced.
-2. Cost - related to the above, while this programme and everything it uses is entirely free and open source - the person's/company's computer you're running it on might charge you electricity / load costs etc. Please check with your provider, how they handle fair use. 
+2. Cost - related to the above, while this programme and everything it uses is entirely free and open source - the person's/company's computer you're running it on might charge you electricity/load costs etc. Please check with your provider, how they handle fair use. 
 3. Time - your hardware will be unable to do anything much other than run this programme while it is running. This is in order to be efficient and is by design. If your hardware is hosting other production software or will be needed for other things in the next few days, be aware that it will perform suboptimally while this is running.
 4. Bandwidth - this will download the entire planet's worth of openstreetmap data directly from OSM. At the time of writing, this is approx. 64GB. **Please note: ** the programme will look for a `planet-latest.osm.pbf` file in the `data/pbf` folder. If this is already present, it will skip the download and use this file. If you already have the data you wish to generate mbtiles for, you can place it there to skip the download. This can be useful if you want historical data, or are generating the mbtiles on multiple computers.
 5. Data generation - in order to remain relatively fast on low spec hardware, this programme systematically breaks up the OSM data into more manegable chunks before processing. Therefore, expect around 300GB of storage to be used up on completion.
@@ -70,18 +70,41 @@ This also uses the maptiler mbtiles spec, meaning when you serve the files with 
 
 1. Have [Docker](https://www.docker.com/) installed.
 
-## How to serve?
+# Serving mbtiles
 
-We would recommend something like [tileserver-gl]('https://github.com/maptiler/tileserver-gl). The style is designed to match the basic one tileserver-gl provides. Further reading can be found [here]('https://wiki.openstreetmap.org/wiki/MBTiles') (openstreetmap wiki).
+## Software
+
+We would recommend something like [tileserver-gl](https://github.com/maptiler/tileserver-gl). Further reading can be found on the [openstreetmap wiki](https://wiki.openstreetmap.org/wiki/MBTiles).
+
+You can quickly serve using tileserver-gl:
+```bash
+docker run --rm -it -v $(pwd)/data:/data -p 8080:80 maptiler/tileserver-gl
+```
+
+## Styles
+
+The default output of `sequentially-generate-planet-mbtiles` looks to match with the open source OSM ['Bright'](https://github.com/openmaptiles/osm-bright-gl-style/blob/master/style.json) style.
+
+When accessing your tileserver with something like [MapLibre](https://maplibre.org/maplibre-gl-js-docs/api/) from a front end application, a good place to start would be passing it a copy of the above ['Bright'](https://github.com/openmaptiles/osm-bright-gl-style/blob/master/style.json) style, **making sure to edit the urls to point to the correct places**.
+
+You can edit the output of `sequentially-generate-planet-mbtiles` by providing a customised process or config file through the config file.
+
+### Style first considerations
+If making your own style or editing an existing one, note that `sequentially-generate-planet-mbtiles` by default will write text to the `name:latin` tag. If your maps are displayed, but missing text, check that your style is looking for `name:latin` and not something else (e.g. simply `name`).
+
+Pay attention to your fonts. The OSM Bright style makes use of Noto Sans variants (bold, italic & regular). If you are using tileserver-gl to serve your tiles, it only comes with the regular variant of Noto Sans (not the bold or the italic); therefore, it may look like text labels are missing since the style won't be able to find the fonts. You should therefore consider editing the style and changing all mentions of the font to use only the regular variant. Alternatively, you could ensure that all fonts necessary are present.
+
+**Further to the above, please find in this repo, a slightly [edited](./configs/styles/sgpm-bright.json) OSM Bright style for use with the default tileserver-gl. Feed this to your MapLibre or similar front end for a pleasent map suitable for most use cases.**
 
 ## FAQ
 
 1. **How long will this take?** Low spec hardware? Whole planet? A few days. Maybe less than 48 hours for 16 CPUs.
-2. **_Would I use this if I have powerful hardware?_** Maybe. Since the programme essentially saves its progress as it goes, even if you have strong hardware, you are reducing the time taken to redo the process in the event of a crash or file corruption. Further, the RAM is what is really saved here so if you have say 32 cores and 64gb RAM, you still would not be able to generate the entire planet by loading it into memory. Additionally, it just saves time configuring everything.
+2. **Would I use this if I have powerful hardware?** Maybe. Since the programme essentially saves its progress as it goes, even if you have strong hardware, you are reducing the time taken to redo the process in the event of a crash or file corruption. Further, the RAM is what is really saved here so if you have say 32 cores and 64gb RAM, you still would not be able to generate the entire planet by loading it into memory. Additionally, it just saves time configuring everything.
 3. **Why do I have to run part of the programme with 'sudo' privileges?** Many docker installations require sudo to be executed. You may not have to execute the programme with sudo.
 4. **Do I have to download the entire planet?** At present, yes. Since if you are not downloading the entire planet, there are other tools out there which do a fine job of getting you mbtiles. We are working on being able to generate mbtiles for smaller areas (such as continents which may still not fit into the average computers RAM)
-5. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core4gb ram home pc without too much trouble. Just time.
-6. **Didn't this used to use GeoFabrik?** It did but the plan was always to move away from geofabrik sources for the planet since it felt unnecessary, when the data was already available direct from source. Further, the GeoFabrik data leaves gaps in the ocean and some of their slices require more than 4gb of ram to process in memory. Ultimately, by getting the data from source, we have more control over it. 
+5. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core CPU/4gb RAM home pc without too much trouble. Just time.
+6. **Didn't this used to use GeoFabrik?** It did but the plan was always to move away from geofabrik sources for the planet since it felt unnecessary, when the data was already available direct from source. Further, the GeoFabrik data leaves gaps in the ocean and some of their slices require more than 4gb RAM to process in memory. Ultimately, by getting the data from source, we have more control over it.
+7. **Why would I use this over Planetiler?** Planetiler is a fantastic project, however it still requires minimum 32gb RAM to complete the entire planet (0.5x the size of the planet pbf file). 
 
 ## Acknowledgements
 
@@ -92,29 +115,11 @@ Please take the time to thank the folks over at [tilemaker](https://github.com/s
 Please attribute openmaptiles, openstreemap contributors and tippecanoe if any data derived from this programme is used in production.
 
 ## Licenses
-Files generated by sequentially-generate-planet-mbtiles is subject to the licenses described by [tippecanoe](https://github.com/mapbox/tippecanoe) and [OpenStreetMap](https://www.openstreetmap.org/copyright)
+Files generated by `sequentially-generate-planet-mbtiles` is subject to the licenses described by [tippecanoe](https://github.com/mapbox/tippecanoe) and [OpenStreetMap](https://www.openstreetmap.org/copyright).
+
+`sequentially-generate-planet-mbtiles` is subject to the MIT [license](LICENSE).
 
 
 ## Contributions
 
 All welcome! Feature request, pull request, bug reports/fixes etc - go for it.
-
-We'd like to make this tool quite robust moving forward - since we needed it for a current project of ours, we have released it notwithstanding the current rough-and-ready nature.
-
-## Todo
-
-1. Extra error handling for if one of the third party processes should fail.
-2. The ability to select different system drives for downloading/generating files.
-3. Write tests before significant future development.
-4. Make the console prettier.
-5. Add option to include or not ocean tiles -o.
-6. Add automatically serve on completion option -s.
-7. Add sleep function at points in stdout user may wish to read and hold it there for a time.
-8.  Consider converting tile-join to operate iteratively - allowing the report to be updated after each join.
-9.  Add option to name output file
-10. Add exit listeners
-11. Add docker kill on SIGINT
-12. Add skip quadrant generation (save space but slower)
-13. Add remove pbfs (save space)
-14. Embed docker file into build binary
-15. Add landcover

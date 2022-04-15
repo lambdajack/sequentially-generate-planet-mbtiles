@@ -24,9 +24,9 @@ func GenerateMbTiles(inputFile, outputFile, pbfFolder, mbtilesFolder, coastlineF
 	var generateMbtilesCmd string
 
 	if processPath == configPath {
-		generateMbtilesCmd = fmt.Sprintf("docker run -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /config/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, containerName, inputFile, outputFile, configFile, processFile)
+		generateMbtilesCmd = fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /config/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, containerName, inputFile, outputFile, configFile, processFile)
 	} else {
-		generateMbtilesCmd = fmt.Sprintf("docker run -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config -v %v:/process %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /process/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, processPath, containerName, inputFile, outputFile, configFile, processFile)
+		generateMbtilesCmd = fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config -v %v:/process %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /process/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, processPath, containerName, inputFile, outputFile, configFile, processFile)
 	}
 
 	err := execute.OutputToConsole(generateMbtilesCmd)
