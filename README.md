@@ -2,6 +2,8 @@
 
 ### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices for free._
 
+![](assets/sequentially-generate-planet-mbtiles-example.gif)
+
 ## TL;DR give me planet vector tiles!
 
 1. Have [Docker](https://docs.docker.com/get-docker/) installed.
