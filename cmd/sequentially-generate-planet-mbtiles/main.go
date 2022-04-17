@@ -3,8 +3,13 @@ package main
 import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/buildthirdpartycontainers"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/downloadosmdata"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extractquadrants"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extractslices"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/flags"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/folders"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/genmbtiles"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/genplanet"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/unzippolygons"
 )
 
 func main() {
@@ -12,9 +17,9 @@ func main() {
 	folders.SetupFolderStructure()
 	buildthirdpartycontainers.BuildContainers()
 	downloadosmdata.DownloadOsmData()
-	// unzippolygons.UnzipPolygons()
-	// extractquadrants.ExtractQuadrants()
-	// extractslices.FromQuadrants()
-	// genmbtiles.GenMbtiles()
-	// genplanet.GenPlanet()
+	unzippolygons.UnzipPolygons()
+	extractquadrants.ExtractQuadrants()
+	extractslices.FromQuadrants()
+	genmbtiles.GenMbtiles()
+	genplanet.GenPlanet()
 }
