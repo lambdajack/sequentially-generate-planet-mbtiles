@@ -2,6 +2,8 @@
 
 ### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices for free._
 
+![](https://img.shields.io/badge/go%20report-A+-brightgreen.svg?style=flat)
+
 ![](assets/sequentially-generate-planet-mbtiles-example.gif)
 
 ## TL;DR give me planet vector tiles!
