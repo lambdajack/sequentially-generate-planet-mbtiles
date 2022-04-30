@@ -9,8 +9,8 @@ import (
 	"sync"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/buildthirdpartycontainers"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/describeloggers"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/folders"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/logger"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/generatembtiles"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
 )
@@ -33,10 +33,10 @@ func GenMbtiles() {
 				if err != nil {
 					stderrorhandler.StdErrorHandler(fmt.Sprintf("genmbtiles.go | Failed to generate mbtiles for %s.", file.Name()), err)
 					mu.Lock()
-					logger.AppendReport(fmt.Sprintf("GENERATE_MBTILES_FAILED: %s\n", outFileName))
+					describeloggers.AppendReport(fmt.Sprintf("GENERATE_MBTILES_FAILED: %s\n", outFileName))
 				} else {
 					mu.Lock()
-					logger.AppendReport(fmt.Sprintf("GENERATE_MBTILES_SUCCESS: %s\n", outFileName))
+					describeloggers.AppendReport(fmt.Sprintf("GENERATE_MBTILES_SUCCESS: %s\n", outFileName))
 				}
 				mu.Unlock()
 

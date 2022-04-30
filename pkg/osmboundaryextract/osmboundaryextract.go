@@ -11,7 +11,7 @@ import (
 )
 
 func OsmBoundaryExtract(srcPbfFilePath, srcFileName, dstFilePath, dstFileName, bbox, containerName string) error {
-	finalPath := filepath.FromSlash(dstFilePath + "/" + dstFileName)
+	finalPath := filepath.Clean(dstFilePath + "/" + dstFileName)
 
 	if _, err := os.Stat(finalPath); os.IsNotExist(err) {
 		cmdString := fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/out %s osmium extract -b %s --set-bounds /pbf/%s -o /out/%s", srcPbfFilePath, dstFilePath, containerName, bbox, srcFileName, dstFileName)

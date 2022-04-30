@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/buildthirdpartycontainers"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/describeloggers"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/folders"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/logger"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/osmboundaryextract"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
 )
@@ -34,10 +34,10 @@ func FromQuadrants() {
 			if err != nil {
 				stderrorhandler.StdErrorHandler(fmt.Sprintf("osmboundaryextractslices.go | Failed to extract %s from %s. Skipping and moving onto next one. Data can be retrospecitively filled in manually later.", bbox, src), err)
 				mu.Lock()
-				logger.AppendReport(fmt.Sprintf("SLICE_EXTRACT_FAILED: %s from %s\n", bbox, src))
+				describeloggers.AppendReport(fmt.Sprintf("SLICE_EXTRACT_FAILED: %s from %s\n", bbox, src))
 			} else {
 				mu.Lock()
-				logger.AppendReport(fmt.Sprintf("SLICE_EXTRACT_SUCCESS: %s from %s\n", bbox, src))
+				describeloggers.AppendReport(fmt.Sprintf("SLICE_EXTRACT_SUCCESS: %s from %s\n", bbox, src))
 			}
 			mu.Unlock()
 			<-chCount

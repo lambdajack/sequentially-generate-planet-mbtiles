@@ -11,6 +11,7 @@ type Configuration struct {
 	DataDir          string `json:"dataDir"`
 	TilemakerConfig  string `json:"TilemakerConfig"`
 	TilemakerProcess string `json:"TilemakerProcess"`
+	AvailableRam     int    `json:"availableRam"`
 }
 
 var Config Configuration
