@@ -13,7 +13,7 @@ _coming soon:_
 - Improved logging and progress management
 - Increased safety with downloads (including allowing for handling of missing/broken links)
 - More...
-- **This project is currently in active development, any feature requests are welcomed now more than ever.**
+- **This project is currently in active development, any feature requests are very welcome.**
 
 ## TL;DR give me planet vector tiles!
 
