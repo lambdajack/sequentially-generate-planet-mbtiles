@@ -207,15 +207,15 @@ func validateFlags() {
 
 func getEmbeddedFiles(embeddedFs *embed.FS) (tmCfg []byte, tmPr []byte) {
 
-	cfg, err := embeddedFs.ReadFile("third_party/tilemaker/resources/config-openmaptiles.json")
+	tcfg, err := embeddedFs.ReadFile("third_party/tilemaker/resources/config-openmaptiles.json")
 	if err != nil {
 		log.Fatalln("Unable to get default config from the embedded filesystem for tilemaker.")
 	}
 
-	pr, err := embeddedFs.ReadFile("third_party/tilemaker/resources/process-openmaptiles.lua")
+	tpr, err := embeddedFs.ReadFile("third_party/tilemaker/resources/process-openmaptiles.lua")
 	if err != nil {
 		log.Fatalln("Unable to get default process file from the embedded filesystem for tilemaker.")
 	}
 
-	return cfg, pr
+	return tcfg, tpr
 }

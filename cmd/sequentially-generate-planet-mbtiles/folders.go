@@ -12,35 +12,35 @@ func initFolderStructure() {
 
 	pth.outFolder = filepath.Clean(cfg.OutDir)
 	makeFolder(pth.outFolder)
-	
-	pth.coastlineFolder = filepath.Clean(pth.dataFolder + "/coastline")
+
+	pth.coastlineFolder = filepath.Join(pth.dataFolder, "coastline")
 	makeFolder(pth.coastlineFolder)
-	
-	pth.landcoverFolder = filepath.Clean(pth.dataFolder + "/landcover")
+
+	pth.landcoverFolder = filepath.Join(pth.dataFolder, "landcover")
 	makeFolder(pth.landcoverFolder)
-	
-	pth.landCoverUrbanDepth = filepath.Clean(pth.landcoverFolder + "/ne_10m_urban_areas")
+
+	pth.landCoverUrbanDepth = filepath.Join(pth.landcoverFolder, "ne_10m_urban_areas")
 	makeFolder(pth.landCoverUrbanDepth)
-	
-	pth.landCoverIceShelvesDepth = filepath.Clean(pth.landcoverFolder + "/ne_10m_antarctic_ice_shelves_polys")
+
+	pth.landCoverIceShelvesDepth = filepath.Join(pth.landcoverFolder, "ne_10m_antarctic_ice_shelves_polys")
 	makeFolder(pth.landCoverIceShelvesDepth)
-	
-	pth.landCoverGlaciatedDepth = filepath.Clean(pth.landcoverFolder + "/ne_10m_glaciated_areas")
+
+	pth.landCoverGlaciatedDepth = filepath.Join(pth.landcoverFolder, "ne_10m_glaciated_areas")
 	makeFolder(pth.landCoverGlaciatedDepth)
-	
-	pth.pbfFolder = filepath.Clean(pth.dataFolder + "/pbf")
+
+	pth.pbfFolder = filepath.Join(pth.dataFolder, "pbf")
 	makeFolder(pth.pbfFolder)
-	
-	pth.pbfSlicesFolder = filepath.Clean(pth.pbfFolder + "/slices")
+
+	pth.pbfSlicesFolder = filepath.Join(pth.pbfFolder, "slices")
 	makeFolder(pth.pbfSlicesFolder)
-	
-	pth.pbfQuadrantSlicesFolder = filepath.Clean(pth.pbfFolder + "/quadrants")
+
+	pth.pbfQuadrantSlicesFolder = filepath.Join(pth.pbfFolder, "quadrants")
 	makeFolder(pth.pbfQuadrantSlicesFolder)
-	
-	pth.mbtilesFolder = filepath.Clean(pth.dataFolder + "/mbtiles")
+
+	pth.mbtilesFolder = filepath.Join(pth.dataFolder, "mbtiles")
 	makeFolder(pth.mbtilesFolder)
-	
-	pth.logsFolder = filepath.Clean(pth.dataFolder + "/logs")
+
+	pth.logsFolder = filepath.Join(pth.dataFolder, "logs")
 	makeFolder(pth.logsFolder)
 }
 
