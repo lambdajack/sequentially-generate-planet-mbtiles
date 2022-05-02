@@ -10,7 +10,6 @@ import (
 //go:embed third_party/tilemaker/resources/config-openmaptiles.json
 //go:embed third_party/tilemaker/resources/process-openmaptiles.lua
 var embeddedFs embed.FS
-
 func main() {
 	os.Exit(sequentiallygenerateplanetmbtiles.EntryPoint(&embeddedFs))
 }
