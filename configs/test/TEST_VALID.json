@@ -1,0 +1,10 @@
+{
+  "planetFile": "",
+  "dataDir": "",
+  "outDir": "",
+  "includeOcean": true,
+  "includeLanduse": true,
+  "TilemakerConfig": "",
+  "TilemakerProcess": "",
+  "maxRamMb": 0
+}

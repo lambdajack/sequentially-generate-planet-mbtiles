@@ -35,7 +35,7 @@ func setConfigByFlags() {
 	cfg.IncludeLanduse = fl.includeLanduse
 	cfg.TilemakerConfig = fl.tilemakerConfig   // THIS IS GOING TO BE A PROBLEM
 	cfg.TilemakerProcess = fl.tilemakerProcess // THIS IS GOING TO BE A PROBLEM
-	cfg.MaxRamMb = getRam() // Check to see if a flag has been set before calling ram
+	cfg.MaxRamMb = getRam()                    // Check to see if a flag has been set before calling ram
 }
 
 func getRam() uint64 {

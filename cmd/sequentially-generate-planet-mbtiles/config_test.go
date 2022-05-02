@@ -31,7 +31,7 @@ func init() {
 	fmt.Printf("cfg initialised: %+v\n", cfg)
 }
 
-func TestSetConfigByJSON(t *testing.T) {
+func TestSetInvalidConfigByJSON(t *testing.T) {
 	// Test run in separate processes so as not to pollute other tests
 
 	invalidConfig := "../../configs/test/TEST_INVALID.json"
@@ -47,7 +47,7 @@ func TestSetConfigByJSON(t *testing.T) {
 		return
 	}
 
-	cmd := exec.Command(os.Args[0], "-test.run=TestSetConfigByJSON")
+	cmd := exec.Command(os.Args[0], "-test.run=TestSetInvalidConfigByJSON")
 	cmd.Env = append(os.Environ(), "TEST_SET_CONFIG_BY_JSON=1")
 	defer os.Unsetenv("TEST_SET_CONFIG_BY_JSON")
 	err := cmd.Run()
@@ -61,6 +61,31 @@ func TestSetConfigByJSON(t *testing.T) {
 	t.Fatalf("process ran with err %v, want exit status %v", err, exitInvalidJSON)
 
 	// Add test for valid json
+}
+
+func TestSetValidConfigByJSON(t *testing.T) {
+	validConfig := "../../configs/test/TEST_INVALID.json"
+
+	if _, err := os.Stat(validConfig); os.IsNotExist(err) {
+		t.Errorf("TestSetConfigByJSON test config file does not exist")
+	}
+
+	if os.Getenv("TEST_SET_VALID_CONFIG_BY_JSON") == "1" {
+		t.Log(os.Args)
+		os.Args = append(os.Args, "-c", validConfig)
+		flag.Parse()
+		setConfigByJSON()
+		return
+	}
+
+	cmd := exec.Command(os.Args[0], "-test.run=TestSetValidConfigByJSON")
+	cmd.Env = append(os.Environ(), "TEST_SET_VALID_CONFIG_BY_JSON=1")
+	defer os.Unsetenv("TEST_SET_VALID_CONFIG_BY_JSON")
+	err := cmd.Run()
+	if err != nil {
+		t.Fatalf("process ran with err %v, want %v", err, nil)
+	}
+
 }
 
 func TestSetConfigByFlags(t *testing.T) {
