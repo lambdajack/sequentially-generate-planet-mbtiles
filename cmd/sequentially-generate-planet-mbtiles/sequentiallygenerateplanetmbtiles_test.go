@@ -71,16 +71,3 @@ func TestValidateFlags(t *testing.T) {
 
 	t.Fatalf("process ran with err %v, want exit status %v", err, exitFlags)
 }
-
-func TestGetEmbeddedFiles(t *testing.T) {
-	// Function mirrored in main_test.go.
-	// The test relies on a non-global embed.FS variable.
-	// While the embed is not needed in the main function,
-	// golang only allows embeded files to be within scope of the package.
-	// The embed should therefore be in the main package as it is not worth
-	// making a mess of the source code by moving the relevant embedded
-	// files to within scope.
-
-	// tl:dr - a mirror of this function is tested in main_test.go.
-	// It is the developers responsibility to ensure that the mirror is up to date.
-}
