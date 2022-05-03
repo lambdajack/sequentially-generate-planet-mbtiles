@@ -1,7 +1,6 @@
 package sequentiallygenerateplanetmbtiles
 
 import (
-	"embed"
 	"flag"
 	"fmt"
 	"log"
@@ -105,9 +104,7 @@ func init() {
 	}
 }
 
-func EntryPoint(embeddedFs *embed.FS) int {
-
-	tmCfg, tmPr := getEmbeddedFiles(embeddedFs)
+func EntryPoint() int {
 
 	flag.BoolVar(&fl.version, "v", false, "")
 	flag.BoolVar(&fl.version, "version", false, "")
@@ -133,11 +130,11 @@ func EntryPoint(embeddedFs *embed.FS) int {
 	flag.BoolVar(&fl.includeLanduse, "il", true, "")
 	flag.BoolVar(&fl.includeLanduse, "include-landuse", true, "")
 
-	flag.StringVar(&fl.tilemakerConfig, "tc", string(tmCfg), "")
-	flag.StringVar(&fl.tilemakerConfig, "tilemaker-config", string(tmCfg), "")
+	flag.StringVar(&fl.tilemakerConfig, "tc", "third_party/tilemaker/resources/config-openmaptiles.json", "")
+	flag.StringVar(&fl.tilemakerConfig, "tilemaker-config", "third_party/tilemaker/resources/config-openmaptiles.json", "")
 
-	flag.StringVar(&fl.tilemakerProcess, "tp", string(tmPr), "")
-	flag.StringVar(&fl.tilemakerProcess, "tilemaker-process", string(tmPr), "")
+	flag.StringVar(&fl.tilemakerProcess, "tp", "third_party/tilemaker/resources/process-openmaptiles.lua", "")
+	flag.StringVar(&fl.tilemakerProcess, "tilemaker-process", "third_party/tilemaker/resources/process-openmaptiles.lua", "")
 
 	flag.Uint64Var(&fl.maxRamMb, "r", 0, "")
 	flag.Uint64Var(&fl.maxRamMb, "ram", 0, "")
@@ -219,19 +216,4 @@ func validateFlags() {
 			os.Exit(exitFlags)
 		}
 	}
-}
-
-func getEmbeddedFiles(embeddedFs *embed.FS) (tmCfg []byte, tmPr []byte) {
-
-	tcfg, err := embeddedFs.ReadFile("third_party/tilemaker/resources/config-openmaptiles.json")
-	if err != nil {
-		log.Fatalln("Unable to get default config from the embedded filesystem for tilemaker.")
-	}
-
-	tpr, err := embeddedFs.ReadFile("third_party/tilemaker/resources/process-openmaptiles.lua")
-	if err != nil {
-		log.Fatalln("Unable to get default process file from the embedded filesystem for tilemaker.")
-	}
-
-	return tcfg, tpr
 }
