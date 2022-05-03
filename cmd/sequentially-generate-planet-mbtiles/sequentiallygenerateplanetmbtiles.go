@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"path/filepath"
 )
 
 type flags struct {
@@ -155,7 +157,7 @@ func EntryPoint(embeddedFs *embed.FS) int {
 
 	initLoggers()
 
-	// build containers
+	checkRecursiveClone()
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
@@ -170,6 +172,20 @@ func EntryPoint(embeddedFs *embed.FS) int {
 	// genmbtiles.GenMbtiles()
 	// genplanet.GenPlanet()
 	return exitOK
+}
+
+func checkRecursiveClone() {
+	tp := [...]string{"libosmium", "osmium-tool", "tilemaker", "tippecanoe"}
+
+	for _, t := range tp {
+		if _, err := os.Stat(filepath.Join("third_party", t)); os.IsNotExist(err) {
+			lg.err.Printf("Submodule %v cannot be found. Attempting to fix..", t)
+			err := exec.Command("git", "submodule", "update", "--init", "--recursive").Run()
+			if err != nil {
+				lg.err.Fatal("Failed to recursively clone submodules. Submodules are required to run this programme. Please clone the submodules manually and try again.")
+			}
+		}
+	}
 }
 
 func validateFlags() {
