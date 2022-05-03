@@ -59,12 +59,10 @@ func TestSetInvalidConfigByJSON(t *testing.T) {
 	}
 
 	t.Fatalf("process ran with err %v, want exit status %v", err, exitInvalidJSON)
-
-	// Add test for valid json
 }
 
 func TestSetValidConfigByJSON(t *testing.T) {
-	validConfig := "../../configs/test/TEST_INVALID.json"
+	validConfig := "../../configs/test/TEST_VALID.json"
 
 	if _, err := os.Stat(validConfig); os.IsNotExist(err) {
 		t.Errorf("TestSetConfigByJSON test config file does not exist")
@@ -85,7 +83,6 @@ func TestSetValidConfigByJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("process ran with err %v, want %v", err, nil)
 	}
-
 }
 
 func TestSetConfigByFlags(t *testing.T) {
