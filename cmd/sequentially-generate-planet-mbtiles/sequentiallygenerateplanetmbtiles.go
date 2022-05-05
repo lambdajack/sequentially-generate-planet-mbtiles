@@ -40,10 +40,10 @@ const (
 	exitOK          = 0
 	exitPermissions = iota + 100
 	exitReadInput
-	exitFetchURL
+	exitDownloadURL
 	exitFlags
 	exitInvalidJSON
-	exitFailedToBuildContainers
+	exitBuildContainers
 )
 
 const sgpmVersion = "3.0.0"
@@ -76,7 +76,7 @@ func init() {
 		h += fmt.Sprintf("    %d\t%s\n", exitOK, "OK")
 		h += fmt.Sprintf("    %d\t%s\n", exitPermissions, "Do not have permission")
 		h += fmt.Sprintf("    %d\t%s\n", exitReadInput, "Error reading input")
-		h += fmt.Sprintf("    %d\t%s\n", exitFetchURL, "Error fetching URL")
+		h += fmt.Sprintf("    %d\t%s\n", exitDownloadURL, "Error fetching URL")
 		h += fmt.Sprintf("    %d\t%s\n", exitFlags, "Error parsing flags")
 		h += fmt.Sprintf("    %d\t%s\n", exitInvalidJSON, "Invalid JSON")
 
@@ -139,7 +139,7 @@ func EntryPoint() int {
 	err := containers.BuildAll()
 	if err != nil {
 		lg.err.Println(err)
-		os.Exit(exitFailedToBuildContainers)
+		os.Exit(exitBuildContainers)
 	}
 
 	if fl.stage {
@@ -147,7 +147,8 @@ func EntryPoint() int {
 		os.Exit(exitOK)
 	}
 
-	// downloadosmdata.DownloadOsmData()
+	downloadOsmData()
+
 	// unzippolygons.UnzipPolygons()
 	// extractiontree.Slicer("./data/pbf/switzerland-latest.osm.pbf")
 	// extractquadrants.ExtractQuadrants()

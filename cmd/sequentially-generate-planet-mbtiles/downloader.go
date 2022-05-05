@@ -1,20 +1,18 @@
-package downloadosmdata
+package sequentiallygenerateplanetmbtiles
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/folders"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/downloadurl"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
 )
 
 type downloadInformation struct {
 	url, destFileName, destFolder string
 }
 
-func DownloadOsmData() error {
+func downloadOsmData() {
 
 	downloads := map[string]downloadInformation{
 		"osmPlanetPbf": {
@@ -48,12 +46,12 @@ func DownloadOsmData() error {
 		if _, err := os.Stat(filepath.Join(dl.destFolder, "/", dl.destFileName)); os.IsNotExist(err) {
 			err := downloadurl.DownloadURL(dl.url, dl.destFileName, dl.destFolder)
 			if err != nil {
-				stderrorhandler.StdErrorHandler("main.go | Failed downloading required initial data. Unable to proceed", err)
-				panic(err)
+				lg.err.Printf("Error downloading %s: %s", dl.url, err)
+				os.Exit(exitDownloadURL)
 			}
-			fmt.Printf("Download success: %v\n", dl.destFileName)
+			lg.rep.Printf("Download success: %v\n", dl.destFileName)
 		} else {
-			fmt.Printf("main.go | %v already exists. Skipping download.\n", dl.destFileName)
+			lg.rep.Printf("%v already exists. Skipping download.\n", dl.destFileName)
 		}
 	}
 }

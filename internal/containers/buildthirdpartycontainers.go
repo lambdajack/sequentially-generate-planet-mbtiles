@@ -41,12 +41,12 @@ func BuildAll() error {
 	if err != nil {
 		return err
 	}
-	
+
 	err = buildContainer(ct.tippecanoe.name, ct.tippecanoe.dockerfile, ct.tippecanoe.context)
 	if err != nil {
 		return err
 	}
-	
+
 	err = buildContainer(ct.osmium.name, ct.osmium.dockerfile, ct.osmium.context)
 	if err != nil {
 		return err
@@ -66,4 +66,3 @@ func buildContainer(name, dockerfile, context string) error {
 	cmd.Wait()
 	return nil
 }
-

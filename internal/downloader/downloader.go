@@ -1,4 +1,4 @@
-package downloadosmdata
+package downloader
 
 import (
 	"fmt"
