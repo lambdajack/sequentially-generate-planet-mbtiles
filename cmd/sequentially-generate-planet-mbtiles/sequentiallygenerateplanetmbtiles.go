@@ -7,8 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
 )
 
 type flags struct {
@@ -136,11 +134,11 @@ func EntryPoint() int {
 
 	checkRecursiveClone()
 
-	err := containers.BuildAll()
-	if err != nil {
-		lg.err.Println(err)
-		os.Exit(exitBuildContainers)
-	}
+	// err := containers.BuildAll()
+	// if err != nil {
+	// 	lg.err.Println(err)
+	// 	os.Exit(exitBuildContainers)
+	// }
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
