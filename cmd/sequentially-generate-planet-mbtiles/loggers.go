@@ -8,6 +8,14 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/describeloggers"
 )
 
+type loggers struct {
+	prog *log.Logger
+	err  *log.Logger
+	rep  *log.Logger
+}
+
+var lg = &loggers{}
+
 func initLoggers() {
 	lg.prog = initProg("./data/logs/prog.log")
 	lg.err = initErr("./data/logs/err.log")

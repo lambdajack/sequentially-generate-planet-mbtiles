@@ -34,27 +34,6 @@ type configuration struct {
 	MaxRamMb         uint64 `json:"maxRamMb"`
 }
 
-type paths struct {
-	dataFolder               string
-	outFolder                string
-	coastlineFolder          string
-	landcoverFolder          string
-	landCoverUrbanDepth      string
-	landCoverIceShelvesDepth string
-	landCoverGlaciatedDepth  string
-	pbfFolder                string
-	pbfSlicesFolder          string
-	pbfQuadrantSlicesFolder  string
-	mbtilesFolder            string
-	logsFolder               string
-}
-
-type loggers struct {
-	prog *log.Logger
-	err  *log.Logger
-	rep  *log.Logger
-}
-
 const (
 	exitOK          = 0
 	exitPermissions = iota + 100
@@ -68,8 +47,6 @@ const sgpmVersion = "3.0.0"
 
 var fl = &flags{}
 var cfg = &configuration{}
-var pth = &paths{}
-var lg = &loggers{}
 
 func init() {
 	flag.Usage = func() {

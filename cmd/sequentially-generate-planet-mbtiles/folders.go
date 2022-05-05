@@ -6,6 +6,23 @@ import (
 	"path/filepath"
 )
 
+type paths struct {
+	dataFolder               string
+	outFolder                string
+	coastlineFolder          string
+	landcoverFolder          string
+	landCoverUrbanDepth      string
+	landCoverIceShelvesDepth string
+	landCoverGlaciatedDepth  string
+	pbfFolder                string
+	pbfSlicesFolder          string
+	pbfQuadrantSlicesFolder  string
+	mbtilesFolder            string
+	logsFolder               string
+}
+
+var pth = paths{}
+
 func initFolderStructure() {
 	pth.dataFolder = filepath.Clean(cfg.DataDir)
 	makeFolder(pth.dataFolder)

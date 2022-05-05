@@ -13,6 +13,11 @@ func init() {
 
 	tmpDir := filepath.Join(os.TempDir(), "sequentially-generate-planet-mbtiles")
 
+	err := os.MkdirAll(tmpDir, os.ModePerm)
+	if err != nil {
+		panic("Could not make os.TempDir/sequentially-generate-planet-mbtiles. Permissions issue? TempleOS? Expect many tests to fail.")
+	}
+
 	if _, err := os.Stat(tmpDir); os.IsNotExist(err) {
 		panic("Could not find os.TempDir. Permissions issue? TempleOS? Expect many tests to fail.")
 	}

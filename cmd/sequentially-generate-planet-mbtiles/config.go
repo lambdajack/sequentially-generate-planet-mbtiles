@@ -33,9 +33,9 @@ func setConfigByFlags() {
 	cfg.OutDir = fl.outDir
 	cfg.IncludeOcean = fl.includeOcean
 	cfg.IncludeLanduse = fl.includeLanduse
-	cfg.TilemakerConfig = fl.tilemakerConfig   // THIS IS GOING TO BE A PROBLEM
-	cfg.TilemakerProcess = fl.tilemakerProcess // THIS IS GOING TO BE A PROBLEM
-	cfg.MaxRamMb = getRam()                    // Check to see if a flag has been set before calling ram
+	cfg.TilemakerConfig = fl.tilemakerConfig
+	cfg.TilemakerProcess = fl.tilemakerProcess
+	cfg.MaxRamMb = getRam()
 }
 
 func getRam() uint64 {
