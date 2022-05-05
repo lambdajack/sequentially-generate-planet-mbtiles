@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
 )
 
 type flags struct {
@@ -41,6 +43,7 @@ const (
 	exitFetchURL
 	exitFlags
 	exitInvalidJSON
+	exitFailedToBuildContainers
 )
 
 const sgpmVersion = "3.0.0"
@@ -132,6 +135,12 @@ func EntryPoint() int {
 	initLoggers()
 
 	checkRecursiveClone()
+
+	err := containers.BuildAll()
+	if err != nil {
+		lg.err.Println(err)
+		os.Exit(exitFailedToBuildContainers)
+	}
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
