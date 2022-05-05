@@ -6,12 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
-
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
 )
 
 var (
@@ -37,15 +36,17 @@ func (d *downloadInformation) Write(p []byte) (n int, err error) {
 func DownloadURL(URL, destFileName, destFolder string) error {
 	err := os.MkdirAll(destFolder, os.ModePerm)
 	if err != nil {
-		return stderrorhandler.StdErrorHandler(fmt.Sprintf("Failed to create %v folder, in %v", destFolder, destFolder), err)
+		log.Println(err)
+		return fmt.Errorf("failed to create %v folder, in %v", destFolder, destFolder)
 	}
 
-	writeFile := filepath.Clean(destFolder + "/" + destFileName)
+	writeFile := filepath.Join(destFolder, "/", destFileName)
 
 	// Setup file to write download to.
 	f, err := os.Create(writeFile)
 	if err != nil {
-		return stderrorhandler.StdErrorHandler(fmt.Sprintf("downloadurl.go | Failed to create %s file, in %s\n", destFileName, destFolder), err)
+		log.Println(err)
+		return fmt.Errorf("failed to create %s file, in %s", destFileName, destFolder)
 	}
 
 	// Set client with timeout
@@ -56,18 +57,21 @@ func DownloadURL(URL, destFileName, destFolder string) error {
 	// Set request
 	r, err := http.NewRequest(http.MethodGet, URL, nil)
 	if err != nil {
-		return stderrorhandler.StdErrorHandler(fmt.Sprintln("downloadurl.go | Failed to set request."), err)
+		log.Println(err)
+		return fmt.Errorf("failed to set download request for %v", URL)
 	}
 
 	// Attempt download
 	resp, err := client.Do(r)
 	if err != nil {
-		return stderrorhandler.StdErrorHandler(fmt.Sprintf("downloadurl.go | failed to Download %v\n", URL), DownloadAttemptFailed)
+		log.Println(err)
+		return fmt.Errorf("failed to Download %v", URL)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return stderrorhandler.StdErrorHandler(fmt.Sprintf("downloadurl.go | failed to Download %v\n", URL), DownloadAttemptFailed)
+		log.Println(err)
+		return fmt.Errorf("bad status code when downloading %v - got %v", URL, resp.StatusCode)
 	}
 
 	// Initiate struct implementing writer for progress reporting.
@@ -81,7 +85,8 @@ func DownloadURL(URL, destFileName, destFolder string) error {
 	tee := io.TeeReader(resp.Body, &di)
 	_, err = io.Copy(f, tee)
 	if err != nil {
-		return stderrorhandler.StdErrorHandler(fmt.Sprintf("downloadurl.go | Failed to save %s to %s\n", URL, destFileName), err)
+		log.Println(err)
+		return fmt.Errorf("failed to save %s to %s", URL, destFileName)
 	}
 
 	return nil

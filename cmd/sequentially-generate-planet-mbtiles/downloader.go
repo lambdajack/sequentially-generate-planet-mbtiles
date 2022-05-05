@@ -44,7 +44,7 @@ func downloadOsmData() {
 		if _, err := os.Stat(filepath.Join(dl.destFolder, "/", dl.destFileName)); os.IsNotExist(err) {
 			err := downloadurl.DownloadURL(dl.url, dl.destFileName, dl.destFolder)
 			if err != nil {
-				lg.err.Printf("Error downloading %s: %s", dl.url, err)
+				lg.err.Printf("error downloading %s: %s", dl.url, err)
 				os.Exit(exitDownloadURL)
 			}
 			lg.rep.Printf("Download success: %v\n", dl.destFileName)
