@@ -1,39 +1,30 @@
 package unzippolygons
 
-import (
-	"fmt"
-	"path/filepath"
+// type unzipInformation struct {
+// 	srcPath  string
+// 	destPath string
+// }
 
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/folders"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/flatunzip"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
-)
+// func UnzipPolygons() {
+// 	waterPolygons := unzipInformation{srcPath: "water-polygons-split-4326.zip", destPath: folders.CoastlineFolder}
+// 	landCoverUrban := unzipInformation{srcPath: "ne_10m_urban_areas.zip", destPath: folders.LandcoverFolder}
+// 	landCoverIceShelves := unzipInformation{srcPath: "ne_10m_antarctic_ice_shelves_polys.zip", destPath: folders.LandcoverFolder}
+// 	landCoverGlaciated := unzipInformation{srcPath: "ne_10m_glaciated_areas.zip", destPath: folders.LandcoverFolder}
 
-type unzipInformation struct {
-	srcPath  string
-	destPath string
-}
+// 	urbanDepth := unzipInformation{srcPath: "ne_10m_urban_areas.zip", destPath: folders.LandCoverUrbanDepth}
+// 	iceShelves := unzipInformation{srcPath: "ne_10m_antarctic_ice_shelves_polys.zip", destPath: folders.LandCoverIceShelvesDepth}
+// 	glaciated := unzipInformation{srcPath: "ne_10m_glaciated_areas.zip", destPath: folders.LandCoverGlaciatedDepth}
 
-func UnzipPolygons() {
-	waterPolygons := unzipInformation{srcPath: "water-polygons-split-4326.zip", destPath: folders.CoastlineFolder}
-	landCoverUrban := unzipInformation{srcPath: "ne_10m_urban_areas.zip", destPath: folders.LandcoverFolder}
-	landCoverIceShelves := unzipInformation{srcPath: "ne_10m_antarctic_ice_shelves_polys.zip", destPath: folders.LandcoverFolder}
-	landCoverGlaciated := unzipInformation{srcPath: "ne_10m_glaciated_areas.zip", destPath: folders.LandcoverFolder}
+// 	fileNames := [...]*unzipInformation{&waterPolygons, &landCoverUrban, &landCoverIceShelves, &landCoverGlaciated, &urbanDepth, &iceShelves, &glaciated}
 
-	urbanDepth := unzipInformation{srcPath: "ne_10m_urban_areas.zip", destPath: folders.LandCoverUrbanDepth}
-	iceShelves := unzipInformation{srcPath: "ne_10m_antarctic_ice_shelves_polys.zip", destPath: folders.LandCoverIceShelvesDepth}
-	glaciated := unzipInformation{srcPath: "ne_10m_glaciated_areas.zip", destPath: folders.LandCoverGlaciatedDepth}
+// 	for i, zipFile := range fileNames {
+// 		fileNames[i].srcPath = filepath.Clean(folders.DataFolder + "/" + zipFile.srcPath)
 
-	fileNames := [...]*unzipInformation{&waterPolygons, &landCoverUrban, &landCoverIceShelves, &landCoverGlaciated, &urbanDepth, &iceShelves, &glaciated}
+// 		err := flatunzip.Unzip(fileNames[i].srcPath, fileNames[i].destPath)
+// 		if err != nil {
+// 			stderrorhandler.StdErrorHandler(fmt.Sprintf("unzippolygons.go | Failed unzipping %v polygons. Unable to proceed...", zipFile.srcPath), err)
+// 			panic(err)
+// 		}
+// 	}
 
-	for i, zipFile := range fileNames {
-		fileNames[i].srcPath = filepath.Clean(folders.DataFolder + "/" + zipFile.srcPath)
-
-		err := flatunzip.Unzip(fileNames[i].srcPath, fileNames[i].destPath)
-		if err != nil {
-			stderrorhandler.StdErrorHandler(fmt.Sprintf("unzippolygons.go | Failed unzipping %v polygons. Unable to proceed...", zipFile.srcPath), err)
-			panic(err)
-		}
-	}
-
-}
+// }

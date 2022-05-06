@@ -1,37 +1,27 @@
 package generatembtiles
 
-import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"strings"
+// func GenerateMbTiles(inputFile, outputFile, pbfFolder, mbtilesFolder, coastlineFolder, containerName, configFile, processFile string) error {
 
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/execute"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/stderrorhandler"
-)
+// 	splitConfigPath := strings.Split(configFile, string(os.PathSeparator))
+// 	splitProcessPath := strings.Split(processFile, string(os.PathSeparator))
 
-func GenerateMbTiles(inputFile, outputFile, pbfFolder, mbtilesFolder, coastlineFolder, containerName, configFile, processFile string) error {
+// 	configPath := strings.Join(splitConfigPath[:len(splitConfigPath)-1], string(os.PathSeparator))
+// 	processPath := strings.Join(splitProcessPath[:len(splitProcessPath)-1], string(os.PathSeparator))
 
-	splitConfigPath := strings.Split(configFile, string(os.PathSeparator))
-	splitProcessPath := strings.Split(processFile, string(os.PathSeparator))
+// 	configFile = filepath.Base(configFile)
+// 	processFile = filepath.Base(processFile)
 
-	configPath := strings.Join(splitConfigPath[:len(splitConfigPath)-1], string(os.PathSeparator))
-	processPath := strings.Join(splitProcessPath[:len(splitProcessPath)-1], string(os.PathSeparator))
+// 	var generateMbtilesCmd string
 
-	configFile = filepath.Base(configFile)
-	processFile = filepath.Base(processFile)
+// 	if processPath == configPath {
+// 		generateMbtilesCmd = fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /config/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, containerName, inputFile, outputFile, configFile, processFile)
+// 	} else {
+// 		generateMbtilesCmd = fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config -v %v:/process %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /process/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, processPath, containerName, inputFile, outputFile, configFile, processFile)
+// 	}
 
-	var generateMbtilesCmd string
-
-	if processPath == configPath {
-		generateMbtilesCmd = fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /config/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, containerName, inputFile, outputFile, configFile, processFile)
-	} else {
-		generateMbtilesCmd = fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/mbtiles -v %s:/coastline -v %v:/config -v %v:/process %s --input /pbf/%s --output /mbtiles/%s --config /config/%s --process /process/%s", pbfFolder, mbtilesFolder, coastlineFolder, configPath, processPath, containerName, inputFile, outputFile, configFile, processFile)
-	}
-
-	err := execute.OutputToConsole(generateMbtilesCmd)
-	if err != nil {
-		return stderrorhandler.StdErrorHandler(fmt.Sprintf("generatembtiles.go | Failed to generate mbtiles for %s", inputFile), err)
-	}
-	return nil
-}
+// 	err := execute.OutputToConsole(generateMbtilesCmd)
+// 	if err != nil {
+// 		return stderrorhandler.StdErrorHandler(fmt.Sprintf("generatembtiles.go | Failed to generate mbtiles for %s", inputFile), err)
+// 	}
+// 	return nil
+// }
