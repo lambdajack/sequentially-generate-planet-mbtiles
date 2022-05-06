@@ -38,4 +38,6 @@ func TestDownloadOsmData(t *testing.T) {
 	if !reflect.DeepEqual(downloads, testDl) {
 		t.Errorf("\nEXPECTED: %v\n GOT: %v\n", testDl, downloads)
 	}
+
+	// Set download data for rest of test - geofabrik?
 }

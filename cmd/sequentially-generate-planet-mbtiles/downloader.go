@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/downloadurl"
+	"github.com/lambdajack/go/pkg/download"
 )
 
 type downloadInformation struct {
@@ -42,7 +42,7 @@ var downloads = map[string]downloadInformation{
 func downloadOsmData() {
 	for _, dl := range downloads {
 		if _, err := os.Stat(filepath.Join(dl.destFolder, "/", dl.destFileName)); os.IsNotExist(err) {
-			err := downloadurl.DownloadURL(dl.url, dl.destFileName, dl.destFolder)
+			err := download.FromURL(dl.url, dl.destFileName, dl.destFolder)
 			if err != nil {
 				lg.err.Printf("error downloading %s: %s", dl.url, err)
 				os.Exit(exitDownloadURL)
