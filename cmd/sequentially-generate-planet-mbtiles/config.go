@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/handlejson"
+	"github.com/lambdajack/lj_go/pkg/lj_json"
 )
 
 func initConfig() {
@@ -20,7 +20,7 @@ func initConfig() {
 }
 
 func setConfigByJSON() {
-	err := handlejson.DecodeTo(cfg, fl.config)
+	err := lj_json.DecodeTo(cfg, fl.config)
 	if err != nil {
 		log.Printf("Unable to decode config: %s", err)
 		os.Exit(exitInvalidJSON)
