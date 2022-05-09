@@ -12,8 +12,10 @@ _coming soon:_
 - More configuration options (including allowing greater data separation for better storage management and the option to use a custom osm.pbf file)
 - Improved logging and progress management
 - Increased safety with downloads (including allowing for handling of missing/broken links)
+- Vastly better development experience with a more 'effective-go' like codebase.
 - More...
 - **This project is currently in active development, any feature requests are very welcome.**
+- _Note: development is taking place on v3.0.0 branch as some breaking changes are necessary to introduce the above_
 
 ## TL;DR give me planet vector tiles!
 
