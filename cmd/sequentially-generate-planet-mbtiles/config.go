@@ -20,7 +20,7 @@ func initConfig() {
 }
 
 func setConfigByJSON() {
-	err := lj_json.DecodeTo(cfg, fl.config)
+	err := lj_json.DecodeTo(cfg, fl.config, 1000)
 	if err != nil {
 		log.Printf("Unable to decode config: %s", err)
 		os.Exit(exitInvalidJSON)
