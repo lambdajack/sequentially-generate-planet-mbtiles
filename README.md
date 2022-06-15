@@ -17,13 +17,18 @@ _coming soon:_
 - **This project is currently in active development, any feature requests are very welcome.**
 - _Note: development is taking place on v3.0.0 branch as some breaking changes are necessary to introduce the above_
 
-## TL;DR give me planet vector tiles!
+## TL;DR give me planet vector tiles! (usage)
 
 1. Have [Docker](https://docs.docker.com/get-docker/) installed.
 
-2. `git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
+2. ```bash
+   git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles
+   ```
 
-3. `sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe`
+3. ```bash
+   cd sequentially-generate-planet-mbtiles && \
+   sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe
+   ```
 
 4. Rejoice - see acknowledgements below for people to thank.
 
