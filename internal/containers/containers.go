@@ -12,44 +12,36 @@ type container struct {
 	dockerfile string
 	context    string
 }
-type containers struct {
-	tilemaker  container
-	tippecanoe container
-	osmium     container
-}
 
-var ct = &containers{
-	tilemaker: container{
+var ct = []container{
+	{
 		name:       "sequential-tilemaker",
 		dockerfile: filepath.Clean("third_party/tilemaker/Dockerfile"),
 		context:    filepath.Clean("third_party/tilemaker"),
 	},
-	tippecanoe: container{
+	{
 		name:       "sequential-tippecanoe",
 		dockerfile: filepath.Clean("third_party/tippecanoe/Dockerfile"),
 		context:    filepath.Clean("third_party/tippecanoe"),
 	},
-	osmium: container{
+	{
 		name:       "sequential-osmium",
 		dockerfile: filepath.Clean("build/osmium/Dockerfile"),
 		context:    filepath.Clean("third_party"),
 	},
+	{
+		name:       "sequential-gdal",
+		dockerfile: filepath.Clean("third_party/gdal/docker/alpine-normal/Dockerfile"),
+		context:    filepath.Clean("third_party/gdal"),
+	},
 }
 
 func BuildAll() error {
-	err := buildContainer(ct.tilemaker.name, ct.tilemaker.dockerfile, ct.tilemaker.context)
-	if err != nil {
-		return err
-	}
-
-	err = buildContainer(ct.tippecanoe.name, ct.tippecanoe.dockerfile, ct.tippecanoe.context)
-	if err != nil {
-		return err
-	}
-
-	err = buildContainer(ct.osmium.name, ct.osmium.dockerfile, ct.osmium.context)
-	if err != nil {
-		return err
+	for _, c := range ct {
+		err := buildContainer(c.name, c.dockerfile, c.context)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

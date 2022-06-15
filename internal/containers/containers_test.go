@@ -2,31 +2,38 @@ package containers
 
 import (
 	"path/filepath"
-	"reflect"
 	"testing"
 )
 
 func TestBuildContainer(t *testing.T) {
-	var testCt = &containers{
-		tilemaker: container{
+	var testCt = []container{
+		{
 			name:       "sequential-tilemaker",
 			dockerfile: filepath.Clean("third_party/tilemaker/Dockerfile"),
 			context:    filepath.Clean("third_party/tilemaker"),
 		},
-		tippecanoe: container{
+		{
 			name:       "sequential-tippecanoe",
 			dockerfile: filepath.Clean("third_party/tippecanoe/Dockerfile"),
 			context:    filepath.Clean("third_party/tippecanoe"),
 		},
-		osmium: container{
+		{
 			name:       "sequential-osmium",
 			dockerfile: filepath.Clean("build/osmium/Dockerfile"),
 			context:    filepath.Clean("third_party"),
 		},
+		{
+			name:       "sequential-gdal",
+			dockerfile: filepath.Clean("third_party/gdal/docker/alpine-normal/Dockerfile"),
+			context:    filepath.Clean("third_party/gdal"),
+		},
 	}
 
-	if !reflect.DeepEqual(ct, testCt) {
-		t.Errorf("\nEXPECTED: %v\n GOT: %v\n", testCt, ct)
+	for _, c := range testCt {
+		err := buildContainer(c.name, c.dockerfile, c.context)
+		if err != nil {
+			t.Errorf("Failed to build container %v, with dockerfile %v, and context %v", c.name, c.dockerfile, c.context)
+		}
 	}
 }
 
