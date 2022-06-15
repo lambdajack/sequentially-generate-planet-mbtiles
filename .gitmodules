@@ -10,3 +10,6 @@
 [submodule "third_party/osmium-tool"]
 	path = third_party/osmium-tool
 	url = https://github.com/lambdajack/osmium-tool
+[submodule "third_party/gdal"]
+	path = third_party/gdal
+	url = https://github.com/lambdajack/gdal
