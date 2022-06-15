@@ -23,6 +23,7 @@ type flags struct {
 	tilemakerConfig  string
 	tilemakerProcess string
 	maxRamMb         uint64
+	diskEfficient   bool
 }
 
 type configuration struct {
@@ -71,6 +72,7 @@ func init() {
 		h += "    -tc, --tilemaker-config     Config flag | (embedded) | Provide path to tilemaker configuration file. The default configuration is embedded into the release binary. See the default used here: https://github.com/lambdajack/tilemaker/blob/b90347b2a4fd475470b9870b8e44e2829d8e4d6d/resources/config-openmaptiles.json\n"
 		h += "    -tp, --tilemaker-process    Config flag | (embedded) | Provide path to tilemaker configuration file. The default process file is embedded into the release binary. See the default used here: https://github.com/lambdajack/tilemaker/blob/b90347b2a4fd475470b9870b8e44e2829d8e4d6d/resources/process-openmaptiles.lua\n"
 		h += "    -r,  --ram                  Config flag | (linux: derived from system) (other os: 4096) | Provide the maximum amount of RAM in MB that the process should use. If a linux os is detected, the total system RAM will be detected from /proc/meminfo and a default will be set to a reasonably safe level, maximising the available resourses. This assumes that only a minimal amount of system RAM is currently being used (such as an idle desktop environment (<2G)). If you are having memory problems, consider manually setting this flag to a reduced value. NOTE THIS IS NOT GUARANTEED AND SOME SAFETY MARGIN SHOULD BE ALLOWED\n"
+		h += "    -de, --disk-efficient       Config flag | false | Use disk efficient mode. This will skip the intermediary data slices and proceed straight to the working slices. Can considerably increase the time taken, but will save up to approx. 70 GB of disk space overall. Use only if disk space is a real consideration.\n"
 
 		h += "\nExit Codes:\n"
 		h += fmt.Sprintf("    %d\t%s\n", exitOK, "OK")
@@ -118,6 +120,9 @@ func EntryPoint() int {
 
 	flag.Uint64Var(&fl.maxRamMb, "r", 0, "")
 	flag.Uint64Var(&fl.maxRamMb, "ram", 0, "")
+
+	flag.BoolVar(&fl.diskEfficient, "de", false, "")
+	flag.BoolVar(&fl.diskEfficient, "disk-efficient", false, "")
 
 	flag.Parse()
 
