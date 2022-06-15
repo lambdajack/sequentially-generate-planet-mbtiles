@@ -31,7 +31,7 @@ var ct = []container{
 	},
 	{
 		name:       "sequential-gdal",
-		dockerfile: filepath.Clean("third_party/gdal/docker/alpine-normal/Dockerfile"),
+		dockerfile: filepath.Clean("third_party/gdal/docker/alpine-small/Dockerfile"),
 		context:    filepath.Clean("third_party/gdal"),
 	},
 }
