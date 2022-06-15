@@ -1,4 +1,2 @@
-github.com/lambdajack/lj_go v0.0.1 h1:0ILGUSps8JSYyJ14xQfN4uXUIzSaQ8aFjp2EqYjK+ig=
-github.com/lambdajack/lj_go v0.0.1/go.mod h1:MjcZAAAcQKPrP7M98EeVwwEoHo0AGDI51g9c/ZpAd44=
-github.com/lambdajack/lj_go v0.0.2-0.20220530133935-b968c180c81f h1:THbj+6owykwL6BWi1R79nuq4ql6JpH2I9s623o28yMY=
-github.com/lambdajack/lj_go v0.0.2-0.20220530133935-b968c180c81f/go.mod h1:MjcZAAAcQKPrP7M98EeVwwEoHo0AGDI51g9c/ZpAd44=
+github.com/lambdajack/lj_go v0.0.3 h1:OOjZCwH4+lHpcrjHZoE9h58NE/DWDZ69fLSfcEWvq4Y=
+github.com/lambdajack/lj_go v0.0.3/go.mod h1:MjcZAAAcQKPrP7M98EeVwwEoHo0AGDI51g9c/ZpAd44=
