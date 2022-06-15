@@ -23,7 +23,7 @@ type flags struct {
 	tilemakerConfig  string
 	tilemakerProcess string
 	maxRamMb         uint64
-	diskEfficient   bool
+	diskEfficient    bool
 }
 
 type configuration struct {
