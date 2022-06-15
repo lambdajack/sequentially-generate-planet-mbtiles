@@ -13,24 +13,38 @@ type container struct {
 	context    string
 }
 
+type names struct {
+	Tilemaker string
+	Tippecanoe string
+	Osmium     string
+	Gdal       string
+}
+
+var ContainerNames = names{
+	Tilemaker: "sequential-tilemaker",
+	Tippecanoe: "sequential-tippecanoe",
+	Osmium:     "sequential-osmium",
+	Gdal:       "sequential-gdal",
+}
+
 var ct = []container{
 	{
-		name:       "sequential-tilemaker",
+		name:       ContainerNames.Tilemaker,
 		dockerfile: filepath.Clean("third_party/tilemaker/Dockerfile"),
 		context:    filepath.Clean("third_party/tilemaker"),
 	},
 	{
-		name:       "sequential-tippecanoe",
+		name:       ContainerNames.Tippecanoe,
 		dockerfile: filepath.Clean("third_party/tippecanoe/Dockerfile"),
 		context:    filepath.Clean("third_party/tippecanoe"),
 	},
 	{
-		name:       "sequential-osmium",
+		name:       ContainerNames.Osmium,
 		dockerfile: filepath.Clean("build/osmium/Dockerfile"),
 		context:    filepath.Clean("third_party"),
 	},
 	{
-		name:       "sequential-gdal",
+		name:       ContainerNames.Gdal,
 		dockerfile: filepath.Clean("third_party/gdal/docker/alpine-small/Dockerfile"),
 		context:    filepath.Clean("third_party/gdal"),
 	},

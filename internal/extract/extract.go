@@ -9,7 +9,7 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/execute"
 )
 
-func Extract(src, dst, bbox, containerName string) error {
+func Extract(src, dst, bbox, containerName string) (string, error) {
 	src = filepath.Clean(src)
 	dst = filepath.Clean(dst)
 
@@ -18,11 +18,11 @@ func Extract(src, dst, bbox, containerName string) error {
 
 		err := execute.OutputToConsole(cmdString)
 		if err != nil {
-			return fmt.Errorf("osmboundaryextract.go | Failed to extract %s from %s \n %v", bbox, filepath.Base(src), err)
+			return "", fmt.Errorf("osmboundaryextract.go | Failed to extract %s from %s \n %v", bbox, filepath.Base(src), err)
 		}
 	} else {
 		log.Printf("%s already exists. Skipping...", dst)
 	}
 
-	return nil
+	return dst, nil
 }

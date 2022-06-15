@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
 )
 
 type flags struct {
@@ -155,7 +156,16 @@ func EntryPoint() int {
 	downloadOsmData()
 	unzipSourceData()
 
-	// extractiontree.Slicer("./data/pbf/switzerland-latest.osm.pbf")
+	extract.Quadrants(filepath.Join(pth.pbfFolder, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesFolder, containers.ContainerNames.Osmium)
+
+	filepath.Walk(pth.pbfQuadrantSlicesFolder, func(path string, info os.FileInfo, err error) error {
+        if err != nil {
+            log.Fatalf(err.Error())
+        }
+		extract.Slicer(path, pth.pbfSlicesFolder, containers.ContainerNames.Gdal, int64(fl.maxRamMb))
+        return nil
+    })
+
 	// extractquadrants.ExtractQuadrants()
 	// extractslices.FromQuadrants()
 	// genmbtiles.GenMbtiles()

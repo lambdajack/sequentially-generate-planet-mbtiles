@@ -32,7 +32,7 @@ func Quadrants(src, dst, containerName string) {
 		wg.Add(1)
 		go func(wg *sync.WaitGroup, quadrant Quadrant) {
 			log.Printf("Extracting quadrant %s in parallel. ~1 hour.\n", quadrant.name)
-			err := Extract(src, dst, quadrant.bbox, containerName)
+			_, err := Extract(src, dst+quadrant.name, quadrant.bbox, containerName)
 			if err != nil {
 				fmt.Printf("osmboundaryextractquadrants.go | Failed to extract %s from planet-latest.osm.pbf... unable to proceed", quadrant.bbox)
 				panic(err)
