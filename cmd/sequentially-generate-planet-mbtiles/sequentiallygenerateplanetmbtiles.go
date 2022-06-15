@@ -142,11 +142,11 @@ func EntryPoint() int {
 
 	checkRecursiveClone()
 
-	err := containers.BuildAll()
-	if err != nil {
-		lg.err.Println(err)
-		os.Exit(exitBuildContainers)
-	}
+	// err := containers.BuildAll()
+	// if err != nil {
+	// 	lg.err.Println(err)
+	// 	os.Exit(exitBuildContainers)
+	// }
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
@@ -159,12 +159,12 @@ func EntryPoint() int {
 	extract.Quadrants(filepath.Join(pth.pbfFolder, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesFolder, containers.ContainerNames.Osmium)
 
 	filepath.Walk(pth.pbfQuadrantSlicesFolder, func(path string, info os.FileInfo, err error) error {
-        if err != nil {
-            log.Fatalf(err.Error())
-        }
+	    if err != nil {
+	        log.Fatalf(err.Error())
+	    }
 		extract.Slicer(path, pth.pbfSlicesFolder, containers.ContainerNames.Gdal, int64(fl.maxRamMb))
-        return nil
-    })
+	    return nil
+	})
 
 	// extractquadrants.ExtractQuadrants()
 	// extractslices.FromQuadrants()

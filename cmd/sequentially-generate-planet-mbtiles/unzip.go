@@ -1,6 +1,7 @@
 package sequentiallygenerateplanetmbtiles
 
 import (
+	"log"
 	"path/filepath"
 
 	"github.com/lambdajack/lj_go/pkg/lj_archive"
@@ -20,6 +21,7 @@ func unzipSourceData() {
 	}
 
 	for _, info := range unzipInfo {
+		log.Println("Unzipping", info.srcPath)
 		lj_archive.Unzip(info.srcPath, info.destPath)
 	}
 }
