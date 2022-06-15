@@ -2,17 +2,35 @@
 
 ### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices for free._
 
+![](https://img.shields.io/badge/go%20report-A+-brightgreen.svg?style=flat)
+
 ![](assets/sequentially-generate-planet-mbtiles-example.gif)
 
-## TL;DR give me planet vector tiles!
+_coming soon:_
+
+- Even less ram as an option (aiming for less than 1gb used while still retaining the current speed)
+- More configuration options (including allowing greater data separation for better storage management and the option to use a custom osm.pbf file)
+- Improved logging and progress management
+- Increased safety with downloads (including allowing for handling of missing/broken links)
+- Vastly better development experience with a more 'effective-go' like codebase.
+- More...
+- **This project is currently in active development, any feature requests are very welcome.**
+- _Note: development is taking place on v3.0.0 branch as some breaking changes are necessary to introduce the above_
+
+## TL;DR give me planet vector tiles! (usage)
 
 1. Have [Docker](https://docs.docker.com/get-docker/) installed.
 
-2. `git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles`
+2. ```bash
+   git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles
+   ```
 
-3. `sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe`
+3. ```bash
+   cd sequentially-generate-planet-mbtiles && \
+   sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe
+   ```
 
-4.  Rejoice - see acknowledgements below for people to thank.
+4. Rejoice - see acknowledgements below for people to thank.
 
 ## config.json (defaults shown)
 
@@ -21,7 +39,7 @@
 ```bash
  sudo ./release/v2.2.0-sequentially-generate-planet-mbtiles.exe -c /path/to/config.json
 ```
-  
+
 ```json
 // config.json
 {
@@ -29,9 +47,7 @@
   "TilemakerConfig": "",
   "TilemakerProcess": ""
 }
-
 ```
-
 
 **_dataDir_** - This will be where the program stores all data downloaded and generated. Need approx 300GB space. If none is provided a 'data' folder will be created in the current working directory.
 
@@ -54,8 +70,9 @@ It's also designed (work in progress) to be fail safe - meaning that if your har
 This also uses the openmaptiles mbtiles spec, meaning that when accessing the served tiles you can easily use most of the open source styles available. The default is aimed at using the OSM Bright style. More information on styles can be found below.
 
 ## Considerations
+
 1. Hardware usage - this will consume effectively 100% CPU for up to a few days and will also do millions of read/writes from ssd/RAM/CPUcache. While modern hardware and vps' are perfectly capable of handling this, if you are using old hardware, beware that its remaining lifespan may be significantly reduced.
-2. Cost - related to the above, while this programme and everything it uses is entirely free and open source - the person's/company's computer you're running it on might charge you electricity/load costs etc. Please check with your provider, how they handle fair use. 
+2. Cost - related to the above, while this programme and everything it uses is entirely free and open source - the person's/company's computer you're running it on might charge you electricity/load costs etc. Please check with your provider, how they handle fair use.
 3. Time - your hardware will be unable to do anything much other than run this programme while it is running. This is in order to be efficient and is by design. If your hardware is hosting other production software or will be needed for other things in the next few days, be aware that it will perform suboptimally while this is running.
 4. Bandwidth - this will download the entire planet's worth of openstreetmap data directly from OSM. At the time of writing, this is approx. 64GB. **Please note: ** the programme will look for a `planet-latest.osm.pbf` file in the `data/pbf` folder. If this is already present, it will skip the download and use this file. If you already have the data you wish to generate mbtiles for, you can place it there to skip the download. This can be useful if you want historical data, or are generating the mbtiles on multiple computers.
 5. Data generation - in order to remain relatively fast on low spec hardware, this programme systematically breaks up the OSM data into more manegable chunks before processing. Therefore, expect around 300GB of storage to be used up on completion.
@@ -79,6 +96,7 @@ This also uses the openmaptiles mbtiles spec, meaning that when accessing the se
 We would recommend something like [tileserver-gl](https://github.com/maptiler/tileserver-gl). Further reading can be found on the [openstreetmap wiki](https://wiki.openstreetmap.org/wiki/MBTiles).
 
 You can quickly serve using tileserver-gl:
+
 ```bash
 docker run --rm -it -v $(pwd)/data:/data -p 8080:80 maptiler/tileserver-gl
 ```
@@ -92,6 +110,7 @@ When accessing your tileserver with something like [MapLibre](https://maplibre.o
 You can edit the output of `sequentially-generate-planet-mbtiles` by providing a customised process or config file through the config file.
 
 ### Style first considerations
+
 If making your own style or editing an existing one, note that `sequentially-generate-planet-mbtiles` by default will write text to the `name:latin` tag. If your maps are displayed, but missing text, check that your style is looking for `name:latin` and not something else (e.g. simply `name`).
 
 Pay attention to your fonts. The OSM Bright style makes use of Noto Sans variants (bold, italic & regular). If you are using tileserver-gl to serve your tiles, it only comes with the regular variant of Noto Sans (not the bold or the italic); therefore, it may look like text labels are missing since the style won't be able to find the fonts. You should therefore consider editing the style and changing all mentions of the font to use only the regular variant. Alternatively, you could ensure that all fonts necessary are present.
@@ -106,7 +125,7 @@ Pay attention to your fonts. The OSM Bright style makes use of Noto Sans variant
 4. **Do I have to download the entire planet?** At present, yes. Since if you are not downloading the entire planet, there are other tools out there which do a fine job of getting you mbtiles. We are working on being able to generate mbtiles for smaller areas (such as continents which may still not fit into the average computers RAM)
 5. **Does 'low spec' mean I can run it on my toaster?** Maybe, but mostly not. But you can happily run it on you 4core CPU/4gb RAM home pc without too much trouble. Just time.
 6. **Didn't this used to use GeoFabrik?** It did but the plan was always to move away from geofabrik sources for the planet since it felt unnecessary, when the data was already available direct from source. Further, the GeoFabrik data leaves gaps in the ocean and some of their slices require more than 4gb RAM to process in memory. Ultimately, by getting the data from source, we have more control over it.
-7. **Why would I use this over Planetiler?** Planetiler is a fantastic project, however it still requires minimum 32gb RAM to complete the entire planet (0.5x the size of the planet pbf file). 
+7. **Why would I use this over Planetiler?** Planetiler is a fantastic project, however it still requires minimum 32gb RAM to complete the entire planet (0.5x the size of the planet pbf file).
 
 ## Acknowledgements
 
@@ -117,10 +136,10 @@ Please take the time to thank the folks over at [tilemaker](https://github.com/s
 Please attribute openmaptiles, openstreemap contributors and tippecanoe if any data derived from this programme is used in production.
 
 ## Licenses
+
 Files generated by `sequentially-generate-planet-mbtiles` are subject to the licenses described by [tippecanoe](https://github.com/mapbox/tippecanoe) and [OpenStreetMap](https://www.openstreetmap.org/copyright).
 
 `sequentially-generate-planet-mbtiles` is subject to the MIT [license](LICENSE).
-
 
 ## Contributions
 
