@@ -10,11 +10,17 @@ import (
 )
 
 func Extract(src, dst, bbox, containerName string) (string, error) {
-	src = filepath.Clean(src)
-	dst = filepath.Clean(dst)
+	src, err := filepath.Abs(src)
+	if err != nil {
+		return "", err
+	}
+	dst, err = filepath.Abs(dst)
+	if err != nil {
+		return "", err
+	}
 
 	if _, err := os.Stat(dst); os.IsNotExist(err) {
-		cmdString := fmt.Sprintf("docker run --rm -v %s:/pbf -v %s:/out %s osmium extract -b %s --set-bounds /pbf/%s -o /out/%s", filepath.Dir(src), filepath.Base(src), containerName, bbox, filepath.Base(src), dst)
+		cmdString := fmt.Sprintf("docker run --rm -v %v:/pbf -v %s:/out %s osmium extract -b %s --set-bounds /pbf/%s -o /out/%s", filepath.Dir(src), filepath.Dir(dst), containerName, bbox, filepath.Base(src), filepath.Base(dst))
 
 		err := execute.OutputToConsole(cmdString)
 		if err != nil {
