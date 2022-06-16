@@ -6,7 +6,9 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
@@ -197,6 +199,18 @@ func EntryPoint() int {
 
 	unzipSourceData()
 
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		err := containers.CleanAll()
+		if err != nil {
+			lg.err.Println(err)
+		}
+		os.Exit(1)
+	}()
+	defer close(c)
+
 	if cfg.PlanetFile == "" {
 		extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
 	} else {
@@ -229,10 +243,10 @@ func EntryPoint() int {
 }
 
 func checkRecursiveClone() {
-	tp := [...]string{"libosmium", "osmium-tool", "tilemaker", "tippecanoe"}
+	tp := [...]string{"libosmium", "osmium-tool", "tilemaker", "tippecanoe", "gdal"}
 
 	for _, t := range tp {
-		if _, err := os.Stat(filepath.Join("third_party", t)); os.IsNotExist(err) {
+		if _, err := os.Stat(filepath.Join("third_party", t, "README.md")); os.IsNotExist(err) {
 			lg.err.Printf("Submodule %v cannot be found. Attempting to fix..", t)
 			err := exec.Command("git", "submodule", "update", "--init", "--recursive").Run()
 			if err != nil {
