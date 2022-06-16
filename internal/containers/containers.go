@@ -73,16 +73,15 @@ func CleanAll() error {
 		cmd := exec.Command("docker", "ps", "-a", "-q", "--filter", "ancestor="+c.name+":latest")
 		out, err := cmd.Output()
 		if err != nil {
-			fmt.Println("Failed to shutdown container: ", c.name)
 			e = err
 		}
 		a := strings.Split(string(out), "\n")
-		if len(a) != 0 {
-			for _, c := range a {
-				fmt.Println("Stopping container: ", c)
-				err := execute.OutputToConsole(fmt.Sprintf("docker stop %s", c))
+		for _, n := range a {
+			if len(n) > 0 {
+				fmt.Println("Stopping container: ", n, c.name)
+				err := execute.OutputToConsole(fmt.Sprintf("docker stop %s", n))
 				if err != nil {
-					fmt.Println("Failed to stop container: ", c)
+					fmt.Println("Failed to stop container: ", n)
 					e = err
 				}
 			}
