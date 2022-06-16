@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/describeloggers"
 )
@@ -17,9 +18,9 @@ type loggers struct {
 var lg = &loggers{}
 
 func initLoggers() {
-	lg.prog = initProg("./data/logs/prog.log")
-	lg.err = initErr("./data/logs/err.log")
-	lg.rep = initRep("./data/logs/rep.log")
+	lg.prog = initProg(filepath.Join(pth.logsDir, "prog.log"))
+	lg.err = initErr(filepath.Join(pth.logsDir, "err.log"))
+	lg.rep = initRep(filepath.Join(pth.logsDir, "rep.log"))
 }
 
 func initProg(logPath string) *log.Logger {
