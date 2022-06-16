@@ -3,6 +3,7 @@ package sequentiallygenerateplanetmbtiles
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/lambdajack/lj_go/pkg/lj_http"
 )
@@ -48,6 +49,16 @@ func downloadOsmData() {
 					lg.rep.Printf("source file provided - skipping download %s", dl.url)
 					continue
 				}
+			}
+
+			if !cfg.IncludeOcean && strings.Contains(dl.destFileName, "water") {
+				lg.rep.Printf("skipping download of %s", dl.url)
+				continue
+			}
+
+			if !cfg.IncludeLanduse && strings.Contains(dl.destFileName, "ne_") {
+				lg.rep.Printf("skipping download of %s", dl.url)
+				continue
 			}
 
 			err := lj_http.Download(dl.url, dl.destDir, dl.destFileName)

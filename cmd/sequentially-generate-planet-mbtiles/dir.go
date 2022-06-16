@@ -24,17 +24,32 @@ type paths struct {
 var pth = paths{}
 
 func initDirStructure() {
+
+	tmp, err := os.MkdirTemp(os.TempDir(), "*")
+	if err != nil {
+		log.Printf("Unable to create temp dir: %s", err)
+		os.Exit(exitPermissions)
+	}
+
 	pth.workingDir = convertAbs(cfg.WorkingDir)
 	makeDir(pth.workingDir)
 
 	pth.outDir = convertAbs(cfg.OutDir)
 	makeDir(pth.outDir)
 
-	pth.coastlineDir = filepath.Join(pth.workingDir, "coastline")
+	if cfg.IncludeOcean {
+		pth.coastlineDir = filepath.Join(pth.workingDir, "coastline")
 	makeDir(pth.coastlineDir)
+	} else {
+		pth.coastlineDir = filepath.Join(tmp, "coastline")
+	}
 
+	if cfg.IncludeLanduse {
 	pth.landcoverDir = filepath.Join(pth.workingDir, "landcover")
 	makeDir(pth.landcoverDir)
+	} else {
+		pth.landcoverDir = filepath.Join(tmp, "landcover")
+	}
 
 	pth.landCoverUrbanDepth = filepath.Join(pth.landcoverDir, "ne_10m_urban_areas")
 	makeDir(pth.landCoverUrbanDepth)

@@ -12,6 +12,7 @@ import (
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/mbtiles"
 )
 
 type flags struct {
@@ -221,7 +222,6 @@ if !cfg.DiskEfficient {
 		if err != nil {
 			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
 		}
-		// check planet file exists
 		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
 			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
 		}
@@ -245,7 +245,16 @@ if !cfg.DiskEfficient {
 		})
 	}
 
-
+	filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+		if !info.IsDir() {
+			mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess)
+			
+		}
+		return nil
+	})
 
 
 	// genmbtiles.GenMbtiles()
