@@ -7,63 +7,63 @@ import (
 )
 
 type paths struct {
-	dataFolder               string
-	outFolder                string
-	coastlineFolder          string
-	landcoverFolder          string
+	workingDir               string
+	outDir                   string
+	coastlineDir             string
+	landcoverDir             string
 	landCoverUrbanDepth      string
 	landCoverIceShelvesDepth string
 	landCoverGlaciatedDepth  string
-	pbfFolder                string
-	pbfSlicesFolder          string
-	pbfQuadrantSlicesFolder  string
-	mbtilesFolder            string
-	logsFolder               string
+	pbfDir                   string
+	pbfSlicesDir             string
+	pbfQuadrantSlicesDir     string
+	mbtilesDir               string
+	logsDir                  string
 }
 
 var pth = paths{}
 
-func initFolderStructure() {
-	pth.dataFolder = filepath.Clean(cfg.DataDir)
-	makeFolder(pth.dataFolder)
+func initDirStructure() {
+	pth.workingDir = filepath.Clean(cfg.WorkingDir)
+	makeDir(pth.workingDir)
 
-	pth.outFolder = filepath.Clean(cfg.OutDir)
-	makeFolder(pth.outFolder)
+	pth.outDir = filepath.Clean(cfg.OutDir)
+	makeDir(pth.outDir)
 
-	pth.coastlineFolder = filepath.Join(pth.dataFolder, "coastline")
-	makeFolder(pth.coastlineFolder)
+	pth.coastlineDir = filepath.Join(pth.workingDir, "coastline")
+	makeDir(pth.coastlineDir)
 
-	pth.landcoverFolder = filepath.Join(pth.dataFolder, "landcover")
-	makeFolder(pth.landcoverFolder)
+	pth.landcoverDir = filepath.Join(pth.workingDir, "landcover")
+	makeDir(pth.landcoverDir)
 
-	pth.landCoverUrbanDepth = filepath.Join(pth.landcoverFolder, "ne_10m_urban_areas")
-	makeFolder(pth.landCoverUrbanDepth)
+	pth.landCoverUrbanDepth = filepath.Join(pth.landcoverDir, "ne_10m_urban_areas")
+	makeDir(pth.landCoverUrbanDepth)
 
-	pth.landCoverIceShelvesDepth = filepath.Join(pth.landcoverFolder, "ne_10m_antarctic_ice_shelves_polys")
-	makeFolder(pth.landCoverIceShelvesDepth)
+	pth.landCoverIceShelvesDepth = filepath.Join(pth.landcoverDir, "ne_10m_antarctic_ice_shelves_polys")
+	makeDir(pth.landCoverIceShelvesDepth)
 
-	pth.landCoverGlaciatedDepth = filepath.Join(pth.landcoverFolder, "ne_10m_glaciated_areas")
-	makeFolder(pth.landCoverGlaciatedDepth)
+	pth.landCoverGlaciatedDepth = filepath.Join(pth.landcoverDir, "ne_10m_glaciated_areas")
+	makeDir(pth.landCoverGlaciatedDepth)
 
-	pth.pbfFolder = filepath.Join(pth.dataFolder, "pbf")
-	makeFolder(pth.pbfFolder)
+	pth.pbfDir = filepath.Join(pth.workingDir, "pbf")
+	makeDir(pth.pbfDir)
 
-	pth.pbfSlicesFolder = filepath.Join(pth.pbfFolder, "slices")
-	makeFolder(pth.pbfSlicesFolder)
+	pth.pbfSlicesDir = filepath.Join(pth.pbfDir, "slices")
+	makeDir(pth.pbfSlicesDir)
 
-	pth.pbfQuadrantSlicesFolder = filepath.Join(pth.pbfFolder, "quadrants")
-	makeFolder(pth.pbfQuadrantSlicesFolder)
+	pth.pbfQuadrantSlicesDir = filepath.Join(pth.pbfDir, "quadrants")
+	makeDir(pth.pbfQuadrantSlicesDir)
 
-	pth.mbtilesFolder = filepath.Join(pth.dataFolder, "mbtiles")
-	makeFolder(pth.mbtilesFolder)
+	pth.mbtilesDir = filepath.Join(pth.workingDir, "mbtiles")
+	makeDir(pth.mbtilesDir)
 
-	pth.logsFolder = filepath.Join(pth.dataFolder, "logs")
-	makeFolder(pth.logsFolder)
+	pth.logsDir = filepath.Join(pth.workingDir, "logs")
+	makeDir(pth.logsDir)
 }
 
-func makeFolder(fldr string) {
+func makeDir(fldr string) {
 	if err := os.MkdirAll(fldr, os.ModePerm); err != nil {
-		log.Printf("Unable to create %s folder", fldr)
+		log.Printf("Unable to create %s Dir", fldr)
 		os.Exit(exitPermissions)
 	}
 }

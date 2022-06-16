@@ -17,7 +17,7 @@ type flags struct {
 	stage            bool
 	config           string
 	planetFile       string
-	dataDir          string
+	workingDir       string
 	outDir           string
 	includeOcean     bool
 	includeLanduse   bool
@@ -25,17 +25,6 @@ type flags struct {
 	tilemakerProcess string
 	maxRamMb         uint64
 	diskEfficient    bool
-}
-
-type configuration struct {
-	PlanetFile       string `json:"planetFile"`
-	DataDir          string `json:"dataDir"`
-	OutDir           string `json:"outDir"`
-	IncludeOcean     bool   `json:"includeOcean"`
-	IncludeLanduse   bool   `json:"includeLanduse"`
-	TilemakerConfig  string `json:"TilemakerConfig"`
-	TilemakerProcess string `json:"TilemakerProcess"`
-	MaxRamMb         uint64 `json:"maxRamMb"`
 }
 
 const (
@@ -48,33 +37,84 @@ const (
 	exitBuildContainers
 )
 
-const sgpmVersion = "3.0.0"
-
 var fl = &flags{}
 var cfg = &configuration{}
 
 func init() {
 	flag.Usage = func() {
-		h := "Sequentially Generate Planet Mbtiles\n"
+		h := `
+Sequentially Generate Planet Mbtiles
+____________________________________
 
-		h += "\nUsage:\n"
-		h += "    sequentially-generate-planet-mbtiles [OPTIONS]\n"
+Usage:
+    sequentially-generate-planet-mbtiles [OPTIONS]
 
-		h += "\nOptions:\n"
-		h += "    -h,  --help                 Print this help message\n"
-		h += "    -v,  --version              Print version information\n"
-		h += "    -s,  --stage                Initialise required containers, folders and logs based on the supplied config file and then exit.\n"
-		h += "    -c,  --config               Provide path to a config.json. No configuration is required. If a config.json is provided, all other \"config flags\" are ignored and runtime params are derived solely from the config.json. See documentation for example config.json\n"
-		h += "    -p,  --planet-file          Config flag | \"\" | Provide path to your osm.pbf file to be turned into mbtiles. By default planet-latest.osm.pbf will be downloaded directly from OpenStreetMap. If a file is provided, downloading the latest planet osm data from openstreetmap is skipped and the supplied file will be used. You may use this to provide a file other than an entire planet .osm.pbf file (such as a region downloaded from https://download.geofabrik.de).\n"
-		h += "    -d,  --datadir              Config flag | data | Provide path to the data directory. This is where files will be downloaded to and files generated as a result of processing osm data will be stored.\n"
-		h += "    -o,  --outdir               Config flag | data" + string(os.PathSeparator) + "out | Provide path to output directory for the final planet.mbtiles file.\n"
-		h += "    -io, --include-ocean        Config flag | true | Include ocean tiles in final planet.mbtiles\n"
-		h += "    -il, --include-landuse      Config flag | true | Include landuse layer in final planet.mbtiles\n"
-		h += "    -tc, --tilemaker-config     Config flag | (embedded) | Provide path to tilemaker configuration file. The default configuration is embedded into the release binary. See the default used here: https://github.com/lambdajack/tilemaker/blob/b90347b2a4fd475470b9870b8e44e2829d8e4d6d/resources/config-openmaptiles.json\n"
-		h += "    -tp, --tilemaker-process    Config flag | (embedded) | Provide path to tilemaker configuration file. The default process file is embedded into the release binary. See the default used here: https://github.com/lambdajack/tilemaker/blob/b90347b2a4fd475470b9870b8e44e2829d8e4d6d/resources/process-openmaptiles.lua\n"
-		h += "    -r,  --ram                  Config flag | (linux: derived from system) (other os: 4096) | Provide the maximum amount of RAM in MB that the process should use. If a linux os is detected, the total system RAM will be detected from /proc/meminfo and a default will be set to a reasonably safe level, maximising the available resourses. This assumes that only a minimal amount of system RAM is currently being used (such as an idle desktop environment (<2G)). If you are having memory problems, consider manually setting this flag to a reduced value. NOTE THIS IS NOT GUARANTEED AND SOME SAFETY MARGIN SHOULD BE ALLOWED\n"
-		h += "    -de, --disk-efficient       Config flag | false | Use disk efficient mode. This will skip the intermediary data slices and proceed straight to the working slices. Can considerably increase the time taken, but will save up to approx. 70 GB of disk space overall. Use only if disk space is a real consideration.\n"
+Options:
+  -h, --help               Print this help message
+  -v, --version            Print version information
 
+  -s, --stage              Initialise required containers, Dirs and logs
+                           based on the supplied config file and then exit.
+
+  -c, --config             Provide path to a config.json. No configuration
+                           is required. If a config.json is provided, all
+                           other "config flags" are ignored and runtime
+                           params are derived solely from the config.json.
+                           See documentation for example config.json
+
+Config Flags:
+  -p, --planet-file        Provide path to your osm.pbf file to be turned 
+                           into mbtiles. By default a planet-latest.osm.pbf 
+                           will be downloaded directly from OpenStreetMap. If 
+                           a file is provided, downloading the latest 
+                           planet osm data from openstreetmap is 
+                           skipped and the supplied file will be used. 
+                           You may use this to provide a file other than 
+                           an entire planet .osm.pbf file (such as a region 
+                           downloaded from https://download.geofabrik.de).
+
+  -w,  --working-dir       Provide path to the working directory. This is 
+                           where files will be downloaded to and files 
+                           generated as a result of processing osm data will 
+                           be stored. Temporary files will be stored here. 
+                           Please ensuer your designated working directory 
+                           has at least 300 GB of space available.
+
+  -o,  --outdir            Provide path to output directory for the final 
+                           planet.mbtiles file.
+
+  -io, --include-ocean     Include ocean tiles in final planet.mbtiles
+  -il, --include-landuse   Include landuse layer in final planet.mbtiles
+  
+  -tc, --tilemaker-config  Provide path to tilemaker configuration file. The 
+                           default configuration is embedded into the release 
+                           binary. See the default used here: 
+                           https://github.com/lambdajack/tilemaker/blob/master/resources/config-openmaptiles.json
+
+  -tp, --tilemaker-process Provide path to tilemaker configuration file. The 
+                           default process file is embedded into the release 
+                           binary. See the default used here: 
+                           https://github.com/lambdajack/tilemaker/blob/master/resources/process-openmaptiles.lua
+	
+  -r,  --ram               Provide the maximum amount of RAM in MB that the 
+                           process should use. If a linux os is detected, 
+                           the total system RAM will be detected from 
+                           /proc/meminfo and a default will be set to a 
+                           reasonably safe level, maximising the available 
+                           resourses. This assumes that only a minimal amount 
+                           of system RAM is currently being used (such as an 
+                           idle desktop environment (<2G)). If you are having 
+                           memory problems, consider manually setting this flag 
+                           to a reduced value. NOTE THIS IS NOT GUARANTEED AND 
+                           SOME SAFETY MARGIN SHOULD BE ALLOWED
+
+  -de, --disk-efficient    Use disk efficient mode. This will skip the 
+                           intermediary data slices and proceed straight to the 
+                           working slices. Can considerably increase the time 
+                           taken, but will save up to approx. 70 GB of disk 
+                           space overall. Use only if disk space is a real 
+                           consideration.
+`
 		h += "\nExit Codes:\n"
 		h += fmt.Sprintf("    %d\t%s\n", exitOK, "OK")
 		h += fmt.Sprintf("    %d\t%s\n", exitPermissions, "Do not have permission")
@@ -101,8 +141,8 @@ func EntryPoint() int {
 	flag.StringVar(&fl.planetFile, "p", "", "")
 	flag.StringVar(&fl.planetFile, "planet-file", "", "")
 
-	flag.StringVar(&fl.dataDir, "d", "data", "")
-	flag.StringVar(&fl.dataDir, "datadir", "data", "")
+	flag.StringVar(&fl.workingDir, "d", "data", "")
+	flag.StringVar(&fl.workingDir, "working-dir", "data", "")
 
 	flag.StringVar(&fl.outDir, "o", "data/out", "")
 	flag.StringVar(&fl.outDir, "outdir", "data/out", "")
@@ -136,7 +176,7 @@ func EntryPoint() int {
 
 	initConfig()
 
-	initFolderStructure()
+	initDirStructure()
 
 	initLoggers()
 
@@ -157,8 +197,8 @@ func EntryPoint() int {
 
 	unzipSourceData()
 
-	if (cfg.PlanetFile == "") {
-		extract.Quadrants(filepath.Join(pth.pbfFolder, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesFolder, containers.ContainerNames.Osmium)
+	if cfg.PlanetFile == "" {
+		extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
 	} else {
 		pf, err := filepath.Abs(cfg.PlanetFile)
 		if err != nil {
@@ -168,17 +208,17 @@ func EntryPoint() int {
 		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
 			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
 		}
-		extract.Quadrants(pf, pth.pbfQuadrantSlicesFolder, containers.ContainerNames.Osmium)
+		extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
 	}
 
-	filepath.Walk(pth.pbfQuadrantSlicesFolder, func(path string, info os.FileInfo, err error) error {
-	    if err != nil {
-	        log.Fatalf(err.Error())
-	    }
-		if !info.IsDir() {
-			extract.Slicer(path, pth.pbfSlicesFolder, containers.ContainerNames.Gdal, containers.ContainerNames.Osmium, pth.pbfFolder, 1000)
+	filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			log.Fatalf(err.Error())
 		}
-	    return nil
+		if !info.IsDir() {
+			extract.Slicer(path, pth.pbfSlicesDir, containers.ContainerNames.Gdal, containers.ContainerNames.Osmium, pth.pbfDir, 1000)
+		}
+		return nil
 	})
 
 	// extractquadrants.ExtractQuadrants()

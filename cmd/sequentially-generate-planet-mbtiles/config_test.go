@@ -24,7 +24,7 @@ func init() {
 
 	cfg = &configuration{
 		PlanetFile:       "", // CHANGE TO TEST FILE ONCE SET U
-		DataDir:          tmpDir,
+		WorkingDir:       tmpDir,
 		OutDir:           filepath.Join(tmpDir, "out"),
 		IncludeOcean:     true,
 		IncludeLanduse:   true,

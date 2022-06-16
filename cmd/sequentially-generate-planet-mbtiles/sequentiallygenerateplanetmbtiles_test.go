@@ -23,8 +23,8 @@ func init() {
 	flag.StringVar(&fl.planetFile, "p", "", "")
 	flag.StringVar(&fl.planetFile, "planet-file", "", "")
 
-	flag.StringVar(&fl.dataDir, "d", "data", "")
-	flag.StringVar(&fl.dataDir, "datadir", "data", "")
+	flag.StringVar(&fl.workingDir, "d", "data", "")
+	flag.StringVar(&fl.workingDir, "datadir", "data", "")
 
 	flag.StringVar(&fl.outDir, "o", "data/out", "")
 	flag.StringVar(&fl.outDir, "outdir", "data/out", "")

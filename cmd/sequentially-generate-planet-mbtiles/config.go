@@ -11,6 +11,18 @@ import (
 	"github.com/lambdajack/lj_go/pkg/lj_json"
 )
 
+type configuration struct {
+	PlanetFile       string `json:"planetFile"`
+	WorkingDir       string `json:"WorkingDir"`
+	OutDir           string `json:"outDir"`
+	IncludeOcean     bool   `json:"includeOcean"`
+	IncludeLanduse   bool   `json:"includeLanduse"`
+	TilemakerConfig  string `json:"TilemakerConfig"`
+	TilemakerProcess string `json:"TilemakerProcess"`
+	MaxRamMb         uint64 `json:"maxRamMb"`
+	DiskEfficient    bool   `json:"diskEfficient"`
+}
+
 func initConfig() {
 	if fl.config == "" {
 		setConfigByFlags()
@@ -28,8 +40,10 @@ func setConfigByJSON() {
 }
 
 func setConfigByFlags() {
+	// Set filepath.Abs
+
 	cfg.PlanetFile = fl.planetFile
-	cfg.DataDir = fl.dataDir
+	cfg.WorkingDir = fl.workingDir
 	cfg.OutDir = fl.outDir
 	cfg.IncludeOcean = fl.includeOcean
 	cfg.IncludeLanduse = fl.includeLanduse

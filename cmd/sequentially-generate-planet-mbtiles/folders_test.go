@@ -6,39 +6,39 @@ import (
 	"testing"
 )
 
-func TestMakeFolder(t *testing.T) {
+func TestMakeDir(t *testing.T) {
 	tmp := t.TempDir()
 
-	folder := filepath.Join(tmp, "test")
+	Dir := filepath.Join(tmp, "test")
 
-	makeFolder(folder)
+	makeDir(Dir)
 
-	if _, err := os.Stat(folder); os.IsNotExist(err) {
-		t.Errorf("Folder %s does not exist", folder)
+	if _, err := os.Stat(Dir); os.IsNotExist(err) {
+		t.Errorf("Dir %s does not exist", Dir)
 	}
 }
 
-func TestInitFolderStruc(t *testing.T) {
+func TestInitDirStruc(t *testing.T) {
 
-	initFolderStructure()
+	initDirStructure()
 
-	folderMap := map[string]string{
-		"outFolder":                filepath.Clean(cfg.OutDir),
-		"coastlineFolder":          filepath.Join(pth.dataFolder, "coastline"),
-		"landcoverFolder":          filepath.Join(pth.dataFolder, "landcover"),
-		"landCoverUrbanDepth":      filepath.Join(pth.landcoverFolder, "ne_10m_urban_areas"),
-		"landCoverIceShelvesDepth": filepath.Join(pth.landcoverFolder, "ne_10m_antarctic_ice_shelves_polys"),
-		"landCoverGlaciatedDepth":  filepath.Join(pth.landcoverFolder, "ne_10m_glaciated_areas"),
-		"pbfFolder":                filepath.Join(pth.dataFolder, "pbf"),
-		"pbfSlicesFolder":          filepath.Join(pth.pbfFolder, "slices"),
-		"pbfQuadrantSlicesFolder":  filepath.Join(pth.pbfFolder, "quadrants"),
-		"mbtilesFolder":            filepath.Join(pth.dataFolder, "mbtiles"),
-		"logsFolder":               filepath.Join(pth.dataFolder, "logs"),
+	DirMap := map[string]string{
+		"outDir":                   filepath.Clean(cfg.OutDir),
+		"coastlineDir":             filepath.Join(pth.workingDir, "coastline"),
+		"landcoverDir":             filepath.Join(pth.workingDir, "landcover"),
+		"landCoverUrbanDepth":      filepath.Join(pth.landcoverDir, "ne_10m_urban_areas"),
+		"landCoverIceShelvesDepth": filepath.Join(pth.landcoverDir, "ne_10m_antarctic_ice_shelves_polys"),
+		"landCoverGlaciatedDepth":  filepath.Join(pth.landcoverDir, "ne_10m_glaciated_areas"),
+		"pbfDir":                   filepath.Join(pth.workingDir, "pbf"),
+		"pbfSlicesDir":             filepath.Join(pth.pbfDir, "slices"),
+		"pbfQuadrantSlicesDir":     filepath.Join(pth.pbfDir, "quadrants"),
+		"mbtilesDir":               filepath.Join(pth.workingDir, "mbtiles"),
+		"logsDir":                  filepath.Join(pth.workingDir, "logs"),
 	}
 
-	for folder := range folderMap {
-		if _, err := os.Stat(folderMap[folder]); os.IsNotExist(err) {
-			t.Errorf("Folder %s does not exist", folderMap[folder])
+	for Dir := range DirMap {
+		if _, err := os.Stat(DirMap[Dir]); os.IsNotExist(err) {
+			t.Errorf("Dir %s does not exist", DirMap[Dir])
 		}
 	}
 }
