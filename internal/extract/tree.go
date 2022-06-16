@@ -16,7 +16,7 @@ import (
 )
 
 func TreeSlicer(src, dstDir, workingDir string, targetSize uint64) {
-	log.Printf("Slicing %s", src)
+	log.Printf("Operating on: %s", src)
 
 	src, err := filepath.Abs(src)
 	if err != nil {
