@@ -1,6 +1,6 @@
 {
   "planetFile": "",
-  "dataDir": "",
+  "workingDir": "",
   "outDir": "",
   "includeOcean": true,
   "includeLanduse": true,

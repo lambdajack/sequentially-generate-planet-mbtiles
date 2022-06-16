@@ -13,7 +13,7 @@ import (
 
 type configuration struct {
 	PlanetFile       string `json:"planetFile"`
-	WorkingDir       string `json:"WorkingDir"`
+	WorkingDir       string `json:"workingDir"`
 	OutDir           string `json:"outDir"`
 	IncludeOcean     bool   `json:"includeOcean"`
 	IncludeLanduse   bool   `json:"includeLanduse"`
@@ -30,6 +30,8 @@ func initConfig() {
 		setConfigByJSON()
 	}
 
+	verifyPaths()
+	setAbsolutePaths()
 }
 
 func setConfigByJSON() {
@@ -41,15 +43,54 @@ func setConfigByJSON() {
 }
 
 func setConfigByFlags() {
-	cfg.PlanetFile = convertAbs(fl.planetFile)
-	cfg.WorkingDir = convertAbs(fl.workingDir)
-	cfg.OutDir = convertAbs(fl.outDir)
+	cfg.PlanetFile = fl.planetFile
+	cfg.WorkingDir = fl.workingDir
+	cfg.OutDir = fl.outDir
 	cfg.IncludeOcean = fl.includeOcean
 	cfg.IncludeLanduse = fl.includeLanduse
-	cfg.TilemakerConfig = convertAbs(fl.tilemakerConfig)
-	cfg.TilemakerProcess = convertAbs(fl.tilemakerProcess)
+	cfg.TilemakerConfig = fl.tilemakerConfig
+	cfg.TilemakerProcess = fl.tilemakerProcess
 	cfg.MaxRamMb = getRam()
 	cfg.DiskEfficient = fl.diskEfficient
+}
+
+func setAbsolutePaths() {
+	cfg.PlanetFile = convertAbs(cfg.PlanetFile)
+	cfg.WorkingDir = convertAbs(cfg.WorkingDir)
+	cfg.OutDir = convertAbs(cfg.OutDir)
+	cfg.TilemakerConfig = convertAbs(cfg.TilemakerConfig)
+	cfg.TilemakerProcess = convertAbs(cfg.TilemakerProcess)
+}
+
+func verifyPaths() {
+	if cfg.PlanetFile == "" {
+		log.Fatal("planet file string empty in config")
+	}
+	if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
+		log.Fatalf("planet file does not exist: %s", cfg.PlanetFile)
+	}
+
+	if cfg.WorkingDir == "" {
+		log.Fatal("working dir string empty in config")
+	}
+
+	if cfg.OutDir == "" {
+		log.Fatal("out dir string empty in config")
+	}
+
+	if cfg.TilemakerConfig == "" {
+		log.Fatal("tilemaker config string empty in config")
+	}
+	if _, err := os.Stat(cfg.TilemakerConfig); os.IsNotExist(err) {
+		log.Fatalf("tilemaker config does not exist: %s", cfg.TilemakerConfig)
+	}
+
+	if cfg.TilemakerProcess == "" {
+		log.Fatal("tilemaker process string empty in config")
+	}
+	if _, err := os.Stat(cfg.TilemakerProcess); os.IsNotExist(err) {
+		log.Fatalf("tilemaker process does not exist: %s", cfg.TilemakerProcess)
+	}
 }
 
 func getRam() uint64 {
