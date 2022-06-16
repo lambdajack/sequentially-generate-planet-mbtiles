@@ -6,5 +6,6 @@
   "includeLanduse": true,
   "TilemakerConfig": "",
   "TilemakerProcess": "",
-  "maxRamMb": 0
+  "maxRamMb": 0,
+  "diskEfficient": false
 }
