@@ -13,28 +13,28 @@ import (
 	"strings"
 )
 
-func Slicer(src, dstFolder, ogrContainerName string, targetSizeMb int64) {
+func Slicer(src, dstFolder, ogrContainerName, osmiumContainerName, pbfFolder string, targetSizeMb int64) {
 	log.Printf("Slicing %s", src)
 	
 	src = filepath.Clean(src)
 	dstFolder = filepath.Clean(dstFolder)
 
-	minX, minY, maxX, maxY, _ := getExtent(src, ogrContainerName)
+	minX, minY, maxX, maxY, err := getExtent(src, ogrContainerName)
+	if err != nil {
+		log.Fatalf("extract.go | Slicer | Failed to get extent: %v", err)
+	}
 
 	// Left slice point
-	lsp, err := leftSlicePoint(minX, maxX)
-	if err != nil {
-		log.Fatalf("extract.go | Slicer | Failed to generate left slice point: %v", err)
-	}
+	lsp := leftSlicePoint(minX, maxX)
 	lbb := formatBoundingBox(minX, minY, lsp, maxY)
 
 	// Extract left slice
-	f, err := ioutil.TempFile(filepath.Dir(src), "*.osm.pbf")
+	f, err := ioutil.TempFile(pbfFolder, "*.osm.pbf")
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
 	}
 
-	lp, err := Extract(src, filepath.Join(filepath.Dir(src), f.Name()), lbb, ogrContainerName)
+	lp, err := Extract(src, filepath.Join(pbfFolder, f.Name()), lbb, osmiumContainerName)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to extract left slice: %v", err)
 	}
@@ -45,26 +45,23 @@ func Slicer(src, dstFolder, ogrContainerName string, targetSizeMb int64) {
 		log.Fatalf("extract.go | Slicer | Failed to get file info: %v", err)
 	}
 	if lf.Size() > targetSizeMb*1024*1024 {
-		Slicer(lp, dstFolder, ogrContainerName, targetSizeMb)
+		Slicer(lp, dstFolder, ogrContainerName, osmiumContainerName, pbfFolder, targetSizeMb)
 	} else {
 		log.Printf("Slice %s has reached target size. Saving to working folder", lp)
 		os.Rename(lp, filepath.Join(dstFolder, filepath.Base(lp)))
 	}
 
 	// Right slice point
-	rsp, err := rightSlicePoint(minX, maxX)
-	if err != nil {
-		log.Fatalf("extract.go | Slicer | Failed to generate right slice point: %v", err)
-	}
+	rsp := rightSlicePoint(minX, maxX)
 	rbb := formatBoundingBox(rsp, minY, maxX, maxY)
 
 	// Extract right slice
-	f, err = ioutil.TempFile(filepath.Dir(src), "*.osm.pbf")
+	f, err = ioutil.TempFile(pbfFolder, "*.osm.pbf")
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
 	}
 
-	rp, err := Extract(src, filepath.Join(filepath.Dir(src), f.Name()), rbb, ogrContainerName)
+	rp, err := Extract(src, filepath.Join(pbfFolder, f.Name()), rbb, osmiumContainerName)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to extract right slice: %v", err)
 	}
@@ -76,7 +73,7 @@ func Slicer(src, dstFolder, ogrContainerName string, targetSizeMb int64) {
 	}
 
 	if rf.Size() > targetSizeMb*1024*1024 {
-		Slicer(rp, dstFolder, ogrContainerName, targetSizeMb)
+		Slicer(rp, dstFolder, ogrContainerName, osmiumContainerName, pbfFolder, targetSizeMb)
 	} else {
 		log.Printf("Slice %s has reached target size. Saving to working folder", rp)
 		os.Rename(rp, filepath.Join(dstFolder, filepath.Base(rp)))
@@ -89,11 +86,17 @@ func formatBoundingBox(minX, minY, maxX, maxY float64) string {
 
 func getExtent(filePath, ogrContainerName string) (minX, minY, maxX, maxY float64, err error) {
 
-	cmd := exec.Command("sudo", "docker", "run", "--rm", "--mount", "type=bind,source="+filePath+",target=/data", "containerName", "ogrinfo", "-so", "-al", "/data")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	ap, err := filepath.Abs(filePath)
+	if err != nil {
+		return 0, 0, 0, 0, err
+	}
+
+	fmt.Println(ap)
+
+	cmd := exec.Command("docker", "run", "--rm", "--mount", "type=bind,source="+ap+",target=/data", ogrContainerName, "ogrinfo", "-so", "-al", "/data")
 	out, err := cmd.Output()
 	if err != nil {
+		fmt.Println("error here?")
 		return 0, 0, 0, 0, err
 	}
 
@@ -130,14 +133,14 @@ func getExtent(filePath, ogrContainerName string) (minX, minY, maxX, maxY float6
 }
 
 // returns the mid point for the box (which should be used to generate the next slice)
-func rightSlicePoint(minX, maxX float64) (float64, error) {
+func rightSlicePoint(minX, maxX float64) float64 {
 	slicePoint := (minX + maxX) / 2
 	// 0.01 is taken away to ensure no data is lost during the slicing process
-	return slicePoint - 0.01, nil
+	return slicePoint - 0.01
 }
 
-func leftSlicePoint(minX, maxX float64) (float64, error) {
+func leftSlicePoint(minX, maxX float64) float64 {
 	slicePoint := (minX + maxX) / 2
 	// 0.01 is added to ensure no data is lost during the slicing process
-	return slicePoint + 0.01, nil
+	return slicePoint + 0.01
 }

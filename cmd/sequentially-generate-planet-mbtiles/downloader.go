@@ -42,12 +42,21 @@ func downloadOsmData() {
 
 	for _, dl := range downloads {
 		if _, err := os.Stat(filepath.Join(dl.destFolder, dl.destFileName)); os.IsNotExist(err) {
+
+			if  dl.destFileName == "planet-latest.osm.pbf" {
+				if fl.planetFile != "" {
+					lg.rep.Printf("source file provided - skipping download %s", dl.url)
+					continue
+				}
+			}
+			
 			err := lj_http.Download(dl.url, dl.destFolder, dl.destFileName)
 			if err != nil {
 				lg.err.Printf("error downloading %s: %s", dl.url, err)
 				os.Exit(exitDownloadURL)
 			}
 			lg.rep.Printf("Download success: %v\n", dl.destFileName)
+
 		} else {
 			lg.rep.Printf("%v already exists. Skipping download.\n", dl.destFileName)
 		}

@@ -142,11 +142,11 @@ func EntryPoint() int {
 
 	checkRecursiveClone()
 
-	// err := containers.BuildAll()
-	// if err != nil {
-	// 	lg.err.Println(err)
-	// 	os.Exit(exitBuildContainers)
-	// }
+	err := containers.BuildAll()
+	if err != nil {
+		lg.err.Println(err)
+		os.Exit(exitBuildContainers)
+	}
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
@@ -154,15 +154,30 @@ func EntryPoint() int {
 	}
 
 	downloadOsmData()
+
 	unzipSourceData()
 
-	extract.Quadrants(filepath.Join(pth.pbfFolder, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesFolder, containers.ContainerNames.Osmium)
+	if (cfg.PlanetFile == "") {
+		extract.Quadrants(filepath.Join(pth.pbfFolder, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesFolder, containers.ContainerNames.Osmium)
+	} else {
+		pf, err := filepath.Abs(cfg.PlanetFile)
+		if err != nil {
+			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+		}
+		// check planet file exists
+		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
+			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+		}
+		extract.Quadrants(pf, pth.pbfQuadrantSlicesFolder, containers.ContainerNames.Osmium)
+	}
 
 	filepath.Walk(pth.pbfQuadrantSlicesFolder, func(path string, info os.FileInfo, err error) error {
 	    if err != nil {
 	        log.Fatalf(err.Error())
 	    }
-		extract.Slicer(path, pth.pbfSlicesFolder, containers.ContainerNames.Gdal, int64(fl.maxRamMb))
+		if !info.IsDir() {
+			extract.Slicer(path, pth.pbfSlicesFolder, containers.ContainerNames.Gdal, containers.ContainerNames.Osmium, pth.pbfFolder, 1000)
+		}
 	    return nil
 	})
 
