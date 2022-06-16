@@ -29,6 +29,8 @@ func initConfig() {
 	} else {
 		setConfigByJSON()
 	}
+
+	
 }
 
 func setConfigByJSON() {
@@ -40,16 +42,15 @@ func setConfigByJSON() {
 }
 
 func setConfigByFlags() {
-	// Set filepath.Abs
-
-	cfg.PlanetFile = fl.planetFile
-	cfg.WorkingDir = fl.workingDir
-	cfg.OutDir = fl.outDir
+	cfg.PlanetFile = convertAbs(fl.planetFile)
+	cfg.WorkingDir = convertAbs(fl.workingDir)
+	cfg.OutDir = convertAbs(fl.outDir)
 	cfg.IncludeOcean = fl.includeOcean
 	cfg.IncludeLanduse = fl.includeLanduse
-	cfg.TilemakerConfig = fl.tilemakerConfig
-	cfg.TilemakerProcess = fl.tilemakerProcess
+	cfg.TilemakerConfig = convertAbs(fl.tilemakerConfig)
+	cfg.TilemakerProcess = convertAbs(fl.tilemakerProcess)
 	cfg.MaxRamMb = getRam()
+	cfg.DiskEfficient = fl.diskEfficient
 }
 
 func getRam() uint64 {
