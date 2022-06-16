@@ -211,6 +211,9 @@ func EntryPoint() int {
 	}()
 	defer close(c)
 
+	lg.rep.Println("Starting slice generation. This will take a while and there may be several minutes between progress updates.")
+
+if !cfg.DiskEfficient {
 	if cfg.PlanetFile == "" {
 		extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
 	} else {
@@ -224,19 +227,27 @@ func EntryPoint() int {
 		}
 		extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
 	}
+} else {
+	lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
+}
 
-	filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			log.Fatalf(err.Error())
-		}
-		if !info.IsDir() {
-			extract.Slicer(path, pth.pbfSlicesDir, containers.ContainerNames.Gdal, containers.ContainerNames.Osmium, pth.pbfDir, 1000)
-		}
-		return nil
-	})
+	if cfg.DiskEfficient {
+		extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, 1000)
+	} else {
+		filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				log.Fatalf(err.Error())
+			}
+			if !info.IsDir() {
+				extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, 1000)
+			}
+			return nil
+		})
+	}
 
-	// extractquadrants.ExtractQuadrants()
-	// extractslices.FromQuadrants()
+
+
+
 	// genmbtiles.GenMbtiles()
 	// genplanet.GenPlanet()
 	return exitOK
