@@ -14,14 +14,14 @@ type container struct {
 }
 
 type names struct {
-	Tilemaker string
+	Tilemaker  string
 	Tippecanoe string
 	Osmium     string
 	Gdal       string
 }
 
 var ContainerNames = names{
-	Tilemaker: "sequential-tilemaker",
+	Tilemaker:  "sequential-tilemaker",
 	Tippecanoe: "sequential-tippecanoe",
 	Osmium:     "sequential-osmium",
 	Gdal:       "sequential-gdal",
