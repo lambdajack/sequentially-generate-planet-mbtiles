@@ -30,7 +30,6 @@ func initConfig() {
 		setConfigByJSON()
 	}
 
-	
 }
 
 func setConfigByJSON() {

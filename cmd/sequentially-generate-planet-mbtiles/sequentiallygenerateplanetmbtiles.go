@@ -214,22 +214,22 @@ func EntryPoint() int {
 
 	lg.rep.Println("Starting slice generation. This will take a while and there may be several minutes between progress updates.")
 
-if !cfg.DiskEfficient {
-	if cfg.PlanetFile == "" {
-		extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+	if !cfg.DiskEfficient {
+		if cfg.PlanetFile == "" {
+			extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+		} else {
+			pf, err := filepath.Abs(cfg.PlanetFile)
+			if err != nil {
+				log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+			}
+			if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
+				log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+			}
+			extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+		}
 	} else {
-		pf, err := filepath.Abs(cfg.PlanetFile)
-		if err != nil {
-			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-		}
-		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
-			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-		}
-		extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+		lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
 	}
-} else {
-	lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
-}
 
 	if cfg.DiskEfficient {
 		extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, 1000)
@@ -251,11 +251,10 @@ if !cfg.DiskEfficient {
 		}
 		if !info.IsDir() {
 			mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess)
-			
+
 		}
 		return nil
 	})
-
 
 	// genmbtiles.GenMbtiles()
 	// genplanet.GenPlanet()

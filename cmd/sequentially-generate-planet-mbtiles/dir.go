@@ -39,14 +39,14 @@ func initDirStructure() {
 
 	if cfg.IncludeOcean {
 		pth.coastlineDir = filepath.Join(pth.workingDir, "coastline")
-	makeDir(pth.coastlineDir)
+		makeDir(pth.coastlineDir)
 	} else {
 		pth.coastlineDir = filepath.Join(tmp, "coastline")
 	}
 
 	if cfg.IncludeLanduse {
-	pth.landcoverDir = filepath.Join(pth.workingDir, "landcover")
-	makeDir(pth.landcoverDir)
+		pth.landcoverDir = filepath.Join(pth.workingDir, "landcover")
+		makeDir(pth.landcoverDir)
 	} else {
 		pth.landcoverDir = filepath.Join(tmp, "landcover")
 	}
