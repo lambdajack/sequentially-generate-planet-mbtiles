@@ -13,6 +13,7 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/mbtiles"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/planet"
 )
 
 type flags struct {
@@ -256,8 +257,7 @@ func EntryPoint() int {
 		return nil
 	})
 
-	// genmbtiles.GenMbtiles()
-	// genplanet.GenPlanet()
+	planet.Generate(pth.mbtilesDir, pth.outDir)
 	return exitOK
 }
 

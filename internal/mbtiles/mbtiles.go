@@ -9,7 +9,6 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/execute"
 )
 
-
 func Generate(src, dst, coastline, landcover, config, process string) {
 	src, err := filepath.Abs(src)
 	if err != nil {

@@ -14,3 +14,6 @@ REPORT.txt
 
 !/configs/tilemaker
 !third_party/*
+
+test
+test.json

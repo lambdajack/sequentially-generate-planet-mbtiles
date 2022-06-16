@@ -72,8 +72,8 @@ func size(src string, targetMb uint64) bool {
 	if f.Size() > int64(targetMb*1024*1024) {
 		log.Printf("Target %s requires further slicing", filepath.Base(src))
 		return false
-	} 
-		
+	}
+
 	log.Printf("Slice %s has reached target size. Saving to working folder", filepath.Base(src))
 	return true
 }
@@ -84,7 +84,7 @@ func slice(src, dst, bb string) string {
 		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
 	}
 
-	log.Println("Slicing:", filepath.Base(src), bb)
+	log.Printf("Slicing: %s >>> %s (%s)", filepath.Base(src), filepath.Base(dst), bb)
 	lp, err := Extract(src, f.Name(), bb, containers.ContainerNames.Osmium)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to extract left slice: %v", err)
