@@ -3,6 +3,7 @@ package extract
 import (
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"sync"
 	"time"
@@ -47,11 +48,15 @@ func Quadrants(src, dst, containerName string) {
 		chCount <- 1
 		wg.Add(1)
 		go func(wg *sync.WaitGroup, quadrant Quadrant) {
-			log.Printf("Extracting quadrant %s in parallel. ~1 hour.\n", quadrant.name)
-			_, err := Extract(src, filepath.Join(dst, quadrant.name), quadrant.bbox, containerName)
-			if err != nil {
-				fmt.Printf("osmboundaryextractquadrants.go | Failed to extract %s from planet-latest.osm.pbf... unable to proceed", quadrant.bbox)
-				log.Fatal(err)
+			if _, err := os.Stat(filepath.Join(dst, quadrant.name)); os.IsNotExist(err) {
+				log.Printf("Extracting quadrant %s in parallel. ~1 hour.\n", quadrant.name)
+				_, err := Extract(src, filepath.Join(dst, quadrant.name), quadrant.bbox, containerName)
+				if err != nil {
+					fmt.Printf("osmboundaryextractquadrants.go | Failed to extract %s from planet-latest.osm.pbf... unable to proceed", quadrant.bbox)
+					log.Fatal(err)
+				}
+			} else {
+				log.Printf("Quadrant %s already exists. Skipping...\n", quadrant.name)
 			}
 			<-chCount
 			wg.Done()

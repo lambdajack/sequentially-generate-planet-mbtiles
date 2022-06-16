@@ -11,73 +11,86 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
 )
 
-func Slicer(src, dstFolder, ogrContainerName, osmiumContainerName, pbfFolder string, targetSizeMb int64) {
+func TreeSlicer(src, dstDir, workingDir string, targetSize uint64) {
 	log.Printf("Slicing %s", src)
-	
-	src = filepath.Clean(src)
-	dstFolder = filepath.Clean(dstFolder)
 
-	minX, minY, maxX, maxY, err := getExtent(src, ogrContainerName)
+	src, err := filepath.Abs(src)
+	if err != nil {
+		log.Fatal(err)
+	}
+	dstDir, err = filepath.Abs(dstDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+	workingDir, err = filepath.Abs(workingDir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	minX, minY, maxX, maxY, err := getExtent(src, containers.ContainerNames.Gdal)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to get extent: %v", err)
 	}
 
-	// Left slice point
 	lsp := leftSlicePoint(minX, maxX)
 	lbb := formatBoundingBox(minX, minY, lsp, maxY)
+	lp := slice(src, workingDir, lbb)
 
-	// Extract left slice
-	f, err := ioutil.TempFile(pbfFolder, "*.osm.pbf")
+	rsp := rightSlicePoint(minX, maxX)
+	rbb := formatBoundingBox(rsp, minY, maxX, maxY)
+	rp := slice(src, workingDir, rbb)
+
+	if strings.Contains(filepath.Base(src), "-tmp") {
+		os.Remove(src)
+	} else {
+		log.Printf("Sparing %s's life", filepath.Base(src))
+	}
+
+	if size(lp, targetSize) {
+		os.Rename(lp, filepath.Join(dstDir, filepath.Base(lp)))
+	} else {
+		TreeSlicer(lp, dstDir, workingDir, targetSize)
+	}
+
+	if size(rp, targetSize) {
+		os.Rename(rp, filepath.Join(dstDir, filepath.Base(rp)))
+	} else {
+		TreeSlicer(rp, dstDir, workingDir, targetSize)
+	}
+}
+
+func size(src string, targetMb uint64) bool {
+	f, err := os.Stat(src)
+	if err != nil {
+		log.Fatalf("extract.go | Slicer | Failed to get file info: %v", err)
+	}
+
+	if f.Size() > int64(targetMb*1024*1024) {
+		log.Printf("Target %s requires further slicing", filepath.Base(src))
+		return false
+	} 
+		
+	log.Printf("Slice %s has reached target size. Saving to working folder", filepath.Base(src))
+	return true
+}
+
+func slice(src, dst, bb string) string {
+	f, err := ioutil.TempFile(dst, "*-tmp.osm.pbf")
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
 	}
 
-	lp, err := Extract(src, filepath.Join(pbfFolder, f.Name()), lbb, osmiumContainerName)
+	log.Println("Slicing:", filepath.Base(src), bb)
+	lp, err := Extract(src, f.Name(), bb, containers.ContainerNames.Osmium)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to extract left slice: %v", err)
 	}
 
-	// Check left file size
-	lf, err := os.Stat(lp)
-	if err != nil {
-		log.Fatalf("extract.go | Slicer | Failed to get file info: %v", err)
-	}
-	if lf.Size() > targetSizeMb*1024*1024 {
-		Slicer(lp, dstFolder, ogrContainerName, osmiumContainerName, pbfFolder, targetSizeMb)
-	} else {
-		log.Printf("Slice %s has reached target size. Saving to working folder", lp)
-		os.Rename(lp, filepath.Join(dstFolder, filepath.Base(lp)))
-	}
-
-	// Right slice point
-	rsp := rightSlicePoint(minX, maxX)
-	rbb := formatBoundingBox(rsp, minY, maxX, maxY)
-
-	// Extract right slice
-	f, err = ioutil.TempFile(pbfFolder, "*.osm.pbf")
-	if err != nil {
-		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
-	}
-
-	rp, err := Extract(src, filepath.Join(pbfFolder, f.Name()), rbb, osmiumContainerName)
-	if err != nil {
-		log.Fatalf("extract.go | Slicer | Failed to extract right slice: %v", err)
-	}
-
-	// Check right file size
-	rf, err := os.Stat(rp)
-	if err != nil {
-		log.Fatalf("extract.go | Slicer | Failed to get file info: %v", err)
-	}
-
-	if rf.Size() > targetSizeMb*1024*1024 {
-		Slicer(rp, dstFolder, ogrContainerName, osmiumContainerName, pbfFolder, targetSizeMb)
-	} else {
-		log.Printf("Slice %s has reached target size. Saving to working folder", rp)
-		os.Rename(rp, filepath.Join(dstFolder, filepath.Base(rp)))
-	}
+	return lp
 }
 
 func formatBoundingBox(minX, minY, maxX, maxY float64) string {
@@ -90,8 +103,6 @@ func getExtent(filePath, ogrContainerName string) (minX, minY, maxX, maxY float6
 	if err != nil {
 		return 0, 0, 0, 0, err
 	}
-
-	fmt.Println(ap)
 
 	cmd := exec.Command("docker", "run", "--rm", "--mount", "type=bind,source="+ap+",target=/data", ogrContainerName, "ogrinfo", "-so", "-al", "/data")
 	out, err := cmd.Output()
@@ -123,11 +134,6 @@ func getExtent(filePath, ogrContainerName string) (minX, minY, maxX, maxY float6
 	minY, _ = strconv.ParseFloat(coords[1], 64)
 	maxX, _ = strconv.ParseFloat(coords[2], 64)
 	maxY, _ = strconv.ParseFloat(coords[3], 64)
-
-	fmt.Println(minX)
-	fmt.Println(minY)
-	fmt.Println(maxX)
-	fmt.Println(maxY)
 
 	return minX, minY, maxX, maxY, nil
 }
