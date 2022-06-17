@@ -69,33 +69,22 @@ func setAbsolutePaths() {
 }
 
 func verifyPaths() {
-	if cfg.PlanetFile == "" {
-		log.Fatal("planet file string empty in config")
-	}
-	if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
-		log.Fatalf("planet file does not exist: %s", cfg.PlanetFile)
-	}
-
-	if cfg.WorkingDir == "" {
-		log.Fatal("working dir string empty in config")
+	if cfg.PlanetFile != "" {
+		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
+			log.Fatalf("planet file does not exist: %s", cfg.PlanetFile)
+		}
 	}
 
-	if cfg.OutDir == "" {
-		log.Fatal("out dir string empty in config")
+	if cfg.TilemakerConfig != "" {
+		if _, err := os.Stat(cfg.TilemakerConfig); os.IsNotExist(err) {
+			log.Fatalf("tilemaker config does not exist: %s", cfg.TilemakerConfig)
+		}
 	}
 
-	if cfg.TilemakerConfig == "" {
-		log.Fatal("tilemaker config string empty in config")
-	}
-	if _, err := os.Stat(cfg.TilemakerConfig); os.IsNotExist(err) {
-		log.Fatalf("tilemaker config does not exist: %s", cfg.TilemakerConfig)
-	}
-
-	if cfg.TilemakerProcess == "" {
-		log.Fatal("tilemaker process string empty in config")
-	}
-	if _, err := os.Stat(cfg.TilemakerProcess); os.IsNotExist(err) {
-		log.Fatalf("tilemaker process does not exist: %s", cfg.TilemakerProcess)
+	if cfg.TilemakerProcess != "" {
+		if _, err := os.Stat(cfg.TilemakerProcess); os.IsNotExist(err) {
+			log.Fatalf("tilemaker process does not exist: %s", cfg.TilemakerProcess)
+		}
 	}
 }
 
