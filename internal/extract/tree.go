@@ -3,7 +3,6 @@ package extract
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -74,12 +73,12 @@ func size(src string, targetMb uint64) bool {
 		return false
 	}
 
-	log.Printf("Slice %s has reached target size. Saving to working folder", filepath.Base(src))
+	log.Printf("Slice %s has reached target size. Moving to safety.", filepath.Base(src))
 	return true
 }
 
 func slice(src, dst, bb string) string {
-	f, err := ioutil.TempFile(dst, "*-tmp.osm.pbf")
+	f, err := os.CreateTemp(dst, "*-tmp.osm.pbf")
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
 	}
