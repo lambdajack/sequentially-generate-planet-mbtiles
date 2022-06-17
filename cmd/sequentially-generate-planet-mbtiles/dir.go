@@ -77,6 +77,10 @@ func initDirStructure() {
 }
 
 func convertAbs(path string) string {
+	if path == "" {
+		return ""
+	}
+	
 	p, err := filepath.Abs(path)
 	if err != nil {
 		log.Fatal(err)
