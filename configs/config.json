@@ -8,5 +8,7 @@
   "TilemakerProcess": "",
   "maxRamMb": 0,
   "diskEfficient": false,
-  "outAsDir": false
+  "outAsDir": false,
+  "skipSlicing": false,
+  "mergeOnly": false
 }

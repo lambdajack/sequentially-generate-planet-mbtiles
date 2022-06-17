@@ -11,6 +11,8 @@ import (
 	"syscall"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/mbtiles"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/planet"
 )
 
@@ -28,6 +30,8 @@ type flags struct {
 	maxRamMb         uint64
 	diskEfficient    bool
 	outAsDir         bool
+	skipSlicing      bool
+	mergeOnly        bool
 }
 
 const (
@@ -138,12 +142,12 @@ Config Flags:
                            directory, respecting the -od flag.
 
   -mo, --merge-only        Skips the entire generation process and instead
-                           looks for existing tiles in [workingDir]/mbtiles
+                           looks for existing mbtiles in [workingDir]/mbtiles
                            and merges them into a single planet.mbtiles file
                            in the [outDir]. This is useful if you already
                            have a tileset you wish to merge.
 `
-							h += "\nExit Codes:\n"
+		h += "\nExit Codes:\n"
 		h += fmt.Sprintf("    %d\t%s\n", exitOK, "OK")
 		h += fmt.Sprintf("    %d\t%s\n", exitPermissions, "Do not have permission")
 		h += fmt.Sprintf("    %d\t%s\n", exitReadInput, "Error reading input")
@@ -196,6 +200,12 @@ func EntryPoint() int {
 	flag.BoolVar(&fl.outAsDir, "od", false, "")
 	flag.BoolVar(&fl.outAsDir, "out-as-dir", false, "")
 
+	flag.BoolVar(&fl.skipSlicing, "ss", false, "")
+	flag.BoolVar(&fl.skipSlicing, "skip-slicing", false, "")
+
+	flag.BoolVar(&fl.mergeOnly, "mo", false, "")
+	flag.BoolVar(&fl.mergeOnly, "merge-only", false, "")
+
 	flag.Parse()
 
 	if fl.version {
@@ -213,76 +223,80 @@ func EntryPoint() int {
 
 	checkRecursiveClone()
 
-	// err := containers.BuildAll()
-	// if err != nil {
-	// 	lg.err.Println(err)
-	// 	os.Exit(exitBuildContainers)
-	// }
+	err := containers.BuildAll()
+	if err != nil {
+		lg.err.Println(err)
+		os.Exit(exitBuildContainers)
+	}
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
 		os.Exit(exitOK)
 	}
 
-	// downloadOsmData()
+	if !cfg.MergeOnly {
+		downloadOsmData()
 
-	// unzipSourceData()
+		unzipSourceData()
 
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		err := containers.CleanAll()
-		if err != nil {
-			lg.err.Println(err)
+		c := make(chan os.Signal)
+		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+		go func() {
+			<-c
+			err := containers.CleanAll()
+			if err != nil {
+				lg.err.Println(err)
+			}
+			os.Exit(1)
+		}()
+		defer close(c)
+
+		if !cfg.SkipSlicing {
+			lg.rep.Println("Starting slice generation. This will take a while and there may be several minutes between progress updates.")
+
+			if !cfg.DiskEfficient {
+				if cfg.PlanetFile == "" {
+					extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+				} else {
+					pf, err := filepath.Abs(cfg.PlanetFile)
+					if err != nil {
+						log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+					}
+					if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
+						log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+					}
+					extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+				}
+			} else {
+				lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
+			}
+
+			if cfg.DiskEfficient {
+				extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, 1000)
+			} else {
+				filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
+					if err != nil {
+						log.Fatalf(err.Error())
+					}
+					if !info.IsDir() {
+						extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, 1000)
+					}
+					return nil
+				})
+			}
 		}
-		os.Exit(1)
-	}()
-	defer close(c)
 
-	lg.rep.Println("Starting slice generation. This will take a while and there may be several minutes between progress updates.")
+		filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				log.Fatalf(err.Error())
+			}
+			if !info.IsDir() {
+				mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir)
 
-	// if !cfg.DiskEfficient {
-	// 	if cfg.PlanetFile == "" {
-	// 		extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
-	// 	} else {
-	// 		pf, err := filepath.Abs(cfg.PlanetFile)
-	// 		if err != nil {
-	// 			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-	// 		}
-	// 		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
-	// 			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-	// 		}
-	// 		extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
-	// 	}
-	// } else {
-	// 	lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
-	// }
-
-	// if cfg.DiskEfficient {
-	// 	extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, 1000)
-	// } else {
-	// 	filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
-	// 		if err != nil {
-	// 			log.Fatalf(err.Error())
-	// 		}
-	// 		if !info.IsDir() {
-	// 			extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, 1000)
-	// 		}
-	// 		return nil
-	// 	})
-	// }
-
-	// filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
-	// 	if err != nil {
-	// 		log.Fatalf(err.Error())
-	// 	}
-	// 	if !info.IsDir() {
-	// 		mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir)
-
-	// 	}
-	// 	return nil
-	// })
+			}
+			return nil
+		})
+	}
 
 	final := pth.outDir
 
@@ -359,7 +373,7 @@ func endMessage(out string) {
 
 Your carriage awaits you at: ` + out + "\n")
 
-fmt.Println("We would love to make this process as easy and reliable as possible for everyone. If you have any feedback, suggestions, or bug reports please come over to https://github.com/lambdajack/sequentially-generate-planet-mbtiles and let us know.")
-fmt.Println()
+	fmt.Println("We would love to make this process as easy and reliable as possible for everyone. If you have any feedback, suggestions, or bug reports please come over to https://github.com/lambdajack/sequentially-generate-planet-mbtiles and let us know.")
+	fmt.Println()
 
 }

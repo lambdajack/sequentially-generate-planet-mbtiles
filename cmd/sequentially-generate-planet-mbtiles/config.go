@@ -22,6 +22,8 @@ type configuration struct {
 	MaxRamMb         uint64 `json:"maxRamMb"`
 	DiskEfficient    bool   `json:"diskEfficient"`
 	OutAsDir         bool   `json:"outAsDir"`
+	SkipSlicing      bool   `json:"skipSlicing"`
+	MergeOnly        bool   `json:"mergeOnly"`
 }
 
 func initConfig() {
@@ -54,6 +56,8 @@ func setConfigByFlags() {
 	cfg.MaxRamMb = getRam()
 	cfg.DiskEfficient = fl.diskEfficient
 	cfg.OutAsDir = fl.outAsDir
+	cfg.SkipSlicing = fl.skipSlicing
+	cfg.MergeOnly = fl.mergeOnly
 }
 
 func setAbsolutePaths() {
