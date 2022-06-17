@@ -24,6 +24,7 @@ type configuration struct {
 	OutAsDir         bool   `json:"outAsDir"`
 	SkipSlicing      bool   `json:"skipSlicing"`
 	MergeOnly        bool   `json:"mergeOnly"`
+	SkipDownload	bool  `json:"skipDownload"`
 }
 
 func initConfig() {
@@ -58,6 +59,7 @@ func setConfigByFlags() {
 	cfg.OutAsDir = fl.outAsDir
 	cfg.SkipSlicing = fl.skipSlicing
 	cfg.MergeOnly = fl.mergeOnly
+	cfg.SkipDownload = fl.skipDownload
 }
 
 func setAbsolutePaths() {

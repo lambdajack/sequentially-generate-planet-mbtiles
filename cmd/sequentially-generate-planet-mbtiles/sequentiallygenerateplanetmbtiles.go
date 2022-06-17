@@ -32,6 +32,7 @@ type flags struct {
 	outAsDir         bool
 	skipSlicing      bool
 	mergeOnly        bool
+	skipDownload	bool
 }
 
 const (
@@ -146,6 +147,9 @@ Config Flags:
                            and merges them into a single planet.mbtiles file
                            in the [outDir]. This is useful if you already
                            have a tileset you wish to merge.
+
+  -sd, --skip-download     Skips planet download. Must be set in conjunction
+                           with -p, -ss or -mo.
 `
 		h += "\nExit Codes:\n"
 		h += fmt.Sprintf("    %d\t%s\n", exitOK, "OK")
@@ -205,6 +209,9 @@ func EntryPoint() int {
 
 	flag.BoolVar(&fl.mergeOnly, "mo", false, "")
 	flag.BoolVar(&fl.mergeOnly, "merge-only", false, "")
+
+	flag.BoolVar(&fl.skipDownload, "sd", false, "")
+	flag.BoolVar(&fl.skipDownload, "skip-download", false, "")
 
 	flag.Parse()
 
@@ -331,6 +338,12 @@ func checkRecursiveClone() {
 }
 
 func validateFlags() {
+
+	if fl.skipDownload && !fl.skipSlicing && !fl.mergeOnly {
+		fmt.Println("-sd must be used with -ss or -mo. See -h for more information.")
+		os.Exit(exitFlags)
+	}
+
 	configFlag := fl.config
 
 	var defaultConfigFlagValue string
