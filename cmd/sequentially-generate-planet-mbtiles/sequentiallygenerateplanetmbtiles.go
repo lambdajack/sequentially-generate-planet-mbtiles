@@ -11,9 +11,7 @@ import (
 	"syscall"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/mbtiles"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/planet"
 )
 
 type flags struct {
@@ -29,6 +27,7 @@ type flags struct {
 	tilemakerProcess string
 	maxRamMb         uint64
 	diskEfficient    bool
+	outAsDir         bool
 }
 
 const (
@@ -119,6 +118,13 @@ Config Flags:
                            taken, but will save up to approx. 70 GB of disk 
                            space overall. Use only if disk space is a real 
                            consideration.
+
+  -od, --out-as-dir        The final output will be a directory of tiles
+                           rather than a single mbtiles file. This will
+                           generate hundreds of thousands of files in a
+                           predetermined directory structure. More
+                           information can ba found about this format here:
+                           https://documentation.maptiler.com/hc/en-us/articles/360020886878-Folder-vs-MBTiles-vs-GeoPackage 
 `
 		h += "\nExit Codes:\n"
 		h += fmt.Sprintf("    %d\t%s\n", exitOK, "OK")
@@ -170,6 +176,9 @@ func EntryPoint() int {
 	flag.BoolVar(&fl.diskEfficient, "de", false, "")
 	flag.BoolVar(&fl.diskEfficient, "disk-efficient", false, "")
 
+	flag.BoolVar(&fl.outAsDir, "od", false, "")
+	flag.BoolVar(&fl.outAsDir, "out-as-dir", false, "")
+
 	flag.Parse()
 
 	if fl.version {
@@ -187,20 +196,20 @@ func EntryPoint() int {
 
 	checkRecursiveClone()
 
-	err := containers.BuildAll()
-	if err != nil {
-		lg.err.Println(err)
-		os.Exit(exitBuildContainers)
-	}
+	// err := containers.BuildAll()
+	// if err != nil {
+	// 	lg.err.Println(err)
+	// 	os.Exit(exitBuildContainers)
+	// }
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
 		os.Exit(exitOK)
 	}
 
-	downloadOsmData()
+	// downloadOsmData()
 
-	unzipSourceData()
+	// unzipSourceData()
 
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
@@ -216,49 +225,52 @@ func EntryPoint() int {
 
 	lg.rep.Println("Starting slice generation. This will take a while and there may be several minutes between progress updates.")
 
-	if !cfg.DiskEfficient {
-		if cfg.PlanetFile == "" {
-			extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
-		} else {
-			pf, err := filepath.Abs(cfg.PlanetFile)
-			if err != nil {
-				log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-			}
-			if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
-				log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-			}
-			extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
-		}
-	} else {
-		lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
-	}
+	// if !cfg.DiskEfficient {
+	// 	if cfg.PlanetFile == "" {
+	// 		extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+	// 	} else {
+	// 		pf, err := filepath.Abs(cfg.PlanetFile)
+	// 		if err != nil {
+	// 			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+	// 		}
+	// 		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
+	// 			log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
+	// 		}
+	// 		extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
+	// 	}
+	// } else {
+	// 	lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
+	// }
 
-	if cfg.DiskEfficient {
-		extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, 1000)
-	} else {
-		filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				log.Fatalf(err.Error())
-			}
-			if !info.IsDir() {
-				extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, 1000)
-			}
-			return nil
-		})
-	}
+	// if cfg.DiskEfficient {
+	// 	extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, 1000)
+	// } else {
+	// 	filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
+	// 		if err != nil {
+	// 			log.Fatalf(err.Error())
+	// 		}
+	// 		if !info.IsDir() {
+	// 			extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, 1000)
+	// 		}
+	// 		return nil
+	// 	})
+	// }
 
 	filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Fatalf(err.Error())
 		}
 		if !info.IsDir() {
-			mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess)
+			mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir)
 
 		}
 		return nil
 	})
 
-	planet.Generate(pth.mbtilesDir, pth.outDir)
+	if !cfg.OutAsDir {
+		// planet.Generate(pth.mbtilesDir, pth.outDir)
+	}
+
 	return exitOK
 }
 

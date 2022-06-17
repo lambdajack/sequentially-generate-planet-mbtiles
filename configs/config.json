@@ -7,5 +7,6 @@
   "TilemakerConfig": "",
   "TilemakerProcess": "",
   "maxRamMb": 0,
-  "diskEfficient": false
+  "diskEfficient": false,
+  "outAsDir": false
 }

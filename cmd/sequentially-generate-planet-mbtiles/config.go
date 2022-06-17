@@ -21,6 +21,7 @@ type configuration struct {
 	TilemakerProcess string `json:"TilemakerProcess"`
 	MaxRamMb         uint64 `json:"maxRamMb"`
 	DiskEfficient    bool   `json:"diskEfficient"`
+	OutAsDir         bool   `json:"outAsDir"`
 }
 
 func initConfig() {
@@ -52,6 +53,7 @@ func setConfigByFlags() {
 	cfg.TilemakerProcess = fl.tilemakerProcess
 	cfg.MaxRamMb = getRam()
 	cfg.DiskEfficient = fl.diskEfficient
+	cfg.OutAsDir = fl.outAsDir
 }
 
 func setAbsolutePaths() {
