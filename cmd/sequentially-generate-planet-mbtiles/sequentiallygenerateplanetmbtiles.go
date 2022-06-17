@@ -81,7 +81,7 @@ Config Flags:
                            where files will be downloaded to and files 
                            generated as a result of processing osm data will 
                            be stored. Temporary files will be stored here. 
-                           Please ensuer your designated working directory 
+                           Please ensure your designated working directory 
                            has at least 300 GB of space available.
 
   -o,  --outdir            Provide path to output directory for the final 
@@ -105,12 +105,13 @@ Config Flags:
                            the total system RAM will be detected from 
                            /proc/meminfo and a default will be set to a 
                            reasonably safe level, maximising the available 
-                           resourses. This assumes that only a minimal amount 
+                           resources. This assumes that only a minimal amount 
                            of system RAM is currently being used (such as an 
                            idle desktop environment (<2G)). If you are having 
                            memory problems, consider manually setting this flag 
                            to a reduced value. NOTE THIS IS NOT GUARANTEED AND 
-                           SOME SAFETY MARGIN SHOULD BE ALLOWED
+                           SOME SAFETY MARGIN SHOULD BE ALLOWED. On non unix 
+                           operating systems the default is set to 4096.
 
   -de, --disk-efficient    Use disk efficient mode. This will skip the 
                            intermediary data slices and proceed straight to the 
