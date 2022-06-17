@@ -84,7 +84,7 @@ func slice(src, dst, bb string) string {
 		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
 	}
 
-	log.Printf("Slicing: %s >>> %s (%s)", filepath.Base(src), filepath.Base(dst), bb)
+	log.Printf("Slicing: %s >>> %s (%s)", filepath.Base(src), f.Name(), bb)
 	lp, err := Extract(src, f.Name(), bb, containers.ContainerNames.Osmium)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to extract left slice: %v", err)
