@@ -11,7 +11,7 @@ import (
 	"syscall"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/mbtiles"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/planet"
 )
 
 type flags struct {
@@ -124,9 +124,26 @@ Config Flags:
                            generate hundreds of thousands of files in a
                            predetermined directory structure. More
                            information can ba found about this format here:
-                           https://documentation.maptiler.com/hc/en-us/articles/360020886878-Folder-vs-MBTiles-vs-GeoPackage 
+                           https://documentation.maptiler.com/hc/en-us/articles/360020886878-Folder-vs-MBTiles-vs-GeoPackage
+						   
+  -ss, --skip-slicing      Skips the intermediate data processing/slicing
+                           and looks for existing files to convert into
+                           mbtiles in [workingDir]/pbf/slices. This is 
+                           useful if you wish to experiment with different
+                           Tilemaker configs/process (for example if you
+                           wish to change the zoom levels or style tagging
+                           of the final output). Once the existing files
+                           have been converted to mbtiles, they will be
+                           merged either to a single file, or to a
+                           directory, respecting the -od flag.
+
+  -mo, --merge-only        Skips the entire generation process and instead
+                           looks for existing tiles in [workingDir]/mbtiles
+                           and merges them into a single planet.mbtiles file
+                           in the [outDir]. This is useful if you already
+                           have a tileset you wish to merge.
 `
-		h += "\nExit Codes:\n"
+							h += "\nExit Codes:\n"
 		h += fmt.Sprintf("    %d\t%s\n", exitOK, "OK")
 		h += fmt.Sprintf("    %d\t%s\n", exitPermissions, "Do not have permission")
 		h += fmt.Sprintf("    %d\t%s\n", exitReadInput, "Error reading input")
@@ -256,20 +273,31 @@ func EntryPoint() int {
 	// 	})
 	// }
 
-	filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			log.Fatalf(err.Error())
-		}
-		if !info.IsDir() {
-			mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir)
+	// filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
+	// 	if err != nil {
+	// 		log.Fatalf(err.Error())
+	// 	}
+	// 	if !info.IsDir() {
+	// 		mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir)
 
-		}
-		return nil
-	})
+	// 	}
+	// 	return nil
+	// })
+
+	final := pth.outDir
 
 	if !cfg.OutAsDir {
-		// planet.Generate(pth.mbtilesDir, pth.outDir)
+		f := planet.Generate(pth.mbtilesDir, pth.outDir)
+		final = f
 	}
+
+	if !cfg.OutAsDir && final == pth.outDir {
+		lg.rep.Printf("Hmmm - we think you will find success at %s, but we can't quite tell for some reason... Maybe we don't have permission to see?\n", pth.outDir)
+	} else {
+		lg.rep.Println("SUCCESS: ", final)
+	}
+
+	endMessage(final)
 
 	return exitOK
 }
@@ -319,4 +347,19 @@ func validateFlags() {
 			os.Exit(exitFlags)
 		}
 	}
+}
+
+func endMessage(out string) {
+	fmt.Println(`
+	 __________________________________________________
+	|                                                  |
+	|                Thank you for using               |
+	|     Sequentially Generate Planet Mbtiles!!       |
+	|__________________________________________________|
+
+Your carriage awaits you at: ` + out + "\n")
+
+fmt.Println("We would love to make this process as easy and reliable as possible for everyone. If you have any feedback, suggestions, or bug reports please come over to https://github.com/lambdajack/sequentially-generate-planet-mbtiles and let us know.")
+fmt.Println()
+
 }

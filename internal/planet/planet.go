@@ -11,7 +11,7 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/pkg/execute"
 )
 
-func Generate(src, dst string) {
+func Generate(src, dst string) string {
 	fi, err := os.ReadDir(src)
 	if err != nil {
 		log.Fatal(err)
@@ -33,9 +33,11 @@ func Generate(src, dst string) {
 	}
 
 	mergeCmd := fmt.Sprintf("docker run --rm -v %v:/data -v %v:/merged %v tile-join --output=/merged/planet.mbtiles %v", src, dst, containers.ContainerNames.Tippecanoe, b.String())
-	log.Println(mergeCmd)
+	log.Println("MERGING: ", strings.ReplaceAll(b.String(), "/data/", "..."))
 	err = execute.OutputToConsole((mergeCmd))
 	if err != nil {
 		log.Fatalf("Failed to merge mbtiles: %v", err)
 	}
+
+	return filepath.Join(dst, "planet.mbtiles")
 }
