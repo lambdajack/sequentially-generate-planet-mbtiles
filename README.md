@@ -41,7 +41,8 @@
   "TilemakerConfig": "",
   "TilemakerProcess": "",
   "maxRamMb": 0,
-  "diskEfficient": false
+  "diskEfficient": false,
+  "outAsDir": false
 }
 ```
 
@@ -62,6 +63,8 @@
 **_maxRamMb_** - Provide the maximum amount of RAM in MB that the process should use. If a linux os is detected, the total system RAM will be detected from /proc/meminfo and a default will be set to a reasonably safe level, maximising the available resources. This assumes that only a minimal amount of system RAM is currently being used (such as an idle desktop environment (<2G)). If you are having memory problems, consider manually setting this flag to a reduced value. NOTE THIS IS NOT GUARANTEED AND SOME SAFETY MARGIN SHOULD BE ALLOWED. On **non unix** operating systems the default is set to 4096.
 
 **_diskEfficient_** - Use disk efficient mode. This will skip the intermediary data slices and proceed straight to the working slices. Can considerably increase the time taken, but will save up to approx. 70 GB of disk space overall. Use only if disk space is a real consideration.
+
+**_outAsDir_** - The final output will be a directory of tiles rather than a single mbtiles file. This will generate hundreds of thousands of files in a predetermined directory structure. More information can ba found about this format and why you might use it over a single mbtiles file can be found [here](https://documentation.maptiler.com/hc/en-us/articles/360020886878-Folder-vs-MBTiles-vs-GeoPackage)
 
 ### Flags
 
