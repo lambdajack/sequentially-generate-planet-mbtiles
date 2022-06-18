@@ -24,6 +24,10 @@ func Generate(src, dst string) string {
 		}
 	}
 
+	if (len(b.String()) == 0) {
+		log.Fatalf("cannot find any tiles to merge in %s - have you generated any?", src)
+	}
+
 	if _, err := os.Stat(filepath.Join(dst, "planet.mbtiles")); os.IsNotExist(err) {
 		f, err := os.Create(filepath.Join(dst, "planet.mbtiles"))
 		if err != nil {
