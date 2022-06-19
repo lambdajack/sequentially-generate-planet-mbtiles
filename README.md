@@ -11,7 +11,7 @@
 1. Have [Docker](https://docs.docker.com/get-docker/) installed.
 
 2. ```bash
-   git clone --recurse-submodules https://github.com/lambdajack/sequentially-generate-planet-mbtiles
+   git clone --recursive https://github.com/lambdajack/sequentially-generate-planet-mbtiles
    ```
 
 3. ```bash
