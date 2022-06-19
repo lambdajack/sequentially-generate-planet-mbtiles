@@ -909,7 +909,7 @@
       ],
       "id": "country_label-other",
       "layout": {
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-font": ["Noto Sans Regular"],
         "text-max-width": 10,
         "text-size": {
@@ -939,7 +939,7 @@
       ],
       "id": "country_label",
       "layout": {
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-font": ["Noto Sans Regular"],
         "text-max-width": 10,
         "text-size": {
