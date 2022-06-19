@@ -164,10 +164,10 @@ Providing a config.json:
 sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles -c /path/to/config.json
 ```
 
-Use a specific source file, and send the output to a specific place:
+Use a specific source file, and send the output to a specific place. Target style to match sgpm-bright:
 
 ```bash
-sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles -p /path/to/planet-latest.osm.pbf -o /path/to/output/dir
+sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles -p /path/to/planet-latest.osm.pbf -o /path/to/output/dir -tp sgpm-bright
 ```
 
 ## Acknowledgements
