@@ -23,8 +23,8 @@ type flags struct {
 	planetFile       string
 	workingDir       string
 	outDir           string
-	includeOcean     bool
-	includeLanduse   bool
+	excludeOcean     bool
+	excludeLanduse   bool
 	tilemakerConfig  string
 	tilemakerProcess string
 	maxRamMb         uint64
@@ -91,8 +91,12 @@ Config Flags:
   -o,  --outdir            Provide path to output directory for the final 
                            planet.mbtiles file.
 
-  -io, --include-ocean     Include ocean tiles in final planet.mbtiles
-  -il, --include-landuse   Include landuse layer in final planet.mbtiles
+  -eo, --exclude-ocean     Exclude ocean tiles in final planet.mbtiles. This
+                           can significantly increase overall speed since
+                           there are a lot of ocean tiles which often forms
+                           a filesystem io bottleneck when writing them.
+
+  -el, --exclude-landuse   Exclude landuse layer in final planet.mbtiles.
   
   -tc, --tilemaker-config  Provide path to a tilemaker configuration file. The 
                            default configuration is embedded into the release 
@@ -186,11 +190,11 @@ func EntryPoint() int {
 	flag.StringVar(&fl.outDir, "o", "data/out", "")
 	flag.StringVar(&fl.outDir, "outdir", "data/out", "")
 
-	flag.BoolVar(&fl.includeOcean, "io", true, "")
-	flag.BoolVar(&fl.includeOcean, "include-ocean", true, "")
+	flag.BoolVar(&fl.excludeOcean, "eo", false, "")
+	flag.BoolVar(&fl.excludeOcean, "exclude-ocean", false, "")
 
-	flag.BoolVar(&fl.includeLanduse, "il", true, "")
-	flag.BoolVar(&fl.includeLanduse, "include-landuse", true, "")
+	flag.BoolVar(&fl.excludeLanduse, "el", false, "")
+	flag.BoolVar(&fl.excludeLanduse, "exclude-landuse", false, "")
 
 	flag.StringVar(&fl.tilemakerConfig, "tc", "", "")
 	flag.StringVar(&fl.tilemakerConfig, "tilemaker-config", "", "")

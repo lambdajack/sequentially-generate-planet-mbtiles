@@ -36,8 +36,8 @@
   "planetFile": "",
   "workingDir": "",
   "outDir": "",
-  "includeOcean": true,
-  "includeLanduse": true,
+  "excludeOcean": false,
+  "excludeLanduse": false,
   "TilemakerConfig": "",
   "TilemakerProcess": "",
   "maxRamMb": 0,
@@ -52,9 +52,9 @@
 
 **_outDir_** - This is where the final planet.mbtiles file will be placed.
 
-**_includeOcean_** - By default the program will download the appropriate ocean/sea data and include it in the final output planet.mbtiles. If you do not wish to include the sea tiles (for example to save a little space), then you can set this option to false. If false, the ocean data will not be downloaded either.
+**_excludeOcean_** - By default the program will download the appropriate ocean/sea data and include it in the final output planet.mbtiles. If you do not wish to include the sea tiles (for example to save a little space), then you can set this option to true. If true, the ocean data will not be downloaded either. This can significantly increase the overall speed of generation as there are a lot of ocean tiles and writing them all often manifests as a filesystem io bottleneck. A planet map without ocean tiles however does look strange and empty (it can be hard to identify continent borders etc) - if your target end user is, for example, a customer who expects a pretty map, we would recommend they be included.
 
-**_includeLanduse_** - By default the program will download the appropriate landuse/landcover data and include it in the final output planet.mbtiles. If you do not wish to include the landcover overlay (for example to save a little space), then you can set this option to false. If false, the landuse data will not be downloaded either.
+**_excludeLanduse_** - By default the program will download the appropriate landuse/landcover data and include it in the final output planet.mbtiles. If you do not wish to include the landcover overlay (for example to save a little space), then you can set this option to true. If true, the landuse data will not be downloaded either.
 
 **_TilemakerConfig_** - **_[note capitalisation]_** The path to the config file that will be passed to [Tilemaker](https://github.com/systemed/tilemaker). See the default used [here](https://github.com/lambdajack/tilemaker/blob/b90347b2a4fd475470b9870b8e44e2829d8e4d6d/resources/config-openmaptiles.json). This will affect things like tags etc which will affect your front end styles when serving. It is reccomended to leave as default (blank) unless you have a specific reason to make changes (for example, you require a language other than english to be the primary language for the generated maps, or wish to change the zoom level (14 by default)).
 

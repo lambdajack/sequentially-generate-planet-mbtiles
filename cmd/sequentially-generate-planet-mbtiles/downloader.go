@@ -55,12 +55,12 @@ func downloadOsmData() {
 				}
 			}
 
-			if !cfg.IncludeOcean && strings.Contains(dl.destFileName, "water") {
+			if cfg.ExcludeOcean && strings.Contains(dl.destFileName, "water") {
 				lg.rep.Printf("skipping download of %s", dl.url)
 				continue
 			}
 
-			if !cfg.IncludeLanduse && strings.Contains(dl.destFileName, "ne_") {
+			if cfg.ExcludeLanduse && strings.Contains(dl.destFileName, "ne_") {
 				lg.rep.Printf("skipping download of %s", dl.url)
 				continue
 			}

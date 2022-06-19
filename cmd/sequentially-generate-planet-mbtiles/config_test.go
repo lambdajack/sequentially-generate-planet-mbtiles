@@ -26,8 +26,8 @@ func init() {
 		PlanetFile:       "", // CHANGE TO TEST FILE ONCE SET U
 		WorkingDir:       tmpDir,
 		OutDir:           filepath.Join(tmpDir, "out"),
-		IncludeOcean:     true,
-		IncludeLanduse:   true,
+		ExcludeOcean:     true,
+		ExcludeLanduse:   true,
 		TilemakerConfig:  "",
 		TilemakerProcess: "",
 		MaxRamMb:         1,

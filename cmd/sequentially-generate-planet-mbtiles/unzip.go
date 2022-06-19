@@ -22,11 +22,11 @@ func unzipSourceData() {
 	}
 
 	for _, info := range unzipInfo {
-		if !cfg.IncludeOcean && strings.Contains(info.srcPath, "water") {
+		if cfg.ExcludeOcean && strings.Contains(info.srcPath, "water") {
 			continue
 		}
 
-		if !cfg.IncludeLanduse && strings.Contains(info.srcPath, "ne_") {
+		if !cfg.ExcludeLanduse && strings.Contains(info.srcPath, "ne_") {
 			continue
 		}
 

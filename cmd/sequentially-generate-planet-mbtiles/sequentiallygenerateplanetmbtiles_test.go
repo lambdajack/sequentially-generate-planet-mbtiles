@@ -29,11 +29,11 @@ func init() {
 	flag.StringVar(&fl.outDir, "o", "data/out", "")
 	flag.StringVar(&fl.outDir, "outdir", "data/out", "")
 
-	flag.BoolVar(&fl.includeOcean, "io", true, "")
-	flag.BoolVar(&fl.includeOcean, "include-ocean", true, "")
+	flag.BoolVar(&fl.excludeOcean, "eo", true, "")
+	flag.BoolVar(&fl.excludeOcean, "exclude-ocean", true, "")
 
-	flag.BoolVar(&fl.includeLanduse, "il", true, "")
-	flag.BoolVar(&fl.includeLanduse, "include-landuse", true, "")
+	flag.BoolVar(&fl.excludeLanduse, "el", true, "")
+	flag.BoolVar(&fl.excludeLanduse, "exclude-landuse", true, "")
 
 	flag.StringVar(&fl.tilemakerConfig, "tc", "", "")
 	flag.StringVar(&fl.tilemakerConfig, "tilemaker-config", "", "")

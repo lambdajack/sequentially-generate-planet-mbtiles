@@ -15,8 +15,8 @@ type configuration struct {
 	PlanetFile       string `json:"planetFile"`
 	WorkingDir       string `json:"workingDir"`
 	OutDir           string `json:"outDir"`
-	IncludeOcean     bool   `json:"includeOcean"`
-	IncludeLanduse   bool   `json:"includeLanduse"`
+	ExcludeOcean     bool   `json:"excludeOcean"`
+	ExcludeLanduse   bool   `json:"excludeLanduse"`
 	TilemakerConfig  string `json:"TilemakerConfig"`
 	TilemakerProcess string `json:"TilemakerProcess"`
 	MaxRamMb         uint64 `json:"maxRamMb"`
@@ -50,8 +50,8 @@ func setConfigByFlags() {
 	cfg.PlanetFile = fl.planetFile
 	cfg.WorkingDir = fl.workingDir
 	cfg.OutDir = fl.outDir
-	cfg.IncludeOcean = fl.includeOcean
-	cfg.IncludeLanduse = fl.includeLanduse
+	cfg.ExcludeOcean = fl.excludeOcean
+	cfg.ExcludeLanduse = fl.excludeLanduse
 	cfg.TilemakerConfig = fl.tilemakerConfig
 	cfg.TilemakerProcess = fl.tilemakerProcess
 	cfg.MaxRamMb = getRam()
