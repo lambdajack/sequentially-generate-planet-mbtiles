@@ -284,14 +284,14 @@ func EntryPoint() int {
 			}
 
 			if cfg.DiskEfficient {
-				extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, 1000)
+				extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb / 14)
 			} else {
 				filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
 					if err != nil {
 						log.Fatalf(err.Error())
 					}
 					if !info.IsDir() {
-						extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, 1000)
+						extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb / 14)
 					}
 					return nil
 				})
