@@ -66,10 +66,12 @@ func setAbsolutePaths() {
 
 	if cfg.TilemakerProcess == "" || strings.ToLower(cfg.TilemakerProcess) == "tileserver-gl-basic" {
 		cfg.TilemakerConfig = "third_party/tilemaker/resources/process-openmaptiles.lua"
+		log.Println("Using tileserver-gl-basic style target")
 	}
 
 	if cfg.TilemakerProcess == "sgpm-bright" {
 		cfg.TilemakerProcess = "third_party/tilemaker/resources/process-bright.lua"
+		log.Println("Using sgpm-bright style target")
 	}
 
 	if cfg.TilemakerConfig == "" {
