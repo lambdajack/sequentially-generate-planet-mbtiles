@@ -65,11 +65,15 @@ func setConfigByFlags() {
 func setAbsolutePaths() {
 
 	if cfg.TilemakerProcess == "" || strings.ToLower(cfg.TilemakerProcess) == "tileserver-gl-basic" {
-		cfg.TilemakerConfig = "third_party/tilemaker/resources/process-openmaptiles.json"
+		cfg.TilemakerConfig = "third_party/tilemaker/resources/process-openmaptiles.lua"
 	}
 
 	if cfg.TilemakerProcess == "sgpm-bright" {
-		cfg.TilemakerProcess = "third_party/tilemaker/resources/process-openmaptiles.json"
+		cfg.TilemakerProcess = "third_party/tilemaker/resources/process-bright.lua"
+	}
+
+	if cfg.TilemakerConfig == "" {
+		cfg.TilemakerConfig = "third_party/tilemaker/resources/config-openmaptiles.json"
 	}
 
 	cfg.PlanetFile = convertAbs(cfg.PlanetFile)

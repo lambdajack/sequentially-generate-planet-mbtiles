@@ -94,14 +94,17 @@ Config Flags:
   -io, --include-ocean     Include ocean tiles in final planet.mbtiles
   -il, --include-landuse   Include landuse layer in final planet.mbtiles
   
-  -tc, --tilemaker-config  Provide path to tilemaker configuration file. The 
+  -tc, --tilemaker-config  Provide path to a tilemaker configuration file. The 
                            default configuration is embedded into the release 
                            binary. See the default used here: 
                            https://github.com/lambdajack/tilemaker/blob/master/resources/config-openmaptiles.json
 
-  -tp, --tilemaker-process Provide path to tilemaker configuration file. The 
-                           default process file is embedded into the release 
-                           binary. See the default used here: 
+  -tp, --tilemaker-process Provide path to a tilemaker process file OR
+                           a special value. Special values are 
+                           "tileserver-gl-basic", "sgpm-bright". Setting a
+                           special value will use one of the included configs 
+                           to match the appropriate target style. See the 
+                           default used here: 
                            https://github.com/lambdajack/tilemaker/blob/master/resources/process-openmaptiles.lua
 	
   -r,  --ram               Provide the maximum amount of RAM in MB that the 
@@ -189,11 +192,11 @@ func EntryPoint() int {
 	flag.BoolVar(&fl.includeLanduse, "il", true, "")
 	flag.BoolVar(&fl.includeLanduse, "include-landuse", true, "")
 
-	flag.StringVar(&fl.tilemakerConfig, "tc", "third_party/tilemaker/resources/config-openmaptiles.json", "")
-	flag.StringVar(&fl.tilemakerConfig, "tilemaker-config", "third_party/tilemaker/resources/config-openmaptiles.json", "")
+	flag.StringVar(&fl.tilemakerConfig, "tc", "", "")
+	flag.StringVar(&fl.tilemakerConfig, "tilemaker-config", "", "")
 
-	flag.StringVar(&fl.tilemakerProcess, "tp", "third_party/tilemaker/resources/process-openmaptiles.lua", "")
-	flag.StringVar(&fl.tilemakerProcess, "tilemaker-process", "third_party/tilemaker/resources/process-openmaptiles.lua", "")
+	flag.StringVar(&fl.tilemakerProcess, "tp", "", "")
+	flag.StringVar(&fl.tilemakerProcess, "tilemaker-process", "", "")
 
 	flag.Uint64Var(&fl.maxRamMb, "r", 0, "")
 	flag.Uint64Var(&fl.maxRamMb, "ram", 0, "")
