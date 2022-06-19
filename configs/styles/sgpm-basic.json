@@ -5,10 +5,10 @@
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "url": "http://192.168.1.103:8080/data/v3.json"
+      "url": "http://localhost:8080/data/v3.json"
     }
   },
-  "glyphs": "http://192.168.1.103:8080/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "http://localhost:8080/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
