@@ -27,8 +27,7 @@ func Extract(src, dst, bbox string, osmium *docker.Container) (string, error) {
 			Host:      filepath.Dir(dst),
 		},
 	}
-	
-	// cmdString := fmt.Sprintf("docker run --rm -v %v:/pbf -v %s:/out %s osmium extract -b %s --set-bounds --overwrite /pbf/%s -o /out/%s", filepath.Dir(src), filepath.Dir(dst), containerName, bbox, filepath.Base(src), filepath.Base(dst))
+
 	err = osmium.Execute([]string{"osmium", "extract", "-b", bbox, "--set-bounds", "--overwrite", "/pbf/" + filepath.Base(src), "-o", "/out/" + filepath.Base(dst)})
 	if err != nil {
 		return "", fmt.Errorf("osmboundaryextract.go | Failed to extract %s from %s \n %v", bbox, filepath.Base(src), err)

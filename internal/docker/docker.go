@@ -67,8 +67,6 @@ func (c *Container) Execute(command []string) error {
 	ex = append(ex, c.Name)
 	ex = append(ex, command...)
 
-	log.Println(ex)
-
 	cmd := exec.Command(ex[0], ex[1:]...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -89,7 +87,7 @@ func (c Container) Clean() error {
 		return nil
 	}
 
-	log.Printf("attempting to clean up container: %s, ( %s)", c.Name, strings.ReplaceAll(string(out), "\n", " "))
+	log.Printf("attempting to clean up container: %s, ( %s)\n", c.Name, strings.ReplaceAll(string(out), "\n", " "))
 
 	cmd := exec.Command("docker", "stop", c.Name)
 	cmd.Stdout = os.Stdout

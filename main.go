@@ -8,8 +8,8 @@ import (
 )
 
 //go:embed build/osmium/Dockerfile
-var osmiumDockerFile []byte
+var df []byte
 
 func main() {
-	os.Exit(sequentiallygenerateplanetmbtiles.EntryPoint(osmiumDockerFile))
+	os.Exit(sequentiallygenerateplanetmbtiles.EntryPoint(df))
 }

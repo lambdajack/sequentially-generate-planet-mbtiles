@@ -1,7 +1,6 @@
 package sequentiallygenerateplanetmbtiles
 
 import (
-	"log"
 	"path/filepath"
 	"strings"
 
@@ -26,11 +25,11 @@ func unzipSourceData() {
 			continue
 		}
 
-		if !cfg.ExcludeLanduse && strings.Contains(info.srcPath, "ne_") {
+		if cfg.ExcludeLanduse && strings.Contains(info.srcPath, "ne_") {
 			continue
 		}
 
-		log.Println("Unzipping", info.srcPath)
+		lg.prog.Println("unzipping", info.srcPath)
 		lj_archive.Unzip(info.srcPath, info.destPath)
 	}
 }

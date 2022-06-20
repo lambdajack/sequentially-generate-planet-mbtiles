@@ -168,7 +168,7 @@ Config Flags:
 	}
 }
 
-func EntryPoint(osmiumDockerFile []byte) int {
+func EntryPoint(df []byte) int {
 
 	flag.BoolVar(&fl.version, "v", false, "")
 	flag.BoolVar(&fl.version, "version", false, "")
@@ -235,7 +235,7 @@ func EntryPoint(osmiumDockerFile []byte) int {
 
 	cloneRepos()
 
-	setupContainers(osmiumDockerFile)
+	setupContainers(df)
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
@@ -245,7 +245,7 @@ func EntryPoint(osmiumDockerFile []byte) int {
 	if !cfg.MergeOnly {
 		downloadOsmData()
 
-		// unzipSourceData()
+		unzipSourceData()
 
 		moveOcean()
 
@@ -262,23 +262,23 @@ func EntryPoint(osmiumDockerFile []byte) int {
 			lg.rep.Println("slice generation started; there may be significant gaps between logs")
 			lg.rep.Printf("target file size: %d MB\n", cfg.MaxRamMb/14)
 			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb/14, ct.gdal, ct.osmium)
-		}
-
-		filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
+			
+			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				log.Fatalf(err.Error())
 			}
 			if !info.IsDir() {
-				mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, ct.tilemaker.Name, cfg.OutAsDir)
+				mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker)
 			}
 			return nil
 		})
+		}
 	}
 
 	final := pth.outDir
 
 	if !cfg.OutAsDir {
-		f := planet.Generate(pth.mbtilesDir, pth.outDir, ct.tippecanoe.Name)
+		f := planet.Generate(pth.mbtilesDir, pth.outDir, ct.tippecanoe)
 		final = f
 	}
 

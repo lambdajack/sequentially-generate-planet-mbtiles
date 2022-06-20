@@ -42,25 +42,25 @@ func setupContainers(osmiumDf []byte) {
 		}),
 	}
 
-	// err := ct.gdal.Build()
-	// if err != nil {
-	// 	lg.err.Fatalln("failed to build gdal container:", err)
-	// }
+	err := ct.gdal.Build()
+	if err != nil {
+		lg.err.Fatalln("failed to build gdal container:", err)
+	}
 
-	// err = ct.osmium.Build()
-	// if err != nil {
-	// 	lg.err.Fatalln("failed to build osmium container:", err)
-	// }
+	err = ct.osmium.Build()
+	if err != nil {
+		lg.err.Fatalln("failed to build osmium container:", err)
+	}
 
-	// err = ct.tilemaker.Build()
-	// if err != nil {
-	// 	lg.err.Fatalln("failed to build tilemaker container:", err)
-	// }
+	err = ct.tilemaker.Build()
+	if err != nil {
+		lg.err.Fatalln("failed to build tilemaker container:", err)
+	}
 
-	// err = ct.tippecanoe.Build()
-	// if err != nil {
-	// 	lg.err.Fatalln("failed to build tippecanoe container:", err)
-	// }
+	err = ct.tippecanoe.Build()
+	if err != nil {
+		lg.err.Fatalln("failed to build tippecanoe container:", err)
+	}
 }
 
 func cleanContainers() {
