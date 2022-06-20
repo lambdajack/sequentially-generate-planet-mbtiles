@@ -10,9 +10,11 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/docker"
 )
 
-func TreeSlicer(src, dstDir, workingDir, gdalContainerName, osmiumContainerName string, targetSize uint64) {
+func TreeSlicer(src, dstDir, workingDir string, targetSize uint64, gdal, osmium *docker.Container) {
 	log.Printf("Operating on: %s", src)
 
 	src, err := filepath.Abs(src)
@@ -28,18 +30,18 @@ func TreeSlicer(src, dstDir, workingDir, gdalContainerName, osmiumContainerName 
 		log.Fatal(err)
 	}
 
-	minX, minY, maxX, maxY, err := getExtent(src, gdalContainerName)
+	minX, minY, maxX, maxY, err := getExtent(src, gdal.Name)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to get extent: %v", err)
 	}
 
 	lsp := leftSlicePoint(minX, maxX)
 	lbb := formatBoundingBox(minX, minY, lsp, maxY)
-	lp := slice(src, workingDir, lbb, osmiumContainerName)
+	lp := slice(src, workingDir, lbb, osmium)
 
 	rsp := rightSlicePoint(minX, maxX)
 	rbb := formatBoundingBox(rsp, minY, maxX, maxY)
-	rp := slice(src, workingDir, rbb, osmiumContainerName)
+	rp := slice(src, workingDir, rbb, osmium)
 
 	if strings.Contains(filepath.Base(src), "-tmp") {
 		os.Remove(src)
@@ -50,13 +52,13 @@ func TreeSlicer(src, dstDir, workingDir, gdalContainerName, osmiumContainerName 
 	if size(lp, targetSize) {
 		os.Rename(lp, filepath.Join(dstDir, filepath.Base(lp)))
 	} else {
-		TreeSlicer(lp, dstDir, workingDir, gdalContainerName, osmiumContainerName, targetSize)
+		TreeSlicer(lp, dstDir, workingDir, targetSize, gdal, osmium)
 	}
 
 	if size(rp, targetSize) {
 		os.Rename(rp, filepath.Join(dstDir, filepath.Base(rp)))
 	} else {
-		TreeSlicer(rp, dstDir, workingDir, gdalContainerName, osmiumContainerName, targetSize)
+		TreeSlicer(rp, dstDir, workingDir, targetSize, gdal, osmium)
 	}
 }
 
@@ -75,7 +77,7 @@ func size(src string, targetMb uint64) bool {
 	return true
 }
 
-func slice(src, dst, bb, containerName string) string {
+func slice(src, dst, bb string, osmium *docker.Container) string {
 	f, err := os.CreateTemp(dst, "*-tmp.osm.pbf")
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
@@ -83,9 +85,9 @@ func slice(src, dst, bb, containerName string) string {
 	defer f.Close()
 
 	log.Printf("Slicing: %s >>> %s (%s)", filepath.Base(src), filepath.Base(f.Name()), bb)
-	lp, err := Extract(src, f.Name(), bb, containerName)
+	lp, err := Extract(src, f.Name(), bb, osmium)
 	if err != nil {
-		log.Fatalf("extract.go | Slicer | Failed to extract left slice: %v", err)
+		log.Fatalf("extract.go | Slicer | Failed to extract slice: %v", err)
 	}
 
 	return lp

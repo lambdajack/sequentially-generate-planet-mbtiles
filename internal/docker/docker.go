@@ -2,8 +2,10 @@ package docker
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type Container struct {
@@ -12,12 +14,12 @@ type Container struct {
 	Dockerfile string
 	Flags      []string
 	Name       string
-	Volumes    []volume
+	Volumes    []Volume
 }
 
-type volume struct {
-	container string
-	host      string
+type Volume struct {
+	Container string
+	Host      string
 }
 
 func (c *Container) Build() error {
@@ -60,10 +62,12 @@ func (c *Container) Execute(command []string) error {
 	ex := []string{"docker", "run", "--name", c.Name}
 	ex = append(ex, c.Flags...)
 	for _, v := range c.Volumes {
-		ex = append(ex, "-v", v.host+":"+v.container)
+		ex = append(ex, "-v", v.Host+":"+v.Container)
 	}
 	ex = append(ex, c.Name)
 	ex = append(ex, command...)
+
+	log.Println(ex)
 
 	cmd := exec.Command(ex[0], ex[1:]...)
 	cmd.Stdout = os.Stdout
@@ -76,6 +80,17 @@ func (c *Container) Execute(command []string) error {
 }
 
 func (c Container) Clean() error {
+
+	out, err := exec.Command("docker", "ps", "-q", "--filter", "name="+c.Name).Output()
+	if err != nil {
+		return err
+	}
+	if len(out) < 1 {
+		return nil
+	}
+
+	log.Printf("attempting to clean up container: %s, ( %s)", c.Name, strings.ReplaceAll(string(out), "\n", " "))
+
 	cmd := exec.Command("docker", "stop", c.Name)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

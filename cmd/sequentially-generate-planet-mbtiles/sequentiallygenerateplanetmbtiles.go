@@ -18,7 +18,7 @@ type flags struct {
 	version          bool
 	stage            bool
 	config           string
-	pbfFile       string
+	pbfFile          string
 	workingDir       string
 	outDir           string
 	excludeOcean     bool
@@ -245,7 +245,7 @@ func EntryPoint(osmiumDockerFile []byte) int {
 	if !cfg.MergeOnly {
 		downloadOsmData()
 
-		unzipSourceData()
+		// unzipSourceData()
 
 		moveOcean()
 
@@ -260,8 +260,8 @@ func EntryPoint(osmiumDockerFile []byte) int {
 
 		if !cfg.SkipSlicing {
 			lg.rep.Println("slice generation started; there may be significant gaps between logs")
-			lg.rep.Println("target file size: ", cfg.MaxRamMb/14)
-			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, ct.gdal.Name, ct.osmium.Name, cfg.MaxRamMb/14)
+			lg.rep.Printf("target file size: %d MB\n", cfg.MaxRamMb/14)
+			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb/14, ct.gdal, ct.osmium)
 		}
 
 		filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
@@ -270,7 +270,6 @@ func EntryPoint(osmiumDockerFile []byte) int {
 			}
 			if !info.IsDir() {
 				mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, ct.tilemaker.Name, cfg.OutAsDir)
-
 			}
 			return nil
 		})

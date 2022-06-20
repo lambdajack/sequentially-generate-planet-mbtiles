@@ -12,7 +12,7 @@ import (
 )
 
 type configuration struct {
-	PbfFile       string `json:"pbfFile"`
+	PbfFile          string `json:"pbfFile"`
 	WorkingDir       string `json:"workingDir"`
 	OutDir           string `json:"outDir"`
 	ExcludeOcean     bool   `json:"excludeOcean"`
