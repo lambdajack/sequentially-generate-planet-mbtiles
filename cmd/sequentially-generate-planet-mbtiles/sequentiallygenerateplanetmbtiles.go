@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"os/signal"
 	"path/filepath"
 	"syscall"
 
-	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/containers"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/mbtiles"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/planet"
@@ -32,7 +30,7 @@ type flags struct {
 	outAsDir         bool
 	skipSlicing      bool
 	mergeOnly        bool
-	skipDownload	bool
+	skipDownload     bool
 }
 
 const (
@@ -170,7 +168,7 @@ Config Flags:
 	}
 }
 
-func EntryPoint() int {
+func EntryPoint(osmiumDockerFile []byte) int {
 
 	flag.BoolVar(&fl.version, "v", false, "")
 	flag.BoolVar(&fl.version, "version", false, "")
@@ -235,13 +233,9 @@ func EntryPoint() int {
 
 	initLoggers()
 
-	checkRecursiveClone()
+	cloneRepos()
 
-	err := containers.BuildAll()
-	if err != nil {
-		lg.err.Println(err)
-		os.Exit(exitBuildContainers)
-	}
+	setupContainers(osmiumDockerFile)
 
 	if fl.stage {
 		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
@@ -259,18 +253,15 @@ func EntryPoint() int {
 		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 		go func() {
 			<-c
-			err := containers.CleanAll()
-			if err != nil {
-				lg.err.Println(err)
-			}
+			cleanContainers()
 			os.Exit(1)
 		}()
 		defer close(c)
 
 		if !cfg.SkipSlicing {
 			lg.rep.Println("slice generation started; there may be significant gaps between logs")
-			lg.rep.Println("target file size: ", cfg.MaxRamMb / 14)
-			extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb / 14)
+			lg.rep.Println("target file size: ", cfg.MaxRamMb/14)
+			extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, ct.gdal.Name, ct.osmium.Name, cfg.MaxRamMb/14)
 		}
 
 		filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
@@ -278,7 +269,7 @@ func EntryPoint() int {
 				log.Fatalf(err.Error())
 			}
 			if !info.IsDir() {
-				mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir)
+				mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, ct.tilemaker.Name, cfg.OutAsDir)
 
 			}
 			return nil
@@ -288,7 +279,7 @@ func EntryPoint() int {
 	final := pth.outDir
 
 	if !cfg.OutAsDir {
-		f := planet.Generate(pth.mbtilesDir, pth.outDir)
+		f := planet.Generate(pth.mbtilesDir, pth.outDir, ct.tippecanoe.Name)
 		final = f
 	}
 
@@ -301,20 +292,6 @@ func EntryPoint() int {
 	endMessage(final)
 
 	return exitOK
-}
-
-func checkRecursiveClone() {
-	tp := [...]string{"libosmium", "osmium-tool", "tilemaker", "tippecanoe", "gdal"}
-
-	for _, t := range tp {
-		if _, err := os.Stat(filepath.Join("third_party", t, "README.md")); os.IsNotExist(err) {
-			lg.err.Printf("Submodule %v cannot be found. Attempting to fix..", t)
-			err := exec.Command("git", "submodule", "foreach", "git", "pull", "origin", "master").Run()
-			if err != nil {
-				lg.err.Fatal("failed to recursively clone submodules; submodules are required to run this programme. Please clone the submodules manually and try again.")
-			}
-		}
-	}
 }
 
 func validateFlags() {

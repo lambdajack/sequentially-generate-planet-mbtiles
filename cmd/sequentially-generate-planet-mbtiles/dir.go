@@ -19,6 +19,7 @@ type paths struct {
 	pbfQuadrantSlicesDir     string
 	mbtilesDir               string
 	logsDir                  string
+	temp                     string
 }
 
 var pth = paths{}
@@ -74,13 +75,16 @@ func initDirStructure() {
 
 	pth.logsDir = filepath.Join(pth.workingDir, "logs")
 	makeDir(pth.logsDir)
+
+	pth.temp = filepath.Join(os.TempDir(), "sequentially-generate-planet-mbtiles")
+	makeDir(pth.temp)
 }
 
 func convertAbs(path string) string {
 	if path == "" {
 		return ""
 	}
-	
+
 	p, err := filepath.Abs(path)
 	if err != nil {
 		log.Fatal(err)

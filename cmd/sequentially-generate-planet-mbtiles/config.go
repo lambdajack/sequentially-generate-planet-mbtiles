@@ -24,7 +24,7 @@ type configuration struct {
 	OutAsDir         bool   `json:"outAsDir"`
 	SkipSlicing      bool   `json:"skipSlicing"`
 	MergeOnly        bool   `json:"mergeOnly"`
-	SkipDownload	bool  `json:"skipDownload"`
+	SkipDownload     bool   `json:"skipDownload"`
 }
 
 func initConfig() {

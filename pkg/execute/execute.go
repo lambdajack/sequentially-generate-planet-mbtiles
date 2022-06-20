@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-func OutputToConsole(commandString string) error {
-	comArgs := strings.Split(strings.Trim(commandString, " "), " ")
+func OutputToConsole(command string) error {
+	comArgs := strings.Split(strings.Trim(command, " "), " ")
 	if len(comArgs) < 2 {
-		return fmt.Errorf("execute.go | OutputToConsole | Invalid command string: %s", commandString)
+		return fmt.Errorf("execute.go | OutputToConsole | Invalid command string: %s", command)
 	}
 
 	cmd := exec.Command(comArgs[0], comArgs[1:]...)
