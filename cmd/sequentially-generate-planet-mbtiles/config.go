@@ -12,7 +12,7 @@ import (
 )
 
 type configuration struct {
-	PlanetFile       string `json:"planetFile"`
+	PbfFile       string `json:"pbfFile"`
 	WorkingDir       string `json:"workingDir"`
 	OutDir           string `json:"outDir"`
 	ExcludeOcean     bool   `json:"excludeOcean"`
@@ -47,7 +47,7 @@ func setConfigByJSON() {
 }
 
 func setConfigByFlags() {
-	cfg.PlanetFile = fl.planetFile
+	cfg.PbfFile = fl.pbfFile
 	cfg.WorkingDir = fl.workingDir
 	cfg.OutDir = fl.outDir
 	cfg.ExcludeOcean = fl.excludeOcean
@@ -78,7 +78,7 @@ func setAbsolutePaths() {
 		cfg.TilemakerConfig = "third_party/tilemaker/resources/config-openmaptiles.json"
 	}
 
-	cfg.PlanetFile = convertAbs(cfg.PlanetFile)
+	cfg.PbfFile = convertAbs(cfg.PbfFile)
 	cfg.WorkingDir = convertAbs(cfg.WorkingDir)
 	cfg.OutDir = convertAbs(cfg.OutDir)
 	cfg.TilemakerConfig = convertAbs(cfg.TilemakerConfig)
@@ -86,9 +86,9 @@ func setAbsolutePaths() {
 }
 
 func verifyPaths() {
-	if cfg.PlanetFile != "" {
-		if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
-			log.Fatalf("planet file does not exist: %s", cfg.PlanetFile)
+	if cfg.PbfFile != "" {
+		if _, err := os.Stat(cfg.PbfFile); os.IsNotExist(err) {
+			log.Fatalf("planet file does not exist: %s", cfg.PbfFile)
 		}
 	}
 

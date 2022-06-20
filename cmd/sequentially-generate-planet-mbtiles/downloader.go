@@ -45,7 +45,7 @@ func downloadOsmData() {
 		if _, err := os.Stat(filepath.Join(dl.destDir, dl.destFileName)); os.IsNotExist(err) {
 
 			if dl.destFileName == "planet-latest.osm.pbf" {
-				if cfg.PlanetFile != "" {
+				if cfg.PbfFile != "" {
 					lg.rep.Printf("source file provided - skipping planet download %s", dl.url)
 					continue
 				}

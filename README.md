@@ -33,7 +33,7 @@
 // config.json
 // Note if a config.json is provided, the program will ignore all other flags set.
 {
-  "planetFile": "",
+  "pbfFile": "",
   "workingDir": "",
   "outDir": "",
   "excludeOcean": false,
@@ -46,7 +46,7 @@
 }
 ```
 
-**_planetFile_** - By default, the program downloads the latest planet data directrly from [OpenStreetMaps](https://planet.openstreetmap.org/). However, if you already have your own planet file that you would like to use (for example, you may have a historical data set), you can provide the path to it here.
+**_pbfFile_** - By default, the program downloads the latest planet data directrly from [OpenStreetMaps](https://planet.openstreetmap.org/). However, if you already have your own pbf file that you would like to use (for example, you may have a historical data set, or subset of the planet), you can provide the path to it here.
 
 **_workingDir_** - This is where files will be downloaded to and files generated as a result of processing osm data will be stored. Temporary files will be stored here. Please ensure your designated working directory has at least 300 GB of space available. If none is provided, a 'data' folder will be created in the current working directory.
 

@@ -18,7 +18,7 @@ type flags struct {
 	version          bool
 	stage            bool
 	config           string
-	planetFile       string
+	pbfFile       string
 	workingDir       string
 	outDir           string
 	excludeOcean     bool
@@ -69,7 +69,7 @@ Options:
                            See documentation for example config.json
 
 Config Flags:
-  -p, --planet-file        Provide path to your osm.pbf file to be turned 
+  -p, --pbf-file           Provide path to your osm.pbf file to be turned 
                            into mbtiles. By default a planet-latest.osm.pbf 
                            will be downloaded directly from OpenStreetMap. If 
                            a file is provided, downloading the latest 
@@ -179,8 +179,8 @@ func EntryPoint(osmiumDockerFile []byte) int {
 	flag.StringVar(&fl.config, "c", "", "")
 	flag.StringVar(&fl.config, "config", "", "")
 
-	flag.StringVar(&fl.planetFile, "p", "", "")
-	flag.StringVar(&fl.planetFile, "planet-file", "", "")
+	flag.StringVar(&fl.pbfFile, "p", "", "")
+	flag.StringVar(&fl.pbfFile, "pbf-file", "", "")
 
 	flag.StringVar(&fl.workingDir, "d", "data", "")
 	flag.StringVar(&fl.workingDir, "working-dir", "data", "")
@@ -261,7 +261,7 @@ func EntryPoint(osmiumDockerFile []byte) int {
 		if !cfg.SkipSlicing {
 			lg.rep.Println("slice generation started; there may be significant gaps between logs")
 			lg.rep.Println("target file size: ", cfg.MaxRamMb/14)
-			extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, ct.gdal.Name, ct.osmium.Name, cfg.MaxRamMb/14)
+			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, ct.gdal.Name, ct.osmium.Name, cfg.MaxRamMb/14)
 		}
 
 		filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
