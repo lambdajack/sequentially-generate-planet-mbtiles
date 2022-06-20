@@ -268,38 +268,9 @@ func EntryPoint() int {
 		defer close(c)
 
 		if !cfg.SkipSlicing {
-			lg.rep.Println("Starting slice generation. This will take a while and there may be several minutes between progress updates.")
-
-			if !cfg.DiskEfficient {
-				if cfg.PlanetFile == "" {
-					extract.Quadrants(filepath.Join(pth.pbfDir, "planet-latest.osm.pbf"), pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
-				} else {
-					pf, err := filepath.Abs(cfg.PlanetFile)
-					if err != nil {
-						log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-					}
-					if _, err := os.Stat(cfg.PlanetFile); os.IsNotExist(err) {
-						log.Fatal("failed to locate your planet file: ", cfg.PlanetFile)
-					}
-					extract.Quadrants(pf, pth.pbfQuadrantSlicesDir, containers.ContainerNames.Osmium)
-				}
-			} else {
-				lg.rep.Println("Disk efficient mode enabled. Skipping intermediate quadrant slices.")
-			}
-
-			if cfg.DiskEfficient {
-				extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb / 14)
-			} else {
-				filepath.Walk(pth.pbfQuadrantSlicesDir, func(path string, info os.FileInfo, err error) error {
-					if err != nil {
-						log.Fatalf(err.Error())
-					}
-					if !info.IsDir() {
-						extract.TreeSlicer(path, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb / 14)
-					}
-					return nil
-				})
-			}
+			lg.rep.Println("slice generation started; there may be significant gaps between logs")
+			lg.rep.Println("target file size: ", cfg.MaxRamMb / 14)
+			extract.TreeSlicer(cfg.PlanetFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb / 14)
 		}
 
 		filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
@@ -338,9 +309,9 @@ func checkRecursiveClone() {
 	for _, t := range tp {
 		if _, err := os.Stat(filepath.Join("third_party", t, "README.md")); os.IsNotExist(err) {
 			lg.err.Printf("Submodule %v cannot be found. Attempting to fix..", t)
-			err := exec.Command("git", "submodule", "update", "--init", "--recursive").Run()
+			err := exec.Command("git", "submodule", "foreach", "git", "pull", "origin", "master").Run()
 			if err != nil {
-				lg.err.Fatal("Failed to recursively clone submodules. Submodules are required to run this programme. Please clone the submodules manually and try again.")
+				lg.err.Fatal("failed to recursively clone submodules; submodules are required to run this programme. Please clone the submodules manually and try again.")
 			}
 		}
 	}
@@ -395,7 +366,5 @@ func endMessage(out string) {
 
 Your carriage awaits you at: ` + out + "\n")
 
-	fmt.Println("We would love to make this process as easy and reliable as possible for everyone. If you have any feedback, suggestions, or bug reports please come over to https://github.com/lambdajack/sequentially-generate-planet-mbtiles and let us know.")
-	fmt.Println()
-
+	fmt.Print("We would love to make this process as easy and reliable as possible for everyone. If you have any feedback, suggestions, or bug reports please come over to https://github.com/lambdajack/sequentially-generate-planet-mbtiles and let us know.\n\n")
 }
