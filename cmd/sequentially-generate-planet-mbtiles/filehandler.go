@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func fileHandler() {
+func moveOcean() {
 	if !cfg.ExcludeOcean {
 		filepath.Walk(pth.coastlineDir, func(path string, info fs.FileInfo, err error) error {
 			if !info.IsDir() {

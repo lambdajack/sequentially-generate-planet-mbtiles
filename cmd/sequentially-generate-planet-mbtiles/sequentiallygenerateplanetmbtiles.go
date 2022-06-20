@@ -247,7 +247,7 @@ func EntryPoint(osmiumDockerFile []byte) int {
 
 		unzipSourceData()
 
-		fileHandler()
+		moveOcean()
 
 		c := make(chan os.Signal)
 		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
