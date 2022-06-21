@@ -15,7 +15,7 @@ import (
 )
 
 func TreeSlicer(src, dstDir, workingDir string, targetSize uint64, gdal, osmium *docker.Container) {
-	log.Printf("Operating on: %s", src)
+	log.Printf("operating on: %s", src)
 
 	src, err := filepath.Abs(src)
 	if err != nil {
@@ -46,7 +46,7 @@ func TreeSlicer(src, dstDir, workingDir string, targetSize uint64, gdal, osmium 
 	if strings.Contains(filepath.Base(src), "-tmp") {
 		os.Remove(src)
 	} else {
-		log.Printf("Sparing %s's life", filepath.Base(src))
+		log.Printf("sparing %s's life", filepath.Base(src))
 	}
 
 	if size(lp, targetSize) {
@@ -73,7 +73,7 @@ func size(src string, targetMb uint64) bool {
 		return false
 	}
 
-	log.Printf("Slice %s has reached target size. Moving to safety.", filepath.Base(src))
+	log.Printf("slice %s has reached target size. Moving to safety.", filepath.Base(src))
 	return true
 }
 
@@ -123,7 +123,7 @@ func getExtent(filePath, ogrContainerName string) (minX, minY, maxX, maxY float6
 	}
 
 	if extent == "" {
-		fmt.Println("Extent not found")
+		log.Println("extent not found")
 		return 0, 0, 0, 0, fmt.Errorf("extent \"Extent\" not found")
 	}
 
