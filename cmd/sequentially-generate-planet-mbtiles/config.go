@@ -151,5 +151,7 @@ func getRam() uint64 {
 		totalRamToUse = 1024
 	}
 
+	log.Printf("attempting to use not more than %d MB of ram", totalRamToUse)
+
 	return totalRamToUse
 }
