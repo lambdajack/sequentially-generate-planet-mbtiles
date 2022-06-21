@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
@@ -63,7 +64,7 @@ func EntryPoint(df []byte) int {
 	if !cfg.MergeOnly {
 		downloadOsmData()
 
-		unzipSourceData()
+		// unzipSourceData()
 
 		moveOcean()
 
@@ -77,7 +78,6 @@ func EntryPoint(df []byte) int {
 		defer close(c)
 
 		if !cfg.SkipSlicing {
-
 			count := 0
 			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
 				if !info.IsDir() {
@@ -91,22 +91,32 @@ func EntryPoint(df []byte) int {
 				pbb := extract.IncompleteProgress(cfg.PbfFile, pth.pbfSlicesDir, ct.gdal)
 				if pbb != "" {
 					np, err := extract.Extract(cfg.PbfFile, filepath.Join(pth.pbfDir, "resume.osm.pbf"), pbb, ct.osmium)
-					if err != nil {
+					if err != nil || np == "" {
 						lg.err.Println("failed to continue previous progress; will attempt to continue from scratch... ", err)
 					}
 					if np != "" {
 						cfg.PbfFile = np
+						filepath.Walk(pth.pbfDir, func(path string, info os.FileInfo, err error) error {
+							if !info.IsDir() {
+								if !strings.Contains(path, "slices") && !strings.Contains(path, "resume") {
+									log.Println("removing dirty files: ", path)
+									return os.Remove(path)
+								}
+							}
+							return nil
+						})
 					}
+				} else {
+					lg.rep.Println("previous progress not detected; starting from scratch...")
 					filepath.Walk(pth.pbfDir, func(path string, info os.FileInfo, err error) error {
 						if !info.IsDir() {
-							if path != np {
-								os.Remove(path)
+							if strings.Contains(path, "resume") || strings.Contains(path, "tmp") {
+								log.Println("removing dirty files: ", path)
+								return os.Remove(path)
 							}
 						}
 						return nil
 					})
-				} else {
-					lg.rep.Println("previous progress not detected; starting from scratch...")
 				}
 			}
 

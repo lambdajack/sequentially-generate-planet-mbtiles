@@ -69,11 +69,11 @@ func size(src string, targetMb uint64) bool {
 	}
 
 	if f.Size() > int64(targetMb*1024*1024) {
-		log.Printf("Target %s requires further slicing", filepath.Base(src))
+		log.Printf("target %s requires further slicing", filepath.Base(src))
 		return false
 	}
 
-	log.Printf("slice %s has reached target size. Moving to safety.", filepath.Base(src))
+	log.Printf("slice %s has reached target size; moving to safety.", filepath.Base(src))
 	return true
 }
 
@@ -113,7 +113,7 @@ func slice(src, dst, bb string, osmium *docker.Container) string {
 	}
 	defer f.Close()
 
-	log.Printf("Slicing: %s >>> %s (%s)", filepath.Base(src), filepath.Base(f.Name()), bb)
+	log.Printf("slicing: %s >>> %s (%s)", filepath.Base(src), filepath.Base(f.Name()), bb)
 	lp, err := Extract(src, f.Name(), bb, osmium)
 	if err != nil {
 		log.Fatalf("extract.go | Slicer | Failed to extract slice: %v", err)
@@ -136,7 +136,6 @@ func getExtent(filePath, ogrContainerName string) (minX, minY, maxX, maxY float6
 	cmd := exec.Command("docker", "run", "--rm", "--mount", "type=bind,source="+ap+",target=/data", ogrContainerName, "ogrinfo", "-so", "-al", "/data")
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Println("error here?")
 		return 0, 0, 0, 0, err
 	}
 
