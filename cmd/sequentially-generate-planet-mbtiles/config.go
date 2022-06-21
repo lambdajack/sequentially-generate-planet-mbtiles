@@ -138,6 +138,10 @@ func getRam() uint64 {
 		}
 	}
 
+	if (memTotalKb / 1024) < 2048 {
+		return 1024
+	}
+
 	memTotalMb := memTotalKb / 1024
 
 	totalRamToUse := memTotalMb - 2048
