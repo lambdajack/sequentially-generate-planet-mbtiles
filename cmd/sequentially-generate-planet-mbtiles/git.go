@@ -48,31 +48,26 @@ func cloneRepos() {
 	if err != nil {
 		f = append(f, "gdal")
 	}
-	system.SetUserOwner(gh.gdal.Dst)
-
+	
 	err = gh.osmiumTool.Clone()
 	if err != nil {
 		f = append(f, "osmium-tool")
 	}
-	system.SetUserOwner(gh.osmiumTool.Dst)
 
 	err = gh.libosmium.Clone()
 	if err != nil {
 		f = append(f, "libosmium")
 	}
-	system.SetUserOwner(gh.libosmium.Dst)
 
 	err = gh.tilemaker.Clone()
 	if err != nil {
 		f = append(f, "tilemaker")
 	}
-	system.SetUserOwner(gh.tilemaker.Dst)
 
 	err = gh.tippecanoe.Clone()
 	if err != nil {
 		f = append(f, "tippecanoe")
 	}
-	system.SetUserOwner(gh.tippecanoe.Dst)
 
 	filepath.Walk(cfg.WorkingDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {

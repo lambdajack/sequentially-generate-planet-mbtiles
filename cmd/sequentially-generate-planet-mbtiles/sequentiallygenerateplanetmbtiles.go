@@ -103,14 +103,6 @@ func EntryPoint(df []byte) int {
 		lg.rep.Println("SUCCESS: ", final)
 	}
 
-	filepath.Walk(cfg.WorkingDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		system.SetUserOwner(path)
-		return nil
-	})
-
 	system.SetUserOwner(final)
 
 	endMessage(final)
@@ -126,7 +118,8 @@ func endMessage(out string) {
 	|     Sequentially Generate Planet Mbtiles!!       |
 	|__________________________________________________|
 
-Your carriage awaits you at: ` + out + "\n\n")
+	
+Your carriage awaits you at: ` + out + "\n")
 
 	fmt.Printf("TRY: docker run --rm -it -v %s:/data -p 8080:80 maptiler/tileserver-gl\n\n", filepath.Dir(out))
 	fmt.Print("REMEMBER: To view the map with proper styles, you may need to set up a frontend with something like Maplibre or Leaflet.js using the correct style.json, rather than using the tileserver-gl's inbuilt 'Viewer'; although the viewer is great for checking that the mbtiles work and you got the area you were expecting.\n\n")
