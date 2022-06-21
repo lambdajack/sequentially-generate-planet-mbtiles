@@ -1,3 +1,3 @@
 package sequentiallygenerateplanetmbtiles
 
-const sgpmVersion = "3.1.0-rc1"
+const sgpmVersion = "3.1.0-rc3"
