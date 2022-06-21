@@ -45,7 +45,7 @@ func initFlags() {
 	flag.StringVar(&fl.pbfFile, "p", "", "")
 	flag.StringVar(&fl.pbfFile, "pbf-file", "", "")
 
-	flag.StringVar(&fl.workingDir, "d", "data", "")
+	flag.StringVar(&fl.workingDir, "w", "data", "")
 	flag.StringVar(&fl.workingDir, "working-dir", "data", "")
 
 	flag.StringVar(&fl.outDir, "o", "data/out", "")

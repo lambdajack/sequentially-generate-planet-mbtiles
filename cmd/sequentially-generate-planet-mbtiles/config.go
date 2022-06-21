@@ -93,6 +93,12 @@ func verifyPaths() {
 		if _, err := os.Stat(cfg.PbfFile); os.IsNotExist(err) {
 			log.Fatalf("planet file does not exist: %s", cfg.PbfFile)
 		}
+	} else {
+		if fl.test {
+			cfg.PbfFile = filepath.Join(cfg.WorkingDir, "pbf", "morocco-latest.osm.pbf")
+		} else {
+			cfg.PbfFile = filepath.Join(cfg.WorkingDir, "pbf", "planet-latest.osm.pbf")
+		}
 	}
 
 	if cfg.TilemakerConfig != "" {
@@ -109,7 +115,6 @@ func verifyPaths() {
 }
 
 func getRam() uint64 {
-
 	if fl.maxRamMb != 0 {
 		return fl.maxRamMb
 	}

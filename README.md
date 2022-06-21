@@ -78,6 +78,8 @@
 
 **_-c, --config_** - Provide path to a config.json. No configuration is required. If a config.json is provided, all other "config flags" are ignored and runtime params are derived solely from the config.json. See documentation for example config.json
 
+**_-t, --test_** - Will run the entire program on a much smaller dataset (morocco-latest.osm.pbf). The program will download the test data and generate a planet.mbtiles from it. This is useful for testing both the output and that your system meets the requirements. You cannot set any other flags in conjunction with this flag. if you wish to run your own custom test then please set a config.json file with your own smaller dataset and other options.
+
 ## Why?
 
 There are some wonderful options out there for generating and serving your own map data and there are many reasons to want to do so. My reason, and the inspiration for this program was cost. It is expensive to use a paid tile server option after less users using it than you might think. The problem is, when trying to host your own, a lot of research has shown me that almost all solutions for self generating tiles for a map server require hugely expensive hardware to even complete (it's not uncommon to see requirements for 64 cores and 128gb RAM!). Indeed the largest I've seen wanted 150gb of the stuff!. For generating the planet that is. If you want a small section of the world, then it is much easier. But I need the planet - so what to do? Generate smaller sections of the world, then combine them.
