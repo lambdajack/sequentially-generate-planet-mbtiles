@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/docker"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/system"
 )
 
 type containers struct {
@@ -42,14 +43,14 @@ func setupContainers(osmiumDf []byte) {
 		}),
 	}
 
-	err := ct.gdal.Build()
-	if err != nil {
-		lg.err.Fatalln("failed to build gdal container:", err)
-	}
-
-	err = ct.osmium.Build()
+	err := ct.osmium.Build()
 	if err != nil {
 		lg.err.Fatalln("failed to build osmium container:", err)
+	}
+
+	err = ct.gdal.Build()
+	if err != nil {
+		lg.err.Fatalln("failed to build gdal container:", err)
 	}
 
 	err = ct.tilemaker.Build()
@@ -95,6 +96,8 @@ func setOsmiumDockerfile(df []byte) string {
 	if err != nil {
 		lg.err.Fatalln("failed to write Osmium Dockerfile:", err)
 	}
+
+	system.SetUserOwner(f.Name())
 
 	return f.Name()
 }

@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/system"
 )
 
 type paths struct {
@@ -97,4 +99,5 @@ func makeDir(fldr string) {
 		log.Printf("Unable to create %s Dir", fldr)
 		os.Exit(exitPermissions)
 	}
+	system.SetUserOwner(fldr)
 }

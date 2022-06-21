@@ -13,8 +13,6 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/planet"
 )
 
-
-
 const (
 	exitOK          = 0
 	exitPermissions = iota + 100
@@ -24,7 +22,6 @@ const (
 	exitInvalidJSON
 	exitBuildContainers
 )
-
 
 var cfg = &configuration{}
 
@@ -77,16 +74,16 @@ func EntryPoint(df []byte) int {
 			lg.rep.Println("slice generation started; there may be significant gaps between logs")
 			lg.rep.Printf("target file size: %d MB\n", cfg.MaxRamMb/14)
 			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb/14, ct.gdal, ct.osmium)
-			
+
 			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				log.Fatalf(err.Error())
-			}
-			if !info.IsDir() {
-				mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker)
-			}
-			return nil
-		})
+				if err != nil {
+					log.Fatalf(err.Error())
+				}
+				if !info.IsDir() {
+					mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker)
+				}
+				return nil
+			})
 		}
 	}
 

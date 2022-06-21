@@ -81,7 +81,6 @@ func initFlags() {
 }
 
 func validateFlags() {
-
 	if fl.skipDownload && !fl.skipSlicing && !fl.mergeOnly {
 		fmt.Println("-sd must be used with -ss or -mo. See -h for more information.")
 		os.Exit(exitFlags)

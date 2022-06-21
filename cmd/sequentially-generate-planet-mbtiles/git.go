@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/git"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/system"
 )
 
 type repos struct {
@@ -17,10 +18,11 @@ type repos struct {
 var gh repos
 
 func cloneRepos() {
-	gh = repos{gdal: git.Repo{
-		Url: "https://github.com/lambdajack/gdal",
-		Dst: filepath.Join(pth.temp, "gdal"),
-	},
+	gh = repos{
+		gdal: git.Repo{
+			Url: "https://github.com/lambdajack/gdal",
+			Dst: filepath.Join(pth.temp, "gdal"),
+		},
 		osmiumTool: git.Repo{
 			Url: "https://github.com/lambdajack/osmium-tool",
 			Dst: filepath.Join(pth.temp, "osmium-tool"),
@@ -45,26 +47,31 @@ func cloneRepos() {
 	if err != nil {
 		f = append(f, "gdal")
 	}
+	system.SetUserOwner(gh.gdal.Dst)
 
 	err = gh.osmiumTool.Clone()
 	if err != nil {
 		f = append(f, "osmium-tool")
 	}
+	system.SetUserOwner(gh.osmiumTool.Dst)
 
 	err = gh.libosmium.Clone()
 	if err != nil {
 		f = append(f, "libosmium")
 	}
+	system.SetUserOwner(gh.libosmium.Dst)
 
 	err = gh.tilemaker.Clone()
 	if err != nil {
 		f = append(f, "tilemaker")
 	}
+	system.SetUserOwner(gh.tilemaker.Dst)
 
 	err = gh.tippecanoe.Clone()
 	if err != nil {
 		f = append(f, "tippecanoe")
 	}
+	system.SetUserOwner(gh.tippecanoe.Dst)
 
 	for _, e := range f {
 		lg.err.Fatalf("error cloning %s: %v", e, err)
