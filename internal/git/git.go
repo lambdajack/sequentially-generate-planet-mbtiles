@@ -17,8 +17,6 @@ func (r Repo) Clone() error {
 		return nil
 	}
 
-	log.Println("git clone", r.Url, r.Dst)
-
 	cmd := exec.Command("git", "clone", r.Url, r.Dst)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
