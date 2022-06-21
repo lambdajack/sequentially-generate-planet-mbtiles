@@ -99,7 +99,7 @@ func verifyPaths() {
 		}
 	}
 
-	if cfg.TilemakerProcess != "" {
+	if cfg.TilemakerProcess != "" && cfg.TilemakerProcess != "sgpm-bright" && cfg.TilemakerProcess != "tileserver-gl-basic" {
 		if _, err := os.Stat(cfg.TilemakerProcess); os.IsNotExist(err) {
 			log.Fatalf("tilemaker process does not exist: %s", cfg.TilemakerProcess)
 		}
