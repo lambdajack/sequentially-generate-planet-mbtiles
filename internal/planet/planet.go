@@ -45,7 +45,7 @@ func Generate(src, dst string, tippecanoe *docker.Container) string {
 		},
 	}
 
-	log.Println("MERGING: ", strings.ReplaceAll(strings.Join(b, " "), "/data/", "..."))
+	log.Println("merging: ", strings.ReplaceAll(strings.Join(b, " "), "/data/", "..."))
 
 	err = tippecanoe.Execute(append([]string{"tile-join", "--force", "--output=/merged/planet.mbtiles"}, b...))
 	if err != nil {
