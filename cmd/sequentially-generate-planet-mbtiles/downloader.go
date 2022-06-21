@@ -53,6 +53,11 @@ func downloadOsmData() {
 					lg.rep.Printf("skip download flag provided - skipping planet download %s", dl.url)
 					continue
 				}
+				if fl.test {
+					dl.url = "https://download.geofabrik.de/africa/morocco-latest.osm.pbf"
+					dl.destFileName = "morocco-latest.osm.pbf"
+					lg.rep.Printf("test flag provided; downloading test data %s - %s", dl.destFileName, dl.url)
+				}
 			}
 
 			if cfg.ExcludeOcean && strings.Contains(dl.destFileName, "water") {

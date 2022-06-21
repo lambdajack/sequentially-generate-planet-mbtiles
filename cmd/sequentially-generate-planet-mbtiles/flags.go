@@ -11,6 +11,7 @@ type flags struct {
 	version          bool
 	stage            bool
 	config           string
+	test bool
 	pbfFile          string
 	workingDir       string
 	outDir           string
@@ -37,6 +38,9 @@ func initFlags() {
 
 	flag.StringVar(&fl.config, "c", "", "")
 	flag.StringVar(&fl.config, "config", "", "")
+
+	flag.BoolVar(&fl.test, "t", false, "")
+	flag.BoolVar(&fl.test, "test", false, "")
 
 	flag.StringVar(&fl.pbfFile, "p", "", "")
 	flag.StringVar(&fl.pbfFile, "pbf-file", "", "")
@@ -96,6 +100,19 @@ func validateFlags() {
 		}
 	})
 
+	if fl.test {
+		of := false
+		flag.Visit(func(f *flag.Flag) {
+			if f.Name != "test" && f.Name != "t" {
+				of = true
+			}
+		})
+		if of {
+			log.Println("you cannot use the -t or --test flag with any other flags.")
+			os.Exit(exitFlags)
+		}
+	}
+
 	if configFlag != defaultConfigFlagValue {
 		invalidFlags := false
 		flag.Visit(func(f *flag.Flag) {
@@ -105,11 +122,10 @@ func validateFlags() {
 					invalidFlags = true
 				}
 			}
-			if f.Name == "io" || f.Name == "include-ocean" || f.Name == "il" || f.Name == "include-landuse" {
+			if f.Name == "eo" || f.Name == "exclude-ocean" || f.Name == "el" || f.Name == "exclude-landuse" {
 				log.Printf("[WARN] -%s flag was provided but is overwitten by the provided config.json. Please supply either only a config.json file OR configuration flags. See '-h' for more information.", f.Name)
 				invalidFlags = true
 			}
-
 		})
 
 		if invalidFlags {
@@ -138,8 +154,18 @@ Options:
                            is required. If a config.json is provided, all
                            other "config flags" are ignored and runtime
                            params are derived solely from the config.json.
-                           See documentation for example config.json
+                           See documentation for example config.json.
 
+  -t, --test               Will run the entire program on a much smaller
+                           dataset (morocco-latest.osm.pbf). The program
+                           will download the test data and generate a
+                           planet.mbtiles from it. This is useful for
+                           testing both the output and that your system
+                           meets the requirements. You cannot set any
+                           other flags in conjunction with this flag.
+                           if you wish to run your own custom test then
+                           please set a config.json file with your own
+                           smaller dataset and other options.
 Config Flags:
   -p, --pbf-file           Provide path to your osm.pbf file to be turned 
                            into mbtiles. By default a planet-latest.osm.pbf 
