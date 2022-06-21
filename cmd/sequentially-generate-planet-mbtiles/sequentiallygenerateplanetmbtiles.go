@@ -79,9 +79,14 @@ func EntryPoint(df []byte) int {
 
 		if !cfg.SkipSlicing {
 			count := 0
+			slicingDone := false
+
 			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
-				if !info.IsDir() {
+				if !info.IsDir() && !strings.Contains(path, "converted-") {
 					count++
+				}
+				if strings.Contains(path, "converted-") {
+					slicingDone = true
 				}
 				return nil
 			})
@@ -120,9 +125,13 @@ func EntryPoint(df []byte) int {
 				}
 			}
 
-			lg.rep.Println("slice generation started; there may be significant gaps between logs")
-			lg.rep.Printf("target file size: %d MB\n", uint64(math.Floor(float64(cfg.MaxRamMb)/15)))
-			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, uint64(math.Floor(float64(cfg.MaxRamMb)/15)), ct.gdal, ct.osmium)
+			if !slicingDone {
+				lg.rep.Println("slice generation started; there may be significant gaps between logs")
+				lg.rep.Printf("target file size: %d MB\n", uint64(math.Floor(float64(cfg.MaxRamMb)/15)))
+				extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, uint64(math.Floor(float64(cfg.MaxRamMb)/15)), ct.gdal, ct.osmium)
+			} else {
+				lg.rep.Println("slicing already complete; moving on to tile generation")
+			}
 
 			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
 				if err != nil {
@@ -130,7 +139,12 @@ func EntryPoint(df []byte) int {
 				}
 				system.SetUserOwner(path)
 				if !info.IsDir() {
-					mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker)
+					if !strings.Contains(path, "converted-") {
+						mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker)
+						os.Rename(path, filepath.Join(filepath.Dir(path), "converted-"+filepath.Base(path)))
+					} else {
+						lg.rep.Printf("already converted; skipping %s\n", path)
+					}
 				}
 				return nil
 			})
