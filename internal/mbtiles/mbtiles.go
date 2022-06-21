@@ -57,7 +57,6 @@ func Generate(src, dst, coastline, landcover, config, process string, outAsDir b
 		},
 	}
 
-	// generateMbtilesCmd := fmt.Sprintf("docker run --rm -v %s:/src -v %s:/dst -v %s:/coastline -v %s:/landcover -v %v:/config -v %v:/process %s --input /src/%s --output /dst/%s --config /config/%s --process /process/%s", filepath.Dir(src), filepath.Dir(dst), coastline, landcover, filepath.Dir(config), filepath.Dir(process), containerName, filepath.Base(src), filepath.Base(dst), filepath.Base(config), filepath.Base(process))
 	err = tilemaker.Execute([]string{"--input", "/src/" + filepath.Base(src), "--output", "/dst/" + filepath.Base(dst), "--config", "/config/" + filepath.Base(config), "--process", "/process/" + filepath.Base(process)})
 	if err != nil {
 		log.Fatal(err)

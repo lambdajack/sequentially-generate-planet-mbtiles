@@ -1,6 +1,7 @@
 package sequentiallygenerateplanetmbtiles
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/git"
@@ -72,6 +73,14 @@ func cloneRepos() {
 		f = append(f, "tippecanoe")
 	}
 	system.SetUserOwner(gh.tippecanoe.Dst)
+
+	filepath.Walk(cfg.WorkingDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		system.SetUserOwner(path)
+		return nil
+	})
 
 	for _, e := range f {
 		lg.err.Fatalf("error cloning %s: %v", e, err)

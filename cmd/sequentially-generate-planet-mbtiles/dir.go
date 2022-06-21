@@ -78,14 +78,6 @@ func initDirStructure() {
 	pth.logsDir = filepath.Join(pth.workingDir, "logs")
 	makeDir(pth.logsDir)
 
-	// cd, err := os.UserCacheDir()
-	// if err != nil {
-	// 	log.Println("unable to get user cache dir; defaulting to tmp instead.")
-	// 	cd = os.TempDir()
-	// }
-
-	// log.Println("cache dir:", cd)
-
 	pth.temp = filepath.Join(pth.workingDir, "tmp")
 	makeDir(pth.temp)
 }

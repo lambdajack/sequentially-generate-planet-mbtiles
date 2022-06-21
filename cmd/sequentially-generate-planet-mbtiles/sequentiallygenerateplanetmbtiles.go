@@ -12,6 +12,7 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/extract"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/mbtiles"
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/planet"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/system"
 )
 
 const (
@@ -80,6 +81,7 @@ func EntryPoint(df []byte) int {
 				if err != nil {
 					log.Fatalf(err.Error())
 				}
+				system.SetUserOwner(path)
 				if !info.IsDir() {
 					mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker)
 				}
@@ -100,6 +102,16 @@ func EntryPoint(df []byte) int {
 	} else {
 		lg.rep.Println("SUCCESS: ", final)
 	}
+
+	filepath.Walk(cfg.WorkingDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		system.SetUserOwner(path)
+		return nil
+	})
+
+	system.SetUserOwner(final)
 
 	endMessage(final)
 
