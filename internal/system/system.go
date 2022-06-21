@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"runtime"
 	"strconv"
 )
 
@@ -13,7 +14,7 @@ func SetUserOwner(path string) error {
 		return err
 	}
 
-	if u.Name == "root" {
+	if u.Name == "root" && runtime.GOOS == "linux" {
 
 		u := os.Getenv("SUDO_UID")
 		if u == "" {
