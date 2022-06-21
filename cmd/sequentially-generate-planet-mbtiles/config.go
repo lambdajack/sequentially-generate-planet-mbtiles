@@ -139,6 +139,7 @@ func getRam() uint64 {
 	}
 
 	if (memTotalKb / 1024) < 2048 {
+		log.Printf("system ram is less than 2 GB; this is dangerously low, but we will do our best!")
 		return 1024
 	}
 
