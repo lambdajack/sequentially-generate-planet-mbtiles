@@ -48,7 +48,7 @@ func cloneRepos() {
 	if err != nil {
 		f = append(f, "gdal")
 	}
-	
+
 	err = gh.osmiumTool.Clone()
 	if err != nil {
 		f = append(f, "osmium-tool")

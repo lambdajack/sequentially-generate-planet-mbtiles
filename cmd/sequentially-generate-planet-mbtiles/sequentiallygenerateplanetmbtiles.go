@@ -45,6 +45,8 @@ func EntryPoint(df []byte) int {
 
 	initDirStructure()
 
+	setTmPaths()
+
 	initLoggers()
 
 	cloneRepos()

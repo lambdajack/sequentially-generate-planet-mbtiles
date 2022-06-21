@@ -78,7 +78,12 @@ func initDirStructure() {
 	pth.logsDir = filepath.Join(pth.workingDir, "logs")
 	makeDir(pth.logsDir)
 
-	pth.temp = filepath.Join(pth.workingDir, "tmp")
+	if system.DockerIsSnap() {
+		log.Println("snap version of docker detected; using local tmp folder since snap docker cannot access system /tmp")
+		pth.temp = filepath.Join(pth.workingDir, "tmp")
+	} else {
+		pth.temp = filepath.Join(os.TempDir(), "sequentially-generate-planet-mbtiles")
+	}
 	makeDir(pth.temp)
 }
 
