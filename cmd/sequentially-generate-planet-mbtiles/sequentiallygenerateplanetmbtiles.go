@@ -63,7 +63,7 @@ func EntryPoint(df []byte) int {
 	if !cfg.MergeOnly {
 		downloadOsmData()
 
-		// unzipSourceData()
+		unzipSourceData()
 
 		moveOcean()
 
