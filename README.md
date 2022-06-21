@@ -193,4 +193,5 @@ All welcome! Feature request, pull request, bug reports/fixes etc - go for it.
 - Even less ram as an option (aiming for less than 1gb used while still retaining the current speed)
 - More configuration options (including allowing greater data separation for better storage management and the option to use a custom osm.pbf file)
 - Improved logging and progress management
+- Add an automatic end to end test which downloads a small pbf file for quick turn around.
 - v4.0.0 landmark - add automatic fetching of pbf files for continents to use instead of the planet.

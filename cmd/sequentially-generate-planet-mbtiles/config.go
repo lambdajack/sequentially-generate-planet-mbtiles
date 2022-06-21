@@ -66,17 +66,17 @@ func setConfigByFlags() {
 func setAbsolutePaths() {
 
 	if cfg.TilemakerProcess == "" || strings.ToLower(cfg.TilemakerProcess) == "tileserver-gl-basic" {
-		cfg.TilemakerProcess = filepath.Join(os.TempDir(), "sequentially-generate-planet-mbtiles", "tilemaker", "resources", "process-openmaptiles.lua")
+		cfg.TilemakerProcess = filepath.Join(cfg.WorkingDir, "tmp", "sequentially-generate-planet-mbtiles", "tilemaker", "resources", "process-openmaptiles.lua")
 		log.Println("using tileserver-gl-basic style target")
 	}
 
 	if cfg.TilemakerProcess == "sgpm-bright" {
-		cfg.TilemakerProcess = filepath.Join(os.TempDir(), "sequentially-generate-planet-mbtiles", "tilemaker", "resources", "process-bright.lua")
+		cfg.TilemakerProcess = filepath.Join(cfg.WorkingDir, "tmp", "sequentially-generate-planet-mbtiles", "tilemaker", "resources", "process-bright.lua")
 		log.Println("using sgpm-bright style target")
 	}
 
 	if cfg.TilemakerConfig == "" {
-		cfg.TilemakerConfig = filepath.Join(os.TempDir(), "sequentially-generate-planet-mbtiles", "tilemaker", "resources", "config-openmaptiles.json")
+		cfg.TilemakerConfig = filepath.Join(cfg.WorkingDir, "tmp", "sequentially-generate-planet-mbtiles", "tilemaker", "resources", "config-openmaptiles.json")
 	}
 
 	cfg.PbfFile = convertAbs(cfg.PbfFile)

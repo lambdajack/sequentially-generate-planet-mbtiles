@@ -3,6 +3,7 @@ package sequentiallygenerateplanetmbtiles
 import (
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -72,8 +73,8 @@ func EntryPoint(df []byte) int {
 
 		if !cfg.SkipSlicing {
 			lg.rep.Println("slice generation started; there may be significant gaps between logs")
-			lg.rep.Printf("target file size: %d MB\n", cfg.MaxRamMb/14)
-			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, cfg.MaxRamMb/14, ct.gdal, ct.osmium)
+			lg.rep.Printf("target file size: %d MB\n", uint64(math.Floor(float64(cfg.MaxRamMb)/14)))
+			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, uint64(math.Floor(float64(cfg.MaxRamMb)/14)), ct.gdal, ct.osmium)
 
 			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
 				if err != nil {
