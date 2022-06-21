@@ -77,6 +77,35 @@ func size(src string, targetMb uint64) bool {
 	return true
 }
 
+func IncompleteProgress(originalSrc, progressDir string, gdal *docker.Container) string {
+	minX, minY, maxX, maxY, err := getExtent(originalSrc, gdal.Name)
+	if err != nil {
+		log.Println("failed to get extent for original source; cannot utilise previous progress")
+		return ""
+	}
+
+	err = filepath.Walk(progressDir, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			_, _, mx, _, err := getExtent(path, gdal.Name)
+			if err != nil {
+				log.Printf("failed to get extent for %s source; cannot utilise previous progress\n", path)
+				return err
+			}
+			if mx > minX {
+				minX = mx
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return ""
+	}
+
+	log.Printf("previously incomplete: %f, %f, %f, %f\n", minX, minY, maxX, maxY)
+
+	return formatBoundingBox(minX, minY, maxX, maxY)
+}
+
 func slice(src, dst, bb string, osmium *docker.Container) string {
 	f, err := os.CreateTemp(dst, "*-tmp.osm.pbf")
 	if err != nil {

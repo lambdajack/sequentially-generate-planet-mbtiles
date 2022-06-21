@@ -11,7 +11,7 @@ type flags struct {
 	version          bool
 	stage            bool
 	config           string
-	test bool
+	test             bool
 	pbfFile          string
 	workingDir       string
 	outDir           string

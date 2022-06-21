@@ -63,7 +63,7 @@ func EntryPoint(df []byte) int {
 	if !cfg.MergeOnly {
 		downloadOsmData()
 
-		unzipSourceData()
+		// unzipSourceData()
 
 		moveOcean()
 
@@ -77,6 +77,39 @@ func EntryPoint(df []byte) int {
 		defer close(c)
 
 		if !cfg.SkipSlicing {
+
+			count := 0
+			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
+				if !info.IsDir() {
+					count++
+				}
+				return nil
+			})
+
+			if count != 0 {
+				lg.rep.Println("previous progress detected; attempting to continue...")
+				pbb := extract.IncompleteProgress(cfg.PbfFile, pth.pbfSlicesDir, ct.gdal)
+				if pbb != "" {
+					np, err := extract.Extract(cfg.PbfFile, filepath.Join(pth.pbfDir, "resume.osm.pbf"), pbb, ct.osmium)
+					if err != nil {
+						lg.err.Println("failed to continue previous progress; will attempt to continue from scratch... ", err)
+					}
+					if np != "" {
+						cfg.PbfFile = np
+					}
+					filepath.Walk(pth.pbfDir, func(path string, info os.FileInfo, err error) error {
+						if !info.IsDir() {
+							if path != np {
+								os.Remove(path)
+							}
+						}
+						return nil
+					})
+				} else {
+					lg.rep.Println("previous progress not detected; starting from scratch...")
+				}
+			}
+
 			lg.rep.Println("slice generation started; there may be significant gaps between logs")
 			lg.rep.Printf("target file size: %d MB\n", uint64(math.Floor(float64(cfg.MaxRamMb)/15)))
 			extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, uint64(math.Floor(float64(cfg.MaxRamMb)/15)), ct.gdal, ct.osmium)
