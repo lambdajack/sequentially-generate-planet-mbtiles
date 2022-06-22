@@ -9,16 +9,10 @@
 ## TL;DR give me planet vector tiles! (usage)
 
 1. Have [Docker](https://docs.docker.com/get-docker/) installed.
-
-2. ```bash
-   git clone --recursive https://github.com/lambdajack/sequentially-generate-planet-mbtiles
-   ```
-
+2. Download the binary from the [release page](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/releases)
 3. ```bash
-   cd sequentially-generate-planet-mbtiles && \
-   sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles
+   sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3
    ```
-
 4. Rejoice - see acknowledgements below for people to thank.
 
 ## Configuration
