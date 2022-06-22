@@ -75,7 +75,6 @@ func downloadOsmData() {
 				os.Exit(exitDownloadURL)
 			}
 			lg.rep.Printf("Download success: %v\n", dl.destFileName)
-
 		} else {
 			lg.rep.Printf("%v already exists. Skipping download.\n", dl.destFileName)
 		}
