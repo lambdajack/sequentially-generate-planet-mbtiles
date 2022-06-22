@@ -13,6 +13,7 @@ import (
 )
 
 type configuration struct {
+	srcFileProvided bool
 	PbfFile          string `json:"pbfFile"`
 	WorkingDir       string `json:"workingDir"`
 	OutDir           string `json:"outDir"`
@@ -90,6 +91,7 @@ func verifyPaths() {
 		if _, err := os.Stat(cfg.PbfFile); os.IsNotExist(err) {
 			log.Fatalf("planet file does not exist: %s", cfg.PbfFile)
 		}
+		cfg.srcFileProvided = true
 	} else {
 		if fl.test {
 			cfg.PbfFile = filepath.Join(cfg.WorkingDir, "pbf", "morocco-latest.osm.pbf")
