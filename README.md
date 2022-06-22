@@ -73,9 +73,9 @@ sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -c /path/to/config.json
 
 **_All options in the config.json can be set with flags. Options unique to flags are:_**
 
-**_-h, --help_** - Print the help message.
+**_-h, --help_** - Print the help message listing all available flags.
 
-**_-v, --version_** - Print version information
+**_-v, --version_** - Print version information.
 
 **_-s, --stage_** - Initialise required containers, Dirs and logs based on the supplied config file and then exit. Can be useful to check you are running with correct permissions etc (for example Docker and filesystem), but without running the hard work. It will take some time to build the required containers.
 
