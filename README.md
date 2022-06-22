@@ -6,16 +6,7 @@
 
 ![](assets/sequentially-generate-planet-mbtiles-example.gif)
 
-_coming soon:_
-
-- Even less ram as an option (aiming for less than 1gb used while still retaining the current speed)
-- More configuration options (including allowing greater data separation for better storage management and the option to use a custom osm.pbf file)
-- Improved logging and progress management
-- Increased safety with downloads (including allowing for handling of missing/broken links)
-- Vastly better development experience with a more 'effective-go' like codebase.
-- More...
-- **This project is currently in active development, any feature requests are very welcome.**
-- _Note: development is taking place on v3.0.0 branch as some breaking changes are necessary to introduce the above_
+**v3.1.0-rc3 currently in testing. see [pre-release](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/releases/tag/v3.1.0-rc3). Feedback in any form is always appreciated.**
 
 ## TL;DR give me planet vector tiles! (usage)
 
