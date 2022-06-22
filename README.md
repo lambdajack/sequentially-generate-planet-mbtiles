@@ -36,7 +36,9 @@
   "TilemakerProcess": "",
   "maxRamMb": 0,
   "diskEfficient": false,
-  "outAsDir": false
+  "outAsDir": false,
+  "skipSlicing": false,
+  "mergeOnly": false
 }
 ```
 
@@ -59,6 +61,10 @@
 **_diskEfficient_** - Use disk efficient mode. This will skip the intermediary data slices and proceed straight to the working slices. Can considerably increase the time taken, but will save up to approx. 70 GB of disk space overall. Use only if disk space is a real consideration.
 
 **_outAsDir_** - The final output will be a directory of tiles rather than a single mbtiles file. This will generate hundreds of thousands of files in a predetermined directory structure. More information can ba found about this format and why you might use it over a single mbtiles file can be found [here](https://documentation.maptiler.com/hc/en-us/articles/360020886878-Folder-vs-MBTiles-vs-GeoPackage)
+
+**_skipSlicing_** - Skips the intermediate data processing/slicing and looks for existing files to convert into mbtiles in [workingDir]/pbf/slices. This is useful if you wish to experiment with different Tilemaker configs/process (for example if you wish to change the zoom levels or style tagging of the final output). Once the existing files have been converted to mbtiles, they will be merged either to a single file, or to a directory, respecting the -od flag.
+
+**_mergeOnly_** - Skips the entire generation process and instead looks for existing mbtiles in [workingDir]/mbtiles and merges them into a single planet.mbtiles file in the [outDir]. This is useful if you already have a tilesets you wish to merge.
 
 ### Flags
 
