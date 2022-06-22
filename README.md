@@ -20,7 +20,7 @@
 ### config.json
 
 ```bash
- sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles -c /path/to/config.json
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -c /path/to/config.json
 ```
 
 ```json
@@ -160,19 +160,19 @@ Pay attention to your fonts. The OSM Bright style makes use of Noto Sans variant
 Use all defaults:
 
 ```bash
-sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3
 ```
 
 Providing a config.json:
 
 ```bash
-sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles -c /path/to/config.json
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -c /path/to/config.json
 ```
 
 Use a specific source file, and send the output to a specific place. Target style to match sgpm-bright:
 
 ```bash
-sudo ./bin/v3.0.0-sequentially-generate-planet-mbtiles -p /path/to/planet-latest.osm.pbf -o /path/to/output/dir -tp sgpm-bright
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -p /path/to/planet-latest.osm.pbf -o /path/to/output/dir -tp sgpm-bright
 ```
 
 ## Acknowledgements
