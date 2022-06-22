@@ -13,7 +13,7 @@ import (
 )
 
 type configuration struct {
-	srcFileProvided bool
+	srcFileProvided  bool
 	PbfFile          string `json:"pbfFile"`
 	WorkingDir       string `json:"workingDir"`
 	OutDir           string `json:"outDir"`
