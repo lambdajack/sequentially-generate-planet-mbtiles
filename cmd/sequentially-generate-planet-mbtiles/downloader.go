@@ -1,7 +1,6 @@
 package sequentiallygenerateplanetmbtiles
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -46,8 +45,6 @@ func downloadOsmData() {
 		if _, err := os.Stat(filepath.Join(dl.destDir, dl.destFileName)); os.IsNotExist(err) {
 
 			if dl.destFileName == "planet-latest.osm.pbf" {
-				log.Println(cfg.PbfFile)
-				
 				if cfg.srcFileProvided {
 					lg.rep.Printf("source file provided - skipping planet download %s", dl.url)
 					continue
