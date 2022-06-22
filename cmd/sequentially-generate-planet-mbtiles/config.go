@@ -36,7 +36,10 @@ func initConfig() {
 	}
 
 	verifyPaths()
-	setAbsolutePaths()
+
+	cfg.PbfFile = convertAbs(cfg.PbfFile)
+	cfg.WorkingDir = convertAbs(cfg.WorkingDir)
+	cfg.OutDir = convertAbs(cfg.OutDir)
 }
 
 func setConfigByJSON() {
@@ -61,12 +64,6 @@ func setConfigByFlags() {
 	cfg.SkipSlicing = fl.skipSlicing
 	cfg.MergeOnly = fl.mergeOnly
 	cfg.SkipDownload = fl.skipDownload
-}
-
-func setAbsolutePaths() {
-	cfg.PbfFile = convertAbs(cfg.PbfFile)
-	cfg.WorkingDir = convertAbs(cfg.WorkingDir)
-	cfg.OutDir = convertAbs(cfg.OutDir)
 }
 
 func setTmPaths() {

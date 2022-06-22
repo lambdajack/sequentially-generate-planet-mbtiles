@@ -112,7 +112,7 @@ func EntryPoint(df []byte) int {
 						})
 					}
 				} else {
-					lg.rep.Println("previous progress not detected; starting from scratch...")
+					lg.rep.Println("failed to get previous progress; starting from scratch...")
 					filepath.Walk(pth.pbfDir, func(path string, info os.FileInfo, err error) error {
 						if !info.IsDir() {
 							if strings.Contains(path, "resume") || strings.Contains(path, "tmp") {
@@ -135,7 +135,7 @@ func EntryPoint(df []byte) int {
 
 			filepath.Walk(pth.pbfSlicesDir, func(path string, info os.FileInfo, err error) error {
 				if err != nil {
-					log.Fatalf(err.Error())
+					lg.rep.Fatalf(err.Error())
 				}
 				system.SetUserOwner(path)
 				if !info.IsDir() {
