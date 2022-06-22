@@ -10,5 +10,6 @@
   "diskEfficient": false,
   "outAsDir": false,
   "skipSlicing": false,
-  "mergeOnly": false
+  "mergeOnly": false,
+  "skipDownload": false
 }

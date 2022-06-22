@@ -38,7 +38,8 @@
   "diskEfficient": false,
   "outAsDir": false,
   "skipSlicing": false,
-  "mergeOnly": false
+  "mergeOnly": false,
+  "skipDownload": false
 }
 ```
 
@@ -65,6 +66,8 @@
 **_skipSlicing_** - Skips the intermediate data processing/slicing and looks for existing files to convert into mbtiles in [workingDir]/pbf/slices. This is useful if you wish to experiment with different Tilemaker configs/process (for example if you wish to change the zoom levels or style tagging of the final output). Once the existing files have been converted to mbtiles, they will be merged either to a single file, or to a directory, respecting the -od flag.
 
 **_mergeOnly_** - Skips the entire generation process and instead looks for existing mbtiles in [workingDir]/mbtiles and merges them into a single planet.mbtiles file in the [outDir]. This is useful if you already have a tilesets you wish to merge.
+
+**_skipDownload_** - Skips planet downloading - must be set with skip slicing or merge only. Note, this should not be used if you have your own pbf file you wish to slice. In that case, just supply a path to the file in the pbfFile option and the download will be skipped anyway.
 
 ### Flags
 
