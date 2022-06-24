@@ -1,4 +1,4 @@
-VERSION := v3.1.0-rc10
+VERSION := v3.1.0-rc3
 
 all: darwin linux windows
 
