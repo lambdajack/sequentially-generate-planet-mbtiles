@@ -29,7 +29,7 @@ func unzipSourceData() {
 			continue
 		}
 
-		lg.prog.Println("unzipping", info.srcPath)
+		lg.rep.Println("unzipping", info.srcPath)
 		lj_archive.Unzip(info.srcPath, info.destPath)
 	}
 }
