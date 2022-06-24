@@ -1,3 +1,4 @@
 package sequentiallygenerateplanetmbtiles
 
-const sgpmVersion = "3.1.0-rc3"
+// Automatically set at compile time
+var sgpmVersion string
