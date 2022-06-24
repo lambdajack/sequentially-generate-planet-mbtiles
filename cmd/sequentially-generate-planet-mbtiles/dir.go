@@ -18,7 +18,6 @@ type paths struct {
 	landCoverGlaciatedDepth  string
 	pbfDir                   string
 	pbfSlicesDir             string
-	pbfQuadrantSlicesDir     string
 	mbtilesDir               string
 	logsDir                  string
 	temp                     string
@@ -68,9 +67,6 @@ func initDirStructure() {
 
 	pth.pbfSlicesDir = filepath.Join(pth.pbfDir, "slices")
 	makeDir(pth.pbfSlicesDir)
-
-	pth.pbfQuadrantSlicesDir = filepath.Join(pth.pbfDir, "quadrants")
-	makeDir(pth.pbfQuadrantSlicesDir)
 
 	pth.mbtilesDir = filepath.Join(pth.workingDir, "mbtiles")
 	makeDir(pth.mbtilesDir)
