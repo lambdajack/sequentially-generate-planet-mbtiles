@@ -10,14 +10,14 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/docker"
 )
 
-func Generate(src, dst, coastline, landcover, config, process string, outAsDir bool, tilemaker *docker.Container) {
+func Generate(src, dst, coastline, landcover, config, process string, outAsDir bool, tilemaker *docker.Container, elg, plg, rlg *log.Logger) {
 	src, err := filepath.Abs(src)
 	if err != nil {
-		log.Fatal(err)
+		elg.Fatal(err)
 	}
 	dst, err = filepath.Abs(dst)
 	if err != nil {
-		log.Fatal(err)
+		elg.Fatal(err)
 	}
 
 	if !outAsDir {
@@ -57,8 +57,10 @@ func Generate(src, dst, coastline, landcover, config, process string, outAsDir b
 		},
 	}
 
+	rlg.Printf("generating temporary mbtiles: %s from %s; directory output: %v\n", dst, src, outAsDir)
 	err = tilemaker.Execute([]string{"--input", "/src/" + filepath.Base(src), "--output", "/dst/" + filepath.Base(dst), "--config", "/config/" + filepath.Base(config), "--process", "/process/" + filepath.Base(process)})
 	if err != nil {
-		log.Fatal(err)
+		elg.Fatal(err)
 	}
+	plg.Printf("TILES: successfully generated %s from %s; directory output: %v\n", dst, src, outAsDir)
 }

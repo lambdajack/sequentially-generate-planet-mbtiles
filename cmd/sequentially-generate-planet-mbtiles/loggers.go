@@ -21,6 +21,10 @@ func initLoggers() {
 	lg.prog = initProg(filepath.Join(pth.logsDir, "prog.log"))
 	lg.err = initErr(filepath.Join(pth.logsDir, "err.log"))
 	lg.rep = initRep(filepath.Join(pth.logsDir, "rep.log"))
+
+	lg.prog.Println("#")
+	lg.err.Println("#")
+	lg.rep.Println("#")
 }
 
 func initProg(logPath string) *log.Logger {

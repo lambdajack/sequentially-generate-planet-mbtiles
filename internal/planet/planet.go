@@ -9,10 +9,10 @@ import (
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/docker"
 )
 
-func Generate(src, dst string, tippecanoe *docker.Container) string {
+func Generate(src, dst string, tippecanoe *docker.Container, elg, plg, rlg *log.Logger) string {
 	fi, err := os.ReadDir(src)
 	if err != nil {
-		log.Fatal(err)
+		elg.Fatal(err)
 	}
 
 	var b []string
@@ -23,13 +23,13 @@ func Generate(src, dst string, tippecanoe *docker.Container) string {
 	}
 
 	if len(b) == 0 {
-		log.Fatalf("cannot find any tiles to merge in %s - have you generated any?", src)
+		elg.Fatalf("cannot find any tiles to merge in %s - have you generated any?", src)
 	}
 
 	if _, err := os.Stat(filepath.Join(dst, "planet.mbtiles")); os.IsNotExist(err) {
 		f, err := os.Create(filepath.Join(dst, "planet.mbtiles"))
 		if err != nil {
-			log.Fatal(err)
+			elg.Fatal(err)
 		}
 		f.Close()
 	}
@@ -45,12 +45,13 @@ func Generate(src, dst string, tippecanoe *docker.Container) string {
 		},
 	}
 
-	log.Println("merging: ", strings.ReplaceAll(strings.Join(b, " "), "/data/", "..."))
+	rlg.Println("merging: ", strings.ReplaceAll(strings.Join(b, " "), "/data/", "..."))
 
 	err = tippecanoe.Execute(append([]string{"tile-join", "--force", "--output=/merged/planet.mbtiles"}, b...))
 	if err != nil {
-		log.Fatalf("failed to merge mbtiles: %v", err)
+		elg.Fatalf("failed to merge mbtiles: %v", err)
 	}
+	plg.Println("MERGING: successfully merged: ", strings.ReplaceAll(strings.Join(b, " "), "/data/", "..."))
 
 	return filepath.Join(dst, "planet.mbtiles")
 }

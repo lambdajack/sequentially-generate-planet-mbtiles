@@ -93,7 +93,7 @@ func EntryPoint(df []byte) int {
 
 			if count != 0 {
 				lg.rep.Println("previous progress detected; attempting to continue...")
-				pbb := extract.IncompleteProgress(cfg.PbfFile, pth.pbfSlicesDir, ct.gdal)
+				pbb := extract.IncompleteProgress(cfg.PbfFile, pth.pbfSlicesDir, ct.gdal, lg.err, lg.rep)
 				if pbb != "" {
 					np, err := extract.Extract(cfg.PbfFile, filepath.Join(pth.pbfDir, "resume.osm.pbf"), pbb, ct.osmium)
 					if err != nil || np == "" {
@@ -128,7 +128,7 @@ func EntryPoint(df []byte) int {
 			if !slicingDone {
 				lg.rep.Println("slice generation started; there may be significant gaps between logs")
 				lg.rep.Printf("target file size: %d MB\n", uint64(math.Floor(float64(cfg.MaxRamMb)/15)))
-				extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, uint64(math.Floor(float64(cfg.MaxRamMb)/15)), ct.gdal, ct.osmium)
+				extract.TreeSlicer(cfg.PbfFile, pth.pbfSlicesDir, pth.pbfDir, uint64(math.Floor(float64(cfg.MaxRamMb)/15)), ct.gdal, ct.osmium, lg.err, lg.prog, lg.rep)
 			} else {
 				lg.rep.Println("slicing already complete; moving on to tile generation")
 			}
@@ -140,7 +140,7 @@ func EntryPoint(df []byte) int {
 				system.SetUserOwner(path)
 				if !info.IsDir() {
 					if !strings.Contains(path, "converted-") {
-						mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker)
+						mbtiles.Generate(path, pth.mbtilesDir, pth.coastlineDir, pth.landcoverDir, cfg.TilemakerConfig, cfg.TilemakerProcess, cfg.OutAsDir, ct.tilemaker, lg.err, lg.prog, lg.rep)
 						os.Rename(path, filepath.Join(filepath.Dir(path), "converted-"+filepath.Base(path)))
 					} else {
 						lg.rep.Printf("already converted; skipping %s\n", path)
@@ -154,7 +154,7 @@ func EntryPoint(df []byte) int {
 	final := pth.outDir
 
 	if !cfg.OutAsDir {
-		f := planet.Generate(pth.mbtilesDir, pth.outDir, ct.tippecanoe)
+		f := planet.Generate(pth.mbtilesDir, pth.outDir, ct.tippecanoe, lg.err, lg.prog, lg.rep)
 		final = f
 	}
 
