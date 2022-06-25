@@ -20,7 +20,6 @@ type flags struct {
 	tilemakerConfig  string
 	tilemakerProcess string
 	maxRamMb         uint64
-	diskEfficient    bool
 	outAsDir         bool
 	skipSlicing      bool
 	mergeOnly        bool
@@ -65,9 +64,6 @@ func initFlags() {
 
 	flag.Uint64Var(&fl.maxRamMb, "r", 0, "")
 	flag.Uint64Var(&fl.maxRamMb, "ram", 0, "")
-
-	flag.BoolVar(&fl.diskEfficient, "de", false, "")
-	flag.BoolVar(&fl.diskEfficient, "disk-efficient", false, "")
 
 	flag.BoolVar(&fl.outAsDir, "od", false, "")
 	flag.BoolVar(&fl.outAsDir, "out-as-dir", false, "")
@@ -219,13 +215,6 @@ Config Flags:
                            to a reduced value. NOTE THIS IS NOT GUARANTEED AND 
                            SOME SAFETY MARGIN SHOULD BE ALLOWED. On non unix 
                            operating systems the default is set to 4096.
-
-  -de, --disk-efficient    Use disk efficient mode. This will skip the 
-                           intermediary data slices and proceed straight to the 
-                           working slices. Can considerably increase the time 
-                           taken, but will save up to approx. 70 GB of disk 
-                           space overall. Use only if disk space is a real 
-                           consideration.
 
   -od, --out-as-dir        The final output will be a directory of tiles
                            rather than a single mbtiles file. This will

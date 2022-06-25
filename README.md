@@ -35,7 +35,6 @@ sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -c /path/to/config.json
   "TilemakerConfig": "",
   "TilemakerProcess": "",
   "maxRamMb": 0,
-  "diskEfficient": false,
   "outAsDir": false,
   "skipSlicing": false,
   "mergeOnly": false,
@@ -58,8 +57,6 @@ sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -c /path/to/config.json
 **_TilemakerProcess_** - **_[note capitalisation]_** The path to the process file that will be passed to [Tilemaker](https://github.com/systemed/tilemaker). See the default used [here](https://github.com/lambdajack/tilemaker/blob/b90347b2a4fd475470b9870b8e44e2829d8e4d6d/resources/process-openmaptiles.lua). Leaving blank will use the default. You can also use a special value to select one of the provided process files to match a given style. The special values are "**tileserver-gl-basic**", "**sgpm-bright**". Copies of the target styles can be viewed [here](configs/styles/). Feel free to copy one of the target styles to your front end project if necessary.
 
 **_maxRamMb_** - Provide the maximum amount of RAM in MB that the process should use. If a linux os is detected, the total system RAM will be detected from /proc/meminfo and a default will be set to a reasonably safe level, maximising the available resources. This assumes that only a minimal amount of system RAM is currently being used (such as an idle desktop environment (<2G)). If you are having memory problems, consider manually setting this flag to a reduced value. NOTE THIS IS NOT GUARANTEED AND SOME SAFETY MARGIN SHOULD BE ALLOWED. On **non unix** operating systems the default is set to 4096.
-
-**_diskEfficient_** - Use disk efficient mode. This will skip the intermediary data slices and proceed straight to the working slices. Can considerably increase the time taken, but will save up to approx. 70 GB of disk space overall. Use only if disk space is a real consideration.
 
 **_outAsDir_** - The final output will be a directory of tiles rather than a single mbtiles file. This will generate hundreds of thousands of files in a predetermined directory structure. More information can ba found about this format and why you might use it over a single mbtiles file can be found [here](https://documentation.maptiler.com/hc/en-us/articles/360020886878-Folder-vs-MBTiles-vs-GeoPackage)
 
