@@ -11,7 +11,7 @@
 1. Have [Docker](https://docs.docker.com/get-docker/) installed.
 2. Download the binary from the [release page](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/releases)
 3. ```bash
-   sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3
+   sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc4
    ```
 4. Rejoice - see acknowledgements below for people to thank.
 
@@ -20,7 +20,7 @@
 ### config.json
 
 ```bash
-sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -c /path/to/config.json
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc4 -c /path/to/config.json
 ```
 
 ```json
@@ -157,19 +157,19 @@ Pay attention to your fonts. The OSM Bright style makes use of Noto Sans variant
 Use all defaults:
 
 ```bash
-sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc4
 ```
 
 Providing a config.json:
 
 ```bash
-sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -c /path/to/config.json
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc4 -c /path/to/config.json
 ```
 
 Use a specific source file, and send the output to a specific place. Target style to match sgpm-bright:
 
 ```bash
-sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc3 -p /path/to/planet-latest.osm.pbf -o /path/to/output/dir -tp sgpm-bright
+sudo ./sequentially-generate-planet-mbtiles--v3.1.0-rc4 -p /path/to/planet-latest.osm.pbf -o /path/to/output/dir -tp sgpm-bright
 ```
 
 ## Acknowledgements
