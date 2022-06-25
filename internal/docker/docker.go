@@ -27,6 +27,13 @@ func (c *Container) Build() error {
 		return nil
 	}
 
+	err := exec.Command("docker", "image", "inspect", c.Name).Run()
+	if err == nil {
+		log.Printf("docker image %s already built - proceeding without cached rebuild", c.Name)
+		c.Built = true
+		return nil
+	}
+
 	if c.Name == "" {
 		return fmt.Errorf("container name is empty")
 	}
