@@ -28,8 +28,8 @@ func setupContainers(osmiumDf []byte) {
 		osmium: docker.New(docker.Container{
 			Name:       "sequential-osmium",
 			Dockerfile: setOsmiumDockerfile(osmiumDf),
-			// Context set to pth.temp since the docker file needs to pull in two separate repos, both in the same dir
-			Context: pth.temp,
+			// Context set to pth.temp/osmium since the docker file needs to pull in two separate repos, both in the same dir
+			Context: filepath.Join(pth.temp, "osmium"),
 		}),
 		tilemaker: docker.New(docker.Container{
 			Name:       "sequential-tilemaker",

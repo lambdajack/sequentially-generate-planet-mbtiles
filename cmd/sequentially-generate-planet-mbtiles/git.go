@@ -26,11 +26,11 @@ func cloneRepos() {
 		},
 		osmiumTool: git.Repo{
 			Url: "https://github.com/lambdajack/osmium-tool",
-			Dst: filepath.Join(pth.temp, "osmium-tool"),
+			Dst: filepath.Join(pth.temp, "osmium", "osmium-tool"),
 		},
 		libosmium: git.Repo{
 			Url: "https://github.com/lambdajack/libosmium",
-			Dst: filepath.Join(pth.temp, "libosmium"),
+			Dst: filepath.Join(pth.temp, "osmium", "libosmium"),
 		},
 		tilemaker: git.Repo{
 			Url: "https://github.com/lambdajack/tilemaker",
