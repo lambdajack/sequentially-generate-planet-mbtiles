@@ -41,6 +41,12 @@ func downloadOsmData() {
 		},
 	}
 
+	if fl.test {
+		downloads[0].url = "https://download.geofabrik.de/africa/morocco-latest.osm.pbf"
+		downloads[0].destFileName = "morocco-latest.osm.pbf"
+		lg.rep.Printf("test flag provided; downloading test data %s - %s", downloads[0].destFileName, downloads[0].url)
+	}
+
 	for _, dl := range downloads {
 		if _, err := os.Stat(filepath.Join(dl.destDir, dl.destFileName)); os.IsNotExist(err) {
 			if dl.destFileName == "planet-latest.osm.pbf" {
@@ -51,11 +57,6 @@ func downloadOsmData() {
 				if cfg.SkipDownload {
 					lg.rep.Printf("skip download flag provided - skipping planet download %s", dl.url)
 					continue
-				}
-				if fl.test {
-					dl.url = "https://download.geofabrik.de/africa/morocco-latest.osm.pbf"
-					dl.destFileName = "morocco-latest.osm.pbf"
-					lg.rep.Printf("test flag provided; downloading test data %s - %s", dl.destFileName, dl.url)
 				}
 			}
 
@@ -76,7 +77,7 @@ func downloadOsmData() {
 			}
 			lg.rep.Printf("Download success: %v\n", dl.destFileName)
 		} else {
-			lg.rep.Printf("%v already exists. Skipping download.\n", dl.destFileName)
+			lg.rep.Printf("%v already exists; skipping download.\n", dl.destFileName)
 		}
 	}
 }
