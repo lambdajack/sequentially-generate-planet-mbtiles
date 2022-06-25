@@ -6,7 +6,7 @@
 
 ![](assets/sequentially-generate-planet-mbtiles-example.gif)
 
-**v3.1.0-rc3 currently in testing; see [pre-release](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/releases/tag/v3.1.0-rc3). Feedback in any form is always appreciated.**
+**v3.1.0-rc4 currently in testing; see [pre-release](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/releases/tag/v3.1.0-rc3). Feedback in any form is always appreciated.**
 
 ## TL;DR give me planet vector tiles! (usage)
 
