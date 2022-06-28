@@ -48,6 +48,9 @@ func setConfigByJSON() {
 		log.Printf("Unable to decode config: %s", err)
 		os.Exit(exitInvalidJSON)
 	}
+	if cfg.MaxRamMb == 0 {
+		cfg.MaxRamMb = getRam()
+	}
 }
 
 func setConfigByFlags() {
