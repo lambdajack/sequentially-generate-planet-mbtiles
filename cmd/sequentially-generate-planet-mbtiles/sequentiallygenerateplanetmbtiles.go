@@ -1,7 +1,9 @@
 package sequentiallygenerateplanetmbtiles
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"math"
 	"os"
@@ -51,7 +53,9 @@ func EntryPoint(df []byte) int {
 
 	initLoggers()
 
-	lg.rep.Printf("sequentially-generate-planet-mbtiles started: %+v\n", cfg)
+	lgInitStr := fmt.Sprintf("sequentially-generate-planet-mbtiles started: %+v\n", cfg)
+	cfgCompare(lgInitStr)
+	lg.rep.Printf(lgInitStr)
 
 	cloneRepos()
 
@@ -195,4 +199,33 @@ Your carriage awaits you at: ` + out + "\n")
 		fmt.Print("REMEMBER: To view the map with proper styles, you may need to set up a frontend with something like Maplibre or Leaflet.js using the correct style.json, rather than using the tileserver-gl's inbuilt 'Viewer'; although the viewer is great for checking that the mbtiles work and you got the area you were expecting.\n\n")
 	}
 	fmt.Print("We would love to make this process as easy and reliable as possible for everyone. If you have any feedback, suggestions, or bug reports please come over to https://github.com/lambdajack/sequentially-generate-planet-mbtiles and let us know.\n\n")
+}
+
+func cfgCompare(lgInitStr string) {
+	f, err := os.Open(filepath.Join(pth.logsDir, "rep.log"))
+	if err != nil {
+		lg.err.Println("unable to open log file: ", filepath.Join(pth.logsDir, "rep.log"))
+		return
+	}
+	s, err := io.ReadAll(f)
+	if err != nil {
+		lg.err.Println("unable to read log file: ", filepath.Join(pth.logsDir, "rep.log"))
+		return
+	}
+	idx := strings.LastIndex(string(s), "sequentially-generate-planet-mbtiles started: ")
+	if idx > 0 {
+		ss := strings.Split(string(s)[idx:], "\n")
+		if strings.TrimSpace(ss[0]) != strings.TrimSpace(lgInitStr) {
+					lg.rep.Println("resumption of a previously stopped execution with different parameters detected")
+					fmt.Println("UNKNOWN THINGS CAN HAPPEN WHEN RESUMING WITH DIFFERENT PARAMETERS. If you are not confident that your changed parameters will have no adverse affect on the end result or are not prepared to take the risk, you should clean up the relevant folders and start again (you can save and replace downloaded files if requried). DO YOU WISH TO CONTINUE? yes/no")
+					r := bufio.NewReader(os.Stdin)
+					a, err := r.ReadString('\n')
+					if err != nil {
+						lg.err.Fatal("unable to read answer to resumption question; aborting; recommend starting fresh")
+					}
+					if a != "yes\n" && a != "y\n" {
+						os.Exit(exitOK)
+					}
+				}
+	}
 }
