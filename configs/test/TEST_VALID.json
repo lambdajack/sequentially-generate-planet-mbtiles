@@ -1,10 +1,14 @@
 {
-  "planetFile": "",
-  "dataDir": "",
+  "pbfFile": "",
+  "workingDir": "",
   "outDir": "",
-  "includeOcean": true,
-  "includeLanduse": true,
+  "excludeOcean": false,
+  "excludeLanduse": false,
   "TilemakerConfig": "",
   "TilemakerProcess": "",
-  "maxRamMb": 0
+  "maxRamMb": 0,
+  "outAsDir": false,
+  "skipSlicing": false,
+  "mergeOnly": false,
+  "skipDownload": false
 }
