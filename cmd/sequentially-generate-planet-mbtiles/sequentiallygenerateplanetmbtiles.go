@@ -62,7 +62,7 @@ func EntryPoint(df []byte) int {
 	setupContainers(df)
 
 	if fl.stage {
-		lg.rep.Println("Stage flag set. Staging completed. Exiting...")
+		lg.rep.Println("stage flag set; staging complete; exiting...")
 		os.Exit(exitOK)
 	}
 
