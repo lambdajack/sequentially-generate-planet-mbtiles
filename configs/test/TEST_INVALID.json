@@ -10,5 +10,6 @@
   "outAsDir": false,
   "skipSlicing": false,
   "mergeOnly": false,
-  "skipDownload": false
+  "skipDownload": false,
+  "thisIsAnInvalidConfigRequiredForTesting": 0
 }
