@@ -89,7 +89,3 @@ func TestSetValidConfigByJSON(t *testing.T) {
 		t.Fatalf("process ran with err %v, want %v", err, nil)
 	}
 }
-
-func TestSetConfigByFlags(t *testing.T) {
-
-}

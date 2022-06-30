@@ -20,20 +20,23 @@ func init() {
 	flag.StringVar(&fl.config, "c", "", "")
 	flag.StringVar(&fl.config, "config", "", "")
 
-	flag.StringVar(&fl.pbfFile, "p", "", "")
-	flag.StringVar(&fl.pbfFile, "planet-file", "", "")
+	flag.BoolVar(&fl.test, "t", false, "")
+	flag.BoolVar(&fl.test, "test", false, "")
 
-	flag.StringVar(&fl.workingDir, "d", "data", "")
-	flag.StringVar(&fl.workingDir, "datadir", "data", "")
+	flag.StringVar(&fl.pbfFile, "p", "", "")
+	flag.StringVar(&fl.pbfFile, "pbf-file", "", "")
+
+	flag.StringVar(&fl.workingDir, "w", "data", "")
+	flag.StringVar(&fl.workingDir, "working-dir", "data", "")
 
 	flag.StringVar(&fl.outDir, "o", "data/out", "")
 	flag.StringVar(&fl.outDir, "outdir", "data/out", "")
 
-	flag.BoolVar(&fl.excludeOcean, "eo", true, "")
-	flag.BoolVar(&fl.excludeOcean, "exclude-ocean", true, "")
+	flag.BoolVar(&fl.excludeOcean, "eo", false, "")
+	flag.BoolVar(&fl.excludeOcean, "exclude-ocean", false, "")
 
-	flag.BoolVar(&fl.excludeLanduse, "el", true, "")
-	flag.BoolVar(&fl.excludeLanduse, "exclude-landuse", true, "")
+	flag.BoolVar(&fl.excludeLanduse, "el", false, "")
+	flag.BoolVar(&fl.excludeLanduse, "exclude-landuse", false, "")
 
 	flag.StringVar(&fl.tilemakerConfig, "tc", "", "")
 	flag.StringVar(&fl.tilemakerConfig, "tilemaker-config", "", "")
@@ -44,6 +47,18 @@ func init() {
 	flag.Uint64Var(&fl.maxRamMb, "r", 0, "")
 	flag.Uint64Var(&fl.maxRamMb, "ram", 0, "")
 
+	flag.BoolVar(&fl.outAsDir, "od", false, "")
+	flag.BoolVar(&fl.outAsDir, "out-as-dir", false, "")
+
+	flag.BoolVar(&fl.skipSlicing, "ss", false, "")
+	flag.BoolVar(&fl.skipSlicing, "skip-slicing", false, "")
+
+	flag.BoolVar(&fl.mergeOnly, "mo", false, "")
+	flag.BoolVar(&fl.mergeOnly, "merge-only", false, "")
+
+	flag.BoolVar(&fl.skipDownload, "sd", false, "")
+	flag.BoolVar(&fl.skipDownload, "skip-download", false, "")
+
 }
 
 func TestEntryPoint(t *testing.T) {
@@ -53,7 +68,7 @@ func TestEntryPoint(t *testing.T) {
 func TestValidateFlags(t *testing.T) {
 
 	if os.Getenv("TEST_VALIDATE_FLAGS") == "1" {
-		os.Args = append(os.Args, "-c", "/into/the/unknown", "-io")
+		os.Args = append(os.Args, "-c", "/into/the/unknown", "-eo")
 		flag.Parse()
 		validateFlags()
 		return
