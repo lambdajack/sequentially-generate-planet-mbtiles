@@ -56,7 +56,7 @@ sudo ./sequentially-generate-planet-mbtiles--unix-amd64-v3.1.0 -c /path/to/confi
 
 **_TilemakerProcess_** - **_[note capitalisation]_** The path to the process file that will be passed to [Tilemaker](https://github.com/systemed/tilemaker). See the default used [here](https://github.com/lambdajack/tilemaker/blob/b90347b2a4fd475470b9870b8e44e2829d8e4d6d/resources/process-openmaptiles.lua). Leaving blank will use the default. You can also use a special value to select one of the provided process files to match a given style. The special values are "**tileserver-gl-basic**", "**sgpm-bright**". Copies of the target styles can be viewed [here](configs/styles/). Feel free to copy one of the target styles to your front end project if necessary.
 
-**_maxRamMb_** - Provide the maximum amount of RAM in MB that the process should use. If a linux os is detected, the total system RAM will be detected from /proc/meminfo and a default will be set to a reasonably safe level, maximising the available resources. This assumes that only a minimal amount of system RAM is currently being used (such as an idle desktop environment (<2G)). If you are having memory problems, consider manually setting this flag to a reduced value. NOTE THIS IS NOT GUARANTEED AND SOME SAFETY MARGIN SHOULD BE ALLOWED. On **non unix** operating systems the default is set to 4096.
+**_maxRamMb_** - Provide the maximum amount of RAM in MB that the process should use. If a linux os is detected, the total system RAM will be detected from /proc/meminfo and a default will be set to a reasonably safe level, maximising the available resources. This assumes that only a minimal amount of system RAM is currently being used (such as an idle desktop environment (<2G)). If you are having memory problems, consider manually setting this flag to a reduced value. Note this is not guaranteed and some margin should be allowed for. The default is set to 4096 if the amount of available ram cannot be detected. This setting is not a hard cap and the program will bleed over if necessary and possible.
 
 **_outAsDir_** - The final output will be a directory of tiles rather than a single mbtiles file. This will generate hundreds of thousands of files in a predetermined directory structure. More information can ba found about this format and why you might use it over a single mbtiles file can be found [here](https://documentation.maptiler.com/hc/en-us/articles/360020886878-Folder-vs-MBTiles-vs-GeoPackage)
 
@@ -116,12 +116,12 @@ This also uses the openmaptiles mbtiles spec (by default but this can be changed
 
 ## Software
 
-We would recommend something like [tileserver-gl](https://github.com/maptiler/tileserver-gl). Further reading can be found on the [openstreetmap wiki](https://wiki.openstreetmap.org/wiki/MBTiles).
+We would recommend something like [tileserver-gl](https://github.com/maptiler/tileserver-gl) as a good place to start. Further reading can be found on the [openstreetmap wiki](https://wiki.openstreetmap.org/wiki/MBTiles).
 
-You can quickly serve using tileserver-gl:
+You can quickly serve using tileserver-gl (remember to mount the correct volume containing your planet.mbtiles):
 
 ```bash
-docker run --rm -it -v $(pwd)/data:/data -p 8080:80 maptiler/tileserver-gl
+docker run --rm -it -v $(pwd)/data/out:/data -p 8080:80 maptiler/tileserver-gl
 ```
 
 ## Styles
