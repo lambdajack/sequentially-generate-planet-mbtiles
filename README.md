@@ -1,3 +1,5 @@
+## v2.2.0 archive branch
+
 # Sequentially Generate Planet Mbtiles
 
 ### _Sequentially generate and merge an entire planet.mbtiles vector tileset on low memory/power devices for free._
