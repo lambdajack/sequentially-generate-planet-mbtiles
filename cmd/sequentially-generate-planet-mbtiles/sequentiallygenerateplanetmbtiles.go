@@ -216,16 +216,16 @@ func cfgCompare(lgInitStr string) {
 	if idx > 0 {
 		ss := strings.Split(string(s)[idx:], "\n")
 		if strings.TrimSpace(ss[0]) != strings.TrimSpace(lgInitStr) {
-					lg.rep.Println("resumption of a previously stopped execution with different parameters detected")
-					fmt.Println("UNKNOWN THINGS CAN HAPPEN WHEN RESUMING WITH DIFFERENT PARAMETERS. You should only proceed if you are not confident that your changed parameters will have no adverse affect on the end result or are prepared to accept the outcome; otherwise you should clean the working/output directories and start again (you can save and replace downloaded files if requried). DO YOU WISH TO CONTINUE? yes/no")
-					r := bufio.NewReader(os.Stdin)
-					a, err := r.ReadString('\n')
-					if err != nil {
-						lg.err.Fatal("unable to read answer to resumption question; aborting; recommend starting fresh")
-					}
-					if a != "yes\n" && a != "y\n" {
-						os.Exit(exitOK)
-					}
-				}
+			lg.rep.Println("resumption of a previously stopped execution with different parameters detected")
+			fmt.Println("UNKNOWN THINGS CAN HAPPEN WHEN RESUMING WITH DIFFERENT PARAMETERS. You should only proceed if you are not confident that your changed parameters will have no adverse affect on the end result or are prepared to accept the outcome; otherwise you should clean the working/output directories and start again (you can save and replace downloaded files if requried). DO YOU WISH TO CONTINUE? yes/no")
+			r := bufio.NewReader(os.Stdin)
+			a, err := r.ReadString('\n')
+			if err != nil {
+				lg.err.Fatal("unable to read answer to resumption question; aborting; recommend starting fresh")
+			}
+			if a != "yes\n" && a != "y\n" {
+				os.Exit(exitOK)
+			}
+		}
 	}
 }
