@@ -126,11 +126,11 @@ docker run --rm -it -v $(pwd)/data:/data -p 8080:80 maptiler/tileserver-gl
 
 ## Styles
 
-The default output of `sequentially-generate-planet-mbtiles` looks to match with the open source tileserver-gl ['Basic'](config/styles/sgpm-basic.json) style.
+The default output of `sequentially-generate-planet-mbtiles` looks to match with the open source tileserver-gl ['Basic'](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/blob/master/configs/styles/sgpm-basic.json) style.
 
 When accessing your tileserver with something like [MapLibre](https://maplibre.org/maplibre-gl-js-docs/api/) from a front end application, a good place to start would be passing it a copy of the above style, **making sure to edit the urls to point to the correct places**.
 
-You can edit the output of `sequentially-generate-planet-mbtiles` by providing a customised process or config file through the config file. We also have built in support for targeting the open source OSM ['Bright'](configs/styles/sgpm-bright.json) style.
+You can edit the output of `sequentially-generate-planet-mbtiles` by providing a customised process or config file through the config file. We also have built in support for targeting the open source OSM ['Bright'](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/blob/master/configs/styles/sgpm-bright.json) style.
 
 ### Some style considerations
 
