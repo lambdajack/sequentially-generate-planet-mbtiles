@@ -187,7 +187,7 @@ All welcome! Feature request, pull request, bug reports/fixes etc - go for it.
 
 ## Version 2 (old)
 
-See the version 2 [README](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/blob/9ff1bfcba95dc6f3564c1aade8421bdf1a98fe73/README.md).
+See the version 2 [README](https://github.com/lambdajack/sequentially-generate-planet-mbtiles/blob/v2.2.0/README.md).
 
 ### Currently working on:
 
