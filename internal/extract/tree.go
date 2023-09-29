@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/docker"
+	"github.com/lambdajack/sequentially-generate-planet-mbtiles/internal/system"
 )
 
 func TreeSlicer(src, dstDir, workingDir string, targetSize uint64, gdal, osmium *docker.Container, elg, plg, rlg *log.Logger) {
@@ -112,6 +113,8 @@ func slice(src, dst, bb string, osmium *docker.Container, elg, plg, rlg *log.Log
 		elg.Fatalf("extract.go | Slicer | Failed to create temp file: %v", err)
 	}
 	defer f.Close()
+
+	system.SetUserOwner(f.Name())
 
 	rlg.Printf("slicing %s >>> %s (%s)", filepath.Base(src), filepath.Base(f.Name()), bb)
 	lp, err := Extract(src, f.Name(), bb, osmium)
