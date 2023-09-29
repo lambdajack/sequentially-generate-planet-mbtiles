@@ -16,7 +16,7 @@ func SetUserOwner(path string) error {
 		return err
 	}
 
-	if u.Name == "root" && runtime.GOOS == "linux" {
+	if u.Username == "root" && (runtime.GOOS == "linux" || runtime.GOOS == "darwin") {
 		u := os.Getenv("SUDO_UID")
 		if u == "" {
 			return err
